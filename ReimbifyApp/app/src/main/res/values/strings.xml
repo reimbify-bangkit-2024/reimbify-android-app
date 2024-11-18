@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ReimbifyApp</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_history">History</string>
+    <string name="title_add_request">Add Request</string>
+    <string name="label_history">Reimbursement History</string>
+    <string name="label_add_request">New Request</string>
+    <string name="label_profile">Profile</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_setting">Setting</string>
+</resources>
