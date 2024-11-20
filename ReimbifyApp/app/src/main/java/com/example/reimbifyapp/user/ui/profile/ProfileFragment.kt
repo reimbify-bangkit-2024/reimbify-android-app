@@ -1,4 +1,4 @@
-package com.example.reimbifyapp
+package com.example.reimbifyapp.user.ui.profile
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.reimbifyapp.R
 
 class ProfileFragment : Fragment() {
 

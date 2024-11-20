@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "ReimbifyApp"
 include(":app")
- 

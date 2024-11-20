@@ -1,4 +1,4 @@
-package com.example.reimbifyapp
+package com.example.reimbifyapp.user.ui.profile
 
 import androidx.lifecycle.ViewModel
 

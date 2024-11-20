@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_add_request_user" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.reimbifyapp.ProfileFragment"
+        android:name="com.example.reimbifyapp.user.ui.profile.ProfileFragment"
         android:label="@string/label_profile"
         tools:layout="@layout/fragment_profile_user" />
     <fragment
