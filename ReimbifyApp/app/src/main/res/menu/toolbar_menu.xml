@@ -6,5 +6,6 @@
         android:icon="@drawable/baseline_notifications_24"
         android:title="@string/title_notifications"
         app:showAsAction="always"
+        android:tint="?attr/colorOnSurface"
         app:iconSize="52dp"/>
 </menu>

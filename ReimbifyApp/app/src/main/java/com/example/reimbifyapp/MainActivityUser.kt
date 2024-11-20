@@ -2,6 +2,7 @@ package com.example.reimbifyapp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -72,6 +73,12 @@ class MainActivityUser : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val menuItem = menu.findItem(R.id.action_notifications)
+        val iconDrawable = menuItem.icon
+        if (iconDrawable != null) {
+            val color = getColorFromAttr(android.R.attr.colorSecondary)
+            iconDrawable.setTint(color)
+        }
         return true
     }
 
@@ -88,4 +95,11 @@ class MainActivityUser : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
+    private fun getColorFromAttr(attr: Int): Int {
+        val typedValue = TypedValue()
+        theme.resolveAttribute(attr, typedValue, true)
+        return typedValue.data
+    }
+
 }
