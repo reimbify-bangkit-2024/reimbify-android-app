@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.user.ui.dashboard
+package com.example.reimbifyapp.user.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

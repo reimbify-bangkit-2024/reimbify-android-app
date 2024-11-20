@@ -7,29 +7,29 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.reimbifyapp.user.ui.dashboard.DashboardFragment"
+        android:name="com.example.reimbifyapp.user.ui.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard_user" />
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.example.reimbifyapp.user.ui.history.HistoryFragment"
+        android:name="com.example.reimbifyapp.user.ui.HistoryFragment"
         android:label="@string/label_history"
         tools:layout="@layout/fragment_history_user" />
 
     <fragment
         android:id="@+id/navigation_add_request"
-        android:name="com.example.reimbifyapp.user.ui.add_user.AddUserFragment"
+        android:name="com.example.reimbifyapp.user.ui.AddUserFragment"
         android:label="@string/label_add_request"
         tools:layout="@layout/fragment_add_request_user" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.reimbifyapp.user.ui.profile.ProfileFragment"
+        android:name="com.example.reimbifyapp.user.ui.ProfileFragment"
         android:label="@string/label_profile"
         tools:layout="@layout/fragment_profile_user" />
     <fragment
         android:id="@+id/navigation_setting"
-        android:name="com.example.reimbifyapp.SettingFragment"
+        android:name="com.example.reimbifyapp.user.ui.SettingFragment"
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting_user" />
 </navigation>

@@ -1,35 +1,58 @@
 package com.example.reimbifyapp
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.reimbifyapp.databinding.ActivityMainUserBinding
+import com.example.reimbifyapp.user.data.preferences.SettingPreferences
+import com.example.reimbifyapp.user.factory.SettingViewModelFactory
+import com.example.reimbifyapp.user.viewmodel.SettingViewModel
+
+private val Context.dataStore by preferencesDataStore(name = "settings")
 
 class MainActivityUser : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainUserBinding
     private lateinit var navController: NavController
+    private lateinit var settingViewModel: SettingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Inisialisasi tema sebelum super.onCreate()
+        val pref = SettingPreferences.getInstance(dataStore)
+        val settingViewModelFactory = SettingViewModelFactory(pref)
+        settingViewModel = ViewModelProvider(this, settingViewModelFactory)[SettingViewModel::class.java]
+
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+            val nightMode = if (isDarkModeActive) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+            // Terapkan mode malam hanya jika berbeda
+            if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+                AppCompatDelegate.setDefaultNightMode(nightMode)
+            }
+        }
+
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set up toolbar
-        setSupportActionBar(binding.toolbar)
-
-        // Set up Navigation
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
 
-        // Configure AppBar
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_dashboard,
@@ -40,7 +63,10 @@ class MainActivityUser : AppCompatActivity() {
             )
         )
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.title = destination.label
+        }
+
         binding.navView.setupWithNavController(navController)
     }
 

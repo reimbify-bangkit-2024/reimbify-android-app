@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.user.ui.add_user
+package com.example.reimbifyapp.user.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
+import com.example.reimbifyapp.user.viewmodel.AddUserViewModel
 
 class AddUserFragment : Fragment() {
 
