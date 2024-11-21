@@ -27,4 +27,20 @@
     <string name="_100_000">100.000</string>
     <string name="description">Description</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="search">Search</string>
+    <string name="sort_by_date">Sort By Date</string>
+    <string-array name="status_options">
+        <item>All</item>
+        <item>Under Review</item>
+        <item>Accepted</item>
+        <item>Rejected</item>
+    </string-array>
+
+    <string-array name="department_options">
+        <item>All</item>
+        <item>HR</item>
+        <item>Finance</item>
+        <item>IT</item>
+    </string-array>
+
 </resources>
