@@ -11,4 +11,20 @@
     <string name="title_notifications">Notifications</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="display">Display</string>
+    <string name="calendar_icon">Calendar Icon</string>
+    <string name="default_date">MM/DD/YYYY HH:MM:SS</string>
+    <string name="under_review_icon">Under Review Icon</string>
+    <string name="under_review">Under Review</string>
+    <string name="approved_icon">Approved Icon</string>
+    <string name="approved">Approved</string>
+    <string name="rejected_icon">Rejected Icon</string>
+    <string name="rejected">Rejected</string>
+    <string name="receipt_date">Receipt Date</string>
+    <string name="default_date_v2">MM/DD/YYYY</string>
+    <string name="department">Department</string>
+    <string name="finance">Finance</string>
+    <string name="amount">Amount</string>
+    <string name="_100_000">100.000</string>
+    <string name="description">Description</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 </resources>

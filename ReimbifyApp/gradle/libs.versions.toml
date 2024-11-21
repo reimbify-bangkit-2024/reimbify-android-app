@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.2"
+cardview = "1.0.0"
 datastorePreferences = "1.1.1"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
@@ -18,6 +19,7 @@ legacySupportV4 = "1.0.0"
 fragmentKtx = "1.8.5"
 
 [libraries]
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
