@@ -166,7 +166,9 @@
                 android:hint="@string/default_date_v2"
                 android:inputType="date"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:focusable="false"
+                android:clickable="false" />
         </LinearLayout>
 
         <LinearLayout
@@ -195,7 +197,9 @@
                 android:hint="@string/finance"
                 android:inputType="text"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:focusable="false"
+                android:clickable="false" />
         </LinearLayout>
 
         <LinearLayout
@@ -223,7 +227,9 @@
                 android:hint="@string/_100_000"
                 android:inputType="numberDecimal"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:focusable="false"
+                android:clickable="false" />
         </LinearLayout>
     </LinearLayout>
 
