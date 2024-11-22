@@ -34,31 +34,45 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/input_box">
 
-            <!-- Icon Image -->
+            <LinearLayout
+                android:id="@+id/placeholder_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/iv_placeholder_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/upload_icon"
+                    android:src="@drawable/document_scanner_24dp_48752c_fill0_wght400_grad0_opsz24"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_receipt_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"
+                    android:gravity="center"
+                    android:text="@string/upload_your_receipt"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/iv_receipt"
-                android:layout_width="100dp"
-                android:layout_height="41dp"
-                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/upload_icon"
-                android:scaleType="centerInside"
-                android:src="@drawable/document_scanner_24dp_48752c_fill0_wght400_grad0_opsz24" />
-
-            <TextView
-                android:id="@+id/tv_receipt_text"
-                android:layout_width="wrap_content"
-                android:layout_height="124dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:text="@string/upload_your_receipt"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
         </FrameLayout>
 
         <LinearLayout
             android:id="@+id/ll_buttons"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -70,6 +84,7 @@
 
             <Button
                 android:id="@+id/btn_open_camera"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -80,6 +95,7 @@
 
             <Button
                 android:id="@+id/btn_upload_gallery"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

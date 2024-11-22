@@ -79,5 +79,6 @@
     <string name="bank_account">Bank Account</string>
     <string name="cancel">Cancel</string>
     <string name="submit_request">Submit Request</string>
+    <string name="image_preview">Image Preview\n</string>
 
 </resources>

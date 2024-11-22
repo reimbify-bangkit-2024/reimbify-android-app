@@ -1,11 +1,20 @@
 package com.example.reimbifyapp.user.ui
 
+import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
 import java.text.SimpleDateFormat
@@ -15,6 +24,13 @@ class AddRequestFragment : Fragment() {
 
     private var _binding: FragmentAddRequestUserBinding? = null
     private val binding get() = _binding!!
+    private var selectedImageUri: Uri? = null
+    private var selectedImageBitmap: Bitmap? = null
+
+    companion object {
+        private const val REQUEST_CAMERA = 100
+        private const val REQUEST_GALLERY = 200
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,18 +51,16 @@ class AddRequestFragment : Fragment() {
         }
 
         binding.btnOpenCamera.setOnClickListener {
-            Toast.makeText(context, "Open Camera Clicked", Toast.LENGTH_SHORT).show()
+            if (Manifest.permission.CAMERA.hasPermission()) {
+                openCamera()
+            } else {
+                Manifest.permission.CAMERA.requestPermission(REQUEST_CAMERA)
+            }
         }
 
         binding.btnUploadGallery.setOnClickListener {
-            Toast.makeText(context, "Upload from Gallery Clicked", Toast.LENGTH_SHORT).show()
+            openGallery()
         }
-
-        binding.flReceipt.setOnClickListener {
-            Toast.makeText(context, "Receipt Frame Clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        updateImageStatus(isValid = true)
     }
 
     private fun showDatePickerDialog() {
@@ -68,11 +82,71 @@ class AddRequestFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private fun updateImageStatus(isValid: Boolean) {
-        if (isValid) {
-            binding.llImageStatus.visibility = View.VISIBLE
+    private fun String.hasPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            this
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun String.requestPermission(requestCode: Int) {
+        requestPermissions(arrayOf(this), requestCode)
+    }
+
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
+    }
+
+    private fun openGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galleryIntent, REQUEST_GALLERY)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openCamera()
         } else {
-            binding.llImageStatus.visibility = View.GONE
+            Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CAMERA -> {
+                    val photo = data?.extras?.get("data") as Bitmap
+                    selectedImageBitmap = photo
+                    displayImage(bitmap = photo, uri = null)
+                }
+                REQUEST_GALLERY -> {
+                    val uri = data?.data
+                    selectedImageUri = uri
+                    displayImage(bitmap = null, uri = uri)
+                }
+            }
+        }
+    }
+
+    private fun displayImage(bitmap: Bitmap?, uri: Uri?) {
+        binding.placeholderLayout.visibility = View.GONE
+        binding.ivReceipt.apply {
+            visibility = View.VISIBLE
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            if (bitmap != null) {
+                setImageBitmap(bitmap)
+            } else if (uri != null) {
+                setImageURI(uri)
+            }
         }
     }
 
