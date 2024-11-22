@@ -11,6 +11,16 @@ import com.example.reimbifyapp.user.data.entities.History
 class HistoryAdapter(private val listHistory: ArrayList<History>) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
+    private var onItemClickCallback: OnItemClickCallback? = null
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: History)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.card_history, parent, false)
         return HistoryViewHolder(view)
@@ -39,6 +49,10 @@ class HistoryAdapter(private val listHistory: ArrayList<History>) :
                 holder.statusApproved.visibility = View.GONE
                 holder.statusRejected.visibility = View.VISIBLE
             }
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClickCallback?.onItemClicked(history)
         }
     }
 

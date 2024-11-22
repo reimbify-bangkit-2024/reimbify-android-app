@@ -10,5 +10,12 @@ data class History(
     val receiptDate: String,
     val department: String,
     val amount: Double,
-    val description: String
+    val description: String,
+    val adminName: String? = null,
+    val accountNumber: String? = null,
+    val receiveDate: String? = null,
+    val declineDate: String? = null,
+    val declineReason: String? = null,
+    val notaImage: String,
+    val transferReceiptImage: String? = null
 ) : Parcelable

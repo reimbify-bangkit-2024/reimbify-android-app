@@ -14,6 +14,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.reimbifyapp.databinding.ActivityMainUserBinding
 import com.example.reimbifyapp.user.data.preferences.SettingPreferences
@@ -27,6 +29,7 @@ class MainActivityUser : AppCompatActivity() {
     private lateinit var binding: ActivityMainUserBinding
     private lateinit var navController: NavController
     private lateinit var settingViewModel: SettingViewModel
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val pref = SettingPreferences.getInstance(dataStore)
@@ -52,11 +55,26 @@ class MainActivityUser : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            supportActionBar?.title = destination.label
-        }
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_dashboard,
+                R.id.navigation_history,
+                R.id.navigation_add_request,
+                R.id.navigation_profile,
+                R.id.navigation_setting
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.title = destination.label
+
+            val topLevelDestinations = appBarConfiguration.topLevelDestinations
+            val showBackButton = destination.id !in topLevelDestinations
+            supportActionBar?.setDisplayHomeAsUpEnabled(showBackButton)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
@@ -90,5 +108,4 @@ class MainActivityUser : AppCompatActivity() {
         theme.resolveAttribute(attr, typedValue, true)
         return typedValue.data
     }
-
 }

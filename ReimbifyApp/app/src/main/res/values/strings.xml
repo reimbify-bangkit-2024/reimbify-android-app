@@ -42,5 +42,22 @@
         <item>Finance</item>
         <item>IT</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_detail_request">Detail Request</string>
+    <string name="nota_image">Nota Image</string>
+    <string name="transfer_receipt_image">Transfer Receipt Image</string>
+    <string name="details">Details</string>
+    <string name="name">Name</string>
+    <string name="admin_name">Admin Name</string>
+    <string name="account_number">Account Number</string>
+    <string name="request_date">Request Date</string>
+    <string name="receive_date">Receive Date</string>
+    <string name="decline_date">Decline Date</string>
+    <string name="reason_decline">Reason Decline</string>
+    <string name="default_reason_rejection">Nota Tidak Valid</string>
+    <string name="title_accepted_detail">Accepted Detail</string>
+    <string name="title_rejected_detail">Rejected Detail</string>
+    <string name="title_under_review_detail">Under Review Detail</string>
 
 </resources>

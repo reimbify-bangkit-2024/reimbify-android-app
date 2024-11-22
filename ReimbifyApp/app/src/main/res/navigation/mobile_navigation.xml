@@ -15,7 +15,20 @@
         android:id="@+id/navigation_history"
         android:name="com.example.reimbifyapp.user.ui.HistoryFragment"
         android:label="@string/label_history"
-        tools:layout="@layout/fragment_history_user" />
+        tools:layout="@layout/fragment_history_user">
+        <action
+            android:id="@+id/action_navigation_history_to_underReviewDetailFragment"
+            app:destination="@id/underReviewDetailFragment"
+            app:popUpTo="@id/navigation_history" />
+        <action
+            android:id="@+id/action_navigation_history_to_acceptedDetailFragment"
+            app:destination="@id/acceptedDetailFragment"
+            app:popUpTo="@id/navigation_history" />
+        <action
+            android:id="@+id/action_navigation_history_to_rejectedDetailFragment"
+            app:destination="@id/rejectedDetailFragment"
+            app:popUpTo="@id/navigation_history" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_add_request"
@@ -32,4 +45,20 @@
         android:name="com.example.reimbifyapp.user.ui.SettingFragment"
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting_user" />
+    <fragment
+        android:id="@+id/acceptedDetailFragment"
+        android:name="com.example.reimbifyapp.user.ui.AcceptedDetailFragment"
+        android:label="@string/title_accepted_detail"
+        tools:layout="@layout/fragment_accepted_detail" />
+    <fragment
+        android:id="@+id/rejectedDetailFragment"
+        android:name="com.example.reimbifyapp.user.ui.RejectedDetailFragment"
+        android:label="@string/title_rejected_detail"
+        tools:layout="@layout/fragment_rejected_detail" />
+    <fragment
+        android:id="@+id/underReviewDetailFragment"
+        android:name="com.example.reimbifyapp.user.ui.UnderReviewDetailFragment"
+        android:label="@string/title_under_review_detail"
+        tools:layout="@layout/fragment_under_review_detail" />
 </navigation>
+
