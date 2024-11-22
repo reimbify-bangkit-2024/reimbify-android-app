@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/navigation_add_request"
-        android:name="com.example.reimbifyapp.user.ui.AddUserFragment"
+        android:name="com.example.reimbifyapp.user.ui.AddRequestFragment"
         android:label="@string/label_add_request"
         tools:layout="@layout/fragment_add_request_user" />
     <fragment
