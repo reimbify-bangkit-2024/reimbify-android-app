@@ -75,35 +75,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/name"
-                    android:textSize="14sp"
-                    android:textColor="@color/black" />
-
-                <EditText
-                    android:id="@+id/et_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="@drawable/input_box"
-                    android:hint="@string/name"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:focusable="false"
-                    android:clickable="false" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/request_date"
                     android:textSize="14sp"
                     android:textColor="@color/black" />

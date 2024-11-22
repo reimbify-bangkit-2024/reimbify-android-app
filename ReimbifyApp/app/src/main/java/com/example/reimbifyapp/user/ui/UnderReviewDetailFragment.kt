@@ -37,7 +37,6 @@ class UnderReviewDetailFragment : Fragment() {
             .load(history.notaImage)
             .placeholder(R.drawable.photo_camera_24dp_48752c_fill0_wght400_grad0_opsz24)
             .into(binding.ivNotaImage)
-        binding.etName.setText(history.department)
         binding.etRequestDate.setText(history.receiptDate)
         binding.etDepartment.setText(history.department)
         binding.etAmount.setText(history.amount.toString())
