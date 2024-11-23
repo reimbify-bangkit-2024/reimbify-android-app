@@ -16,4 +16,32 @@
     <color name="purple_stroke">#D1C4E9</color>
     <color name="green_stroke">#C8E6C9</color>
     <color name="red_stroke">#FFCDD2</color>
+    <color name="red">#D32F2F</color>
+    <color name="navy">#2D3D4F</color>
+
+    <color name="light_gray">#F2F2F2</color>
+    <color name="dark_gray">#616161</color>
+    <color name="semi_transparent_black">#80000000</color>
+    <color name="light_primary">#1E88E5</color>
+    <color name="light_primary_variant">#1565C0</color>
+    <color name="light_secondary">#43A047</color>
+    <color name="light_secondary_variant">#2E7D32</color>
+    <color name="light_surface">#FFFFFF</color>
+    <color name="light_background">#F5F5F5</color>
+    <color name="light_on_primary">#FFFFFF</color>
+    <color name="light_on_secondary">#FFFFFF</color>
+    <color name="light_on_background">#000000</color>
+    <color name="light_error">#D32F2F</color>
+    <color name="light_on_error">#FFFFFF</color>
+    <color name="dark_primary">#1976D2</color>
+    <color name="dark_primary_variant">#0D47A1</color>
+    <color name="dark_secondary">#388E3C</color>
+    <color name="dark_secondary_variant">#1B5E20</color>
+    <color name="dark_surface">#121212</color>
+    <color name="dark_background">#1E1E1E</color>
+    <color name="dark_on_primary">#000000</color>
+    <color name="dark_on_secondary">#FFFFFF</color>
+    <color name="dark_on_background">#FFFFFF</color>
+    <color name="dark_error">#CF6679</color>
+    <color name="dark_on_error">#FFFFFF</color>
 </resources>
