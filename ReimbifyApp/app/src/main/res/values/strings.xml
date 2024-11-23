@@ -80,5 +80,22 @@
     <string name="cancel">Cancel</string>
     <string name="submit_request">Submit Request</string>
     <string name="image_preview">Image Preview\n</string>
+    <string name="login_banner">Login Banner</string>
+    <string name="email">Email</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="password">password</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="login_subtitle">Log in to track your reimbursements effortlessly.</string>
+    <string name="forgot_password"><u>Forgot Password</u></string>
+    <string name="username">Username</string>
+    <string name="enter_your_username">Enter your username</string>
+    <string name="verify">Verify</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="verify_otp_banner">Verify OTP Banner</string>
+    <string name="forgot_password_banner">Forgot Password Banner</string>
+    <string name="enter_your_otp">Enter your OTP</string>
+    <string name="check_email_otp">Check your email for the code we\'ve sent to verify your account</string>
 
 </resources>
