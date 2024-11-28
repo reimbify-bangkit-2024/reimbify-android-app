@@ -17,6 +17,7 @@ import com.example.reimbifyapp.MainActivityUser
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentLoginBinding
 import com.example.reimbifyapp.user.data.entities.User
+import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.first
@@ -173,11 +174,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun handleLoginError(throwable: Throwable) {
-        Toast.makeText(
-            requireContext(),
-            throwable.localizedMessage ?: "An unknown error occurred",
-            Toast.LENGTH_SHORT
-        ).show()
+        val errorMessage = parseErrorMessage(throwable)
+        showToast(errorMessage)
     }
 
     private fun playAnimation() {

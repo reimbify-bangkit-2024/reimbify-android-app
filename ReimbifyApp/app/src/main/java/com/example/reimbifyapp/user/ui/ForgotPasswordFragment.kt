@@ -18,6 +18,7 @@ import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentForgotPasswordBinding
 import com.example.reimbifyapp.databinding.FragmentLoginBinding
 import com.example.reimbifyapp.user.data.entities.User
+import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.first
@@ -62,7 +63,8 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
             }
 
             result.onFailure { throwable ->
-                showToast(throwable.localizedMessage ?: "Failed to send OTP. Please try again.")
+                val errorMessage = parseErrorMessage(throwable)
+                showToast(errorMessage)
             }
         }
     }

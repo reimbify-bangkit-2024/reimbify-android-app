@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentResetPasswordBinding
 import com.example.reimbifyapp.user.ui.component.CustomConfirmPasswordEditText
+import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
 
@@ -80,7 +81,8 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
             }
 
             result.onFailure { throwable ->
-                showToast(throwable.localizedMessage ?: "Failed to reset password. Please try again.")
+                val errorMessage = parseErrorMessage(throwable)
+                showToast(errorMessage)
             }
         }
     }
@@ -114,8 +116,8 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
             return false
         }
 
-        if (newPassword !== confirmPassword) {
-            showToast("Password do not match")
+        if (newPassword != confirmPassword) {
+            showToast("Password do not match!")
             return false
         }
 
