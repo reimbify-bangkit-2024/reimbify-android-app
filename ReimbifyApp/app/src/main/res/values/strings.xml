@@ -123,5 +123,12 @@
     <string name="enter_new_your_password">Enter your new password</string>
     <string name="confirm_your_password">Enter your password again</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
+    <string name="previous_password">Previous Password</string>
+    <string name="success">Success!</string>
+    <string name="default_success_box">This is default success box</string>
+    <string name="failed">Failed</string>
+    <string name="default_failed_box">This is default failed message</string>
 
 </resources>
