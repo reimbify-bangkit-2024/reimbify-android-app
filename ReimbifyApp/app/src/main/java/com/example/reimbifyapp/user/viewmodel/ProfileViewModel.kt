@@ -1,5 +1,6 @@
 package com.example.reimbifyapp.user.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,7 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     }
 
     fun changePassword(userId: String, oldPassword: String, newPassword: String) {
+        Log.d("CHANGE PASS", "$userId $oldPassword $newPassword")
         viewModelScope.launch {
             try {
                 val response = repository.changePassword(userId, oldPassword, newPassword)

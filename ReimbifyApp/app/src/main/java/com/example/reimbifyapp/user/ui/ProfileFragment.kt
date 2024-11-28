@@ -46,6 +46,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupObservers()
         fetchUserProfile()
         setupActions()
     }
@@ -53,6 +54,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupObservers() {
+        viewModel.getUserResult.observe(viewLifecycleOwner) { result ->
+            showLoading(false)
+            result.onSuccess { user ->
+                displayUserData(user.user)
+            }
+            result.onFailure { throwable ->
+                showToast("Failed to load user profile: ${throwable.localizedMessage}")
+            }
+        }
     }
 
     private fun fetchUserProfile() {
@@ -63,20 +76,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
 
                 if (userSession.token.isEmpty()) {
                     userViewModel.logout()
-
                     showToast("Session expired. Please log in again.")
                     navigateToAuthActivity()
                     return@launch
                 }
 
-                viewModel.getUserResult.observe(viewLifecycleOwner) { result ->
-                    showLoading(false)
-                    result.onSuccess { user ->
-                        displayUserData(user.user)
-                    }
-                }
-
-
+                viewModel.getUser(userSession.userId)
             } catch (e: Exception) {
                 showLoading(false)
                 showToast("Failed to load user profile: ${e.localizedMessage}")
@@ -117,6 +122,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.loadingOverlay.visibility = View.VISIBLE
+            binding.progressBar.isIndeterminate = true
         } else {
             binding.loadingOverlay.visibility = View.GONE
         }

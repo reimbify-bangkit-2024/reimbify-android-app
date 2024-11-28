@@ -1,9 +1,14 @@
 package com.example.reimbifyapp.user.ui.component
 
+import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -12,14 +17,19 @@ import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.DialogChangePasswordBinding
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.user.factory.UserViewModelFactory
+import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ChangePasswordDialogFragment  : DialogFragment() {
 
     private var _binding: DialogChangePasswordBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var newPasswordEditText: EditText
+    private lateinit var confirmPasswordEditText: CustomConfirmPasswordEditText
 
     private val viewModel by viewModels<ProfileViewModel> {
         ProfileViewModelFactory.getInstance(requireContext())
@@ -47,14 +57,39 @@ class ChangePasswordDialogFragment  : DialogFragment() {
             showLoading(false)
 
             result.onSuccess {
-                showToast("Password changed successfully!")
-                dismiss()
+                showSuccessDialog()
             }
 
             result.onFailure { throwable ->
-                showToast("Failed to change password: ${throwable.localizedMessage}")
+                val errorMessage = parseErrorMessage(throwable)
+                showToast(errorMessage)
             }
         }
+
+        newPasswordEditText = binding.newPasswordEditText
+        confirmPasswordEditText = view.findViewById(R.id.confirmPasswordEditText)
+        newPasswordEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                confirmPasswordEditText.setOriginalPassword(s?.toString() ?: "")
+            }
+        })
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = Dialog(requireContext(), R.style.CustomDialogStyle)
+        return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
     private fun setupActions() {
@@ -69,19 +104,18 @@ class ChangePasswordDialogFragment  : DialogFragment() {
 
             if (validateInput(oldPassword, newPassword, confirmPassword)) {
                 showLoading(true)
-                getUserIdFromSession()?.let { it1 -> viewModel.changePassword(userId = it1, oldPassword, newPassword) }
+                lifecycleScope.launch {
+                    val userId = getUserIdFromSession()
+
+                    viewModel.changePassword(userId, oldPassword, newPassword)
+                }
             }
         }
     }
 
-    private fun getUserIdFromSession(): String? {
-        var userId: String? = null
-        lifecycleScope.launch {
-            userViewModel.getSession().collect { session ->
-                userId = session.userId
-            }
-        }
-        return userId
+    private suspend fun getUserIdFromSession(): String {
+        val session = userViewModel.getSession().first()
+        return session.userId
     }
 
     private fun validateInput(oldPassword: String, newPassword: String, confirmPassword: String): Boolean {
@@ -106,14 +140,21 @@ class ChangePasswordDialogFragment  : DialogFragment() {
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
+            binding.btnCancel.isEnabled = false
             binding.btnSave.isEnabled = false
             binding.btnSave.text = getString(R.string.loading)
         } else {
+            binding.btnCancel.isEnabled = true
             binding.btnSave.isEnabled = true
             binding.btnSave.text = getString(R.string.save)
         }
     }
 
+    private fun showSuccessDialog() {
+        val successDialog = SuccessDialogFragment.newInstance("Password Changed", "Your password has been updated successfully!")
+        successDialog.show(parentFragmentManager, "SuccessDialog")
+        dismiss()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
