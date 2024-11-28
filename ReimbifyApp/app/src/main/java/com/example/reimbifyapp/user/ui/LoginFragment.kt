@@ -4,7 +4,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,7 @@ import com.example.reimbifyapp.databinding.FragmentLoginBinding
 import com.example.reimbifyapp.user.data.entities.User
 import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
-import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
+import com.example.reimbifyapp.user.factory.UserViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -28,7 +27,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<LoginViewModel> {
-        ViewModelFactory.getInstance(requireActivity())
+        UserViewModelFactory.getInstance(requireActivity())
     }
 
     override fun onCreateView(

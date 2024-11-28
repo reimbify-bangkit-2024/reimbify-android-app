@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,7 +14,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/outline_cancel_24"
-        android:contentDescription="Close"
+        android:contentDescription="@string/close"
         app:tint="@android:color/darker_gray"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -26,7 +25,7 @@
         android:layout_height="64dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/correct_success_tick_svgrepo_com"
-        android:contentDescription="Success"
+        android:contentDescription="@string/success"
         app:layout_constraintTop_toBottomOf="@id/btnCloseDialog"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

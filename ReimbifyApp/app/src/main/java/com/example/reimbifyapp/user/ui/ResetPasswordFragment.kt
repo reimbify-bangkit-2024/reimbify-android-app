@@ -18,7 +18,7 @@ import com.example.reimbifyapp.databinding.FragmentResetPasswordBinding
 import com.example.reimbifyapp.user.ui.component.CustomConfirmPasswordEditText
 import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
-import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
+import com.example.reimbifyapp.user.factory.UserViewModelFactory
 
 class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
     private var _binding: FragmentResetPasswordBinding? = null
@@ -28,7 +28,7 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
     private lateinit var confirmPasswordEditText: CustomConfirmPasswordEditText
 
     private val viewModel by viewModels<LoginViewModel> {
-        ViewModelFactory.getInstance(requireActivity())
+        UserViewModelFactory.getInstance(requireActivity())
     }
 
     override fun onCreateView(

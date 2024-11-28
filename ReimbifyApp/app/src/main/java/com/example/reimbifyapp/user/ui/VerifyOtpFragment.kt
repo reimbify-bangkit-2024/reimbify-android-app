@@ -2,7 +2,6 @@ package com.example.reimbifyapp.user.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,17 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.reimbifyapp.MainActivityUser
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentVerifyOtpBinding
 import com.example.reimbifyapp.user.data.entities.User
 import com.example.reimbifyapp.user.utils.children
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
-import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import com.example.reimbifyapp.user.factory.UserViewModelFactory
 
 class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
     private var _binding: FragmentVerifyOtpBinding? = null
@@ -29,7 +24,7 @@ class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
     private var otp: String? = null
 
     private val viewModel by viewModels<LoginViewModel> {
-        ViewModelFactory.getInstance(requireActivity())
+        UserViewModelFactory.getInstance(requireActivity())
     }
 
     override fun onCreateView(

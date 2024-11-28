@@ -8,11 +8,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.ActivityAuthBinding
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
-import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
+import com.example.reimbifyapp.user.factory.UserViewModelFactory
 
 class AuthActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
-        ViewModelFactory.getInstance(this)
+        UserViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityAuthBinding
 
