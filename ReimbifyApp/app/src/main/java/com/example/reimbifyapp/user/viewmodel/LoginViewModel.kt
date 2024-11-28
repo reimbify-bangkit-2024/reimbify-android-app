@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.reimbifyapp.user.data.entities.User
 import com.example.reimbifyapp.user.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.user.data.network.response.LoginResponse
+import com.example.reimbifyapp.user.data.network.response.ResetPasswordResponse
+import com.example.reimbifyapp.user.data.network.response.SendOtpResponse
 import com.example.reimbifyapp.user.data.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -22,6 +24,13 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _verifyOtpResult = MutableLiveData<Result<LoginResponse>>()
     val verifyOtpResult: LiveData<Result<LoginResponse>> = _verifyOtpResult
+
+
+    private val _sendOtpResult = MutableLiveData<Result<SendOtpResponse>>()
+    val sendOtpResult: LiveData<Result<SendOtpResponse>> = _sendOtpResult
+
+    private val _resetPasswordResult = MutableLiveData<Result<ResetPasswordResponse>>()
+    val resetPasswordResult: LiveData<Result<ResetPasswordResponse>> = _resetPasswordResult
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -52,6 +61,28 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                 _verifyOtpResult.postValue(Result.success(response))
             } catch (e: Exception) {
                 _verifyOtpResult.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun sendOtp(userId: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.sendOtp(userId)
+                _sendOtpResult.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _sendOtpResult.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun resetPassword(userId: String, otp: String, newPassword: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.resetPassword(userId, otp, newPassword)
+                _resetPasswordResult.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _resetPasswordResult.postValue(Result.failure(e))
             }
         }
     }

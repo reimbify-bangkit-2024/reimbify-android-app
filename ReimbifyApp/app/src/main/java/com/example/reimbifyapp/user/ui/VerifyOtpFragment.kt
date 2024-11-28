@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.reimbifyapp.MainActivityUser
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentVerifyOtpBinding
@@ -24,6 +25,8 @@ import kotlinx.coroutines.launch
 class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
     private var _binding: FragmentVerifyOtpBinding? = null
     private val binding get() = _binding!!
+
+    private var otp: String? = null
 
     private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(requireActivity())
@@ -62,12 +65,29 @@ class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
                         isLogin = true
                     )
                 )
-                showToast("Login successful!")
-                moveToDashboard()
+
+                showToast("User Verified!")
+                val bundle = Bundle().apply {
+                    putString("userId", response.userId)
+                    putString("otp", otp)
+                }
+
+                findNavController().navigate(
+                    R.id.action_otpVerificationFragment_to_resetPasswordFragment,
+                    bundle
+                )
             }
 
             result.onFailure { throwable ->
                 handleLoginError(throwable)
+            }
+        }
+
+        viewModel.sendOtpResult.observe(viewLifecycleOwner) { result ->
+            showLoading(false)
+
+            result.onSuccess {
+                showToast("A new OTP has been successfully sent to your email")
             }
         }
     }
@@ -79,42 +99,32 @@ class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
 
     private fun setupActions(userId: String) {
         binding.verifyButton.setOnClickListener {
-            val otp = binding.otpEditText.getOtp()
+            otp = binding.otpEditText.getOtp()
 
             if (validateInput(otp)) {
                 showLoading(true)
-                viewModel.verifyOtp(userId, otp)
+                viewModel.verifyOtp(userId, otp!!)
             }
+        }
+
+        binding.resendOTPTextView.setOnClickListener {
+            showLoading(true)
+            viewModel.sendOtp(userId)
         }
     }
 
-    private fun validateInput(otp: String): Boolean {
+    private fun validateInput(otp: String?): Boolean {
+        if (otp.isNullOrEmpty()) {
+            showToast("OTP cannot be empty")
+            return false
+        }
+
         if (otp.length != 6) {
             showToast("Invalid OTP")
             return false
         }
 
         return true
-    }
-
-    private fun moveToDashboard() {
-        // TODO: Navigate either to User Dashboard or Admin Dashboard
-        lifecycleScope.launch {
-            val user = viewModel.getSession().first()
-            when (user.role) {
-                "user" -> {
-                    showToast("Navigating to User Dashboard")
-                    val intent = Intent(requireContext(), MainActivityUser::class.java).apply {
-                        putExtra("open_fragment", "dashboard")
-                    }
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
-                "admin" -> {
-                    showToast("Navigating to Admin Dashboard")
-                }
-            }
-        }
     }
 
     private fun showToast(message: String) {

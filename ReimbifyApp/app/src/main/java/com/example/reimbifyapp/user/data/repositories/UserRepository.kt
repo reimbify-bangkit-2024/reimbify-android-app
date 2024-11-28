@@ -4,9 +4,13 @@ import com.example.reimbifyapp.user.data.entities.User
 import com.example.reimbifyapp.user.data.network.api.ApiConfig
 import com.example.reimbifyapp.user.data.network.request.ForgotPasswordRequest
 import com.example.reimbifyapp.user.data.network.request.LoginRequest
+import com.example.reimbifyapp.user.data.network.request.ResetPasswordRequest
+import com.example.reimbifyapp.user.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.user.data.network.request.VerifyOtpRequest
 import com.example.reimbifyapp.user.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.user.data.network.response.LoginResponse
+import com.example.reimbifyapp.user.data.network.response.ResetPasswordResponse
+import com.example.reimbifyapp.user.data.network.response.SendOtpResponse
 import com.example.reimbifyapp.user.data.preferences.UserPreference
 import kotlinx.coroutines.flow.Flow
 
@@ -39,6 +43,16 @@ class UserRepository private constructor(
     suspend fun verifyOtp(userId: String, otp: String) : LoginResponse {
         val verifyOtpRequest = VerifyOtpRequest(userId, otp)
         return ApiConfig.apiService.verifyOTP(verifyOtpRequest)
+    }
+
+    suspend fun sendOtp(userId: String) : SendOtpResponse {
+        val sendOtpRequest = SendOtpRequest(userId)
+        return ApiConfig.apiService.sendOtp(sendOtpRequest)
+    }
+
+    suspend fun resetPassword(userId: String, otp: String, newPassword: String) : ResetPasswordResponse {
+        val resetPasswordRequest = ResetPasswordRequest(userId, otp, newPassword)
+        return ApiConfig.apiService.resetPassword(resetPasswordRequest)
     }
 
     companion object {

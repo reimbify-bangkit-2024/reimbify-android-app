@@ -83,7 +83,7 @@
     <string name="login_banner">Login Banner</string>
     <string name="email">Email</string>
     <string name="enter_your_email">Enter your email</string>
-    <string name="password">password</string>
+    <string name="password">Password</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="login">Login</string>
     <string name="welcome_back">Welcome Back!</string>
@@ -116,5 +116,12 @@
     <string name="default_email">john.doe@company.co.id</string>
     <string name="change_password">Change Password</string>
     <string name="add_bank_account">Add Bank Account</string>
+    <string name="reset_banner">Reset Banner</string>
+    <string name="resend_otp"><u>Resend OTP</u></string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
+    <string name="enter_new_your_password">Enter your new password</string>
+    <string name="confirm_your_password">Enter your password again</string>
+    <string name="confirm_password">Confirm Password</string>
 
 </resources>

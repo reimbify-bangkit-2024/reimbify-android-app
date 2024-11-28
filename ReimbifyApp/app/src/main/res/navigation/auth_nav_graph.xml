@@ -25,5 +25,21 @@
     <fragment
         android:id="@+id/otpVerificationFragment"
         android:name="com.example.reimbifyapp.user.ui.VerifyOtpFragment"
-        android:label="OTP Verification" />
+        android:label="OTP Verification" >
+        <action
+            android:id="@+id/action_otpVerificationFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.reimbifyapp.user.ui.ResetPasswordFragment"
+        android:label="Reset Password" >
+        <action
+            android:id="@+id/resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/resetPasswordFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
 </navigation>
