@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.reimbifyapp.user.data.entities.User
+import com.example.reimbifyapp.user.data.entities.UserSession
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -15,18 +15,18 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
-    suspend fun saveSession(user: User) {
+    suspend fun saveSession(userSession: UserSession) {
         dataStore.edit { preferences ->
-            preferences[USER_ID_KEY] = user.userId
-            preferences[TOKEN_KEY] = user.token
-            preferences[ROLE_KEY] = user.role
+            preferences[USER_ID_KEY] = userSession.userId
+            preferences[TOKEN_KEY] = userSession.token
+            preferences[ROLE_KEY] = userSession.role
             preferences[IS_LOGIN_KEY] = true
         }
     }
 
-    fun getSession(): Flow<User> {
+    fun getSession(): Flow<UserSession> {
         return dataStore.data.map { preferences ->
-            User(
+            UserSession(
                 preferences[USER_ID_KEY] ?: "",
                 preferences[TOKEN_KEY] ?: "",
                 preferences[ROLE_KEY] ?: "",

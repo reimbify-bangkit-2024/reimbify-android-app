@@ -4,11 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class User(
+data class UserSession(
     val userId: String,
-    val email: String,
-    val userName: String,
-    val department: Department,
+    val token: String,
     val role: String,
-    val profileImageUrl: String?
+    val isLogin: Boolean = false
 ) : Parcelable

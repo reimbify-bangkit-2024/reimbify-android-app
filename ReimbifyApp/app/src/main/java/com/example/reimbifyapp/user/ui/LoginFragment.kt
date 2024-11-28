@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.reimbifyapp.MainActivityUser
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentLoginBinding
-import com.example.reimbifyapp.user.data.entities.User
+import com.example.reimbifyapp.user.data.entities.UserSession
 import com.example.reimbifyapp.user.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.factory.UserViewModelFactory
@@ -42,60 +43,51 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkSession()
+        checkSessionAndNavigate()
         setupActions()
+        observeLoginResult()
         playAnimation()
-
-        viewModel.loginResult.observe(viewLifecycleOwner) { result ->
-            showLoading(false)
-
-            result.onSuccess { response ->
-                viewModel.saveSession(
-                    User(
-                        userId = response.userId,
-                        token = response.accessToken,
-                        role = response.role,
-                        isLogin = true
-                    )
-                )
-                showToast("Login successful!")
-                moveToDashboard()
-            }
-
-            result.onFailure { throwable ->
-                handleLoginError(throwable)
-            }
-        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    private fun checkSession() {
-        // TODO: Uncomment when the logout is available
-        /*
+    private fun checkSessionAndNavigate() {
         lifecycleScope.launch {
-            val user = viewModel.getSession().first()
-            if (user.isLogin){
-                when (user.role) {
-                    "user" -> {
-                        showToast("Navigating to User Dashboard")
-                        val intent = Intent(requireContext(), MainActivityUser::class.java).apply {
-                            putExtra("open_fragment", "dashboard")
-                        }
-                        startActivity(intent)
-                        requireActivity().finish()
-                    }
+            val userSession = viewModel.getSession().first()
+            Log.d("SESSION", "Checking session: $userSession")
 
-                    "admin" -> {
-                        showToast("Navigating to Admin Dashboard")
-                    }
-                }
+            if (userSession.isLogin) {
+                moveToDashboard(userSession)
             }
         }
-         */
+    }
+
+    private fun observeLoginResult() {
+        viewModel.loginResult.observe(viewLifecycleOwner) { result ->
+            showLoading(false)
+
+            result.onSuccess { response ->
+                lifecycleScope.launch {
+                    val newSession = UserSession(
+                        userId = response.userId,
+                        token = response.accessToken,
+                        role = response.role,
+                        isLogin = true
+                    )
+                    viewModel.saveSession(newSession)
+                    Log.d("SESSION", "New session saved: $newSession")
+                    moveToDashboard(newSession)
+                }
+            }
+
+            result.onFailure { throwable ->
+                handleLoginError(throwable)
+            }
+        }
     }
 
     private fun setupActions() {
@@ -109,7 +101,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
-        // Handle forgot password click
         binding.forgotPasswordTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
@@ -139,28 +130,26 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         return true
     }
 
-    private fun moveToDashboard() {
-        // TODO: Navigate either to User Dashboard or Admin Dashboard
-        lifecycleScope.launch {
-            val user = viewModel.getSession().first()
-            when (user.role) {
-                "user" -> {
-                    showToast("Navigating to User Dashboard")
-                    val intent = Intent(requireContext(), MainActivityUser::class.java).apply {
-                        putExtra("open_fragment", "dashboard")
-                    }
-                    startActivity(intent)
-                    requireActivity().finish()
+    private fun moveToDashboard(userSession: UserSession) {
+        when (userSession.role) {
+            "user" -> {
+                showToast("Navigating to User Dashboard")
+                val intent = Intent(requireContext(), MainActivityUser::class.java).apply {
+                    putExtra("open_fragment", "dashboard")
                 }
-                "admin" -> {
-                    showToast("Navigating to Admin Dashboard")
-                }
+                startActivity(intent)
+                requireActivity().finish()
+            }
+
+            "admin" -> {
+                showToast("Navigating to Admin Dashboard")
+                // TODO: Navigate to Admin Dashboard
+            }
+
+            else -> {
+                showToast("Role not recognized")
             }
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -170,6 +159,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         } else {
             binding.loadingOverlay.visibility = View.GONE
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun handleLoginError(throwable: Throwable) {

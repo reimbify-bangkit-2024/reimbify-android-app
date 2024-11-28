@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.reimbifyapp.user.data.entities.User
+import com.example.reimbifyapp.user.data.entities.UserSession
 import com.example.reimbifyapp.user.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.user.data.network.response.LoginResponse
 import com.example.reimbifyapp.user.data.network.response.ResetPasswordResponse
@@ -41,6 +41,10 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                 _loginResult.postValue(Result.failure(e))
             }
         }
+    }
+
+    suspend fun logout() {
+        repository.logout()
     }
 
     fun forgotPassword(email: String, username: String) {
@@ -87,13 +91,13 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun saveSession(user: User) {
+    fun saveSession(userSession: UserSession) {
         viewModelScope.launch {
-            repository.saveSession(user)
+            repository.saveSession(userSession)
         }
     }
 
-    fun getSession(): Flow<User> {
+    fun getSession(): Flow<UserSession> {
         return repository.getSession()
     }
 }

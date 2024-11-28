@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentVerifyOtpBinding
-import com.example.reimbifyapp.user.data.entities.User
+import com.example.reimbifyapp.user.data.entities.UserSession
 import com.example.reimbifyapp.user.utils.children
 import com.example.reimbifyapp.user.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.factory.UserViewModelFactory
@@ -53,7 +53,7 @@ class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
 
             result.onSuccess { response ->
                 viewModel.saveSession(
-                    User(
+                    UserSession(
                         userId = response.userId,
                         token = response.accessToken,
                         role = response.role,
