@@ -11,12 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentProfileUserBinding
-import com.example.reimbifyapp.user.data.entities.User
-import com.example.reimbifyapp.user.data.entities.UserSession
+import com.example.reimbifyapp.data.entities.User
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
-import com.example.reimbifyapp.user.factory.UserViewModelFactory
-import com.example.reimbifyapp.user.ui.component.ChangePasswordDialogFragment
-import com.example.reimbifyapp.user.viewmodel.LoginViewModel
+import com.example.reimbifyapp.general.factory.UserViewModelFactory
+import com.example.reimbifyapp.general.ui.AuthActivity
+import com.example.reimbifyapp.general.ui.component.ChangePasswordDialogFragment
+import com.example.reimbifyapp.general.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -99,7 +99,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
 
     private fun displayUserData(user: User) {
         binding.tvProfileName.text = user.userName
-        binding.tvProfileDepartment.text = user.department.departmentName ?: "-"
+        binding.tvProfileDepartment.text = user.department.departmentName
         binding.tvEmail.text = user.email
         binding.tvRole.text = user.role
     }

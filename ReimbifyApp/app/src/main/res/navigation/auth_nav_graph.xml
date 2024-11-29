@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.reimbifyapp.user.ui.LoginFragment"
+        android:name="com.example.reimbifyapp.general.ui.LoginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.example.reimbifyapp.user.ui.ForgotPasswordFragment"
+        android:name="com.example.reimbifyapp.general.ui.ForgotPasswordFragment"
         android:label="Forgot Password" >
         <action
             android:id="@+id/action_forgotPasswordFragment_to_otpVerificationFragment"
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/otpVerificationFragment"
-        android:name="com.example.reimbifyapp.user.ui.VerifyOtpFragment"
+        android:name="com.example.reimbifyapp.general.ui.VerifyOtpFragment"
         android:label="OTP Verification" >
         <action
             android:id="@+id/action_otpVerificationFragment_to_resetPasswordFragment"
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.example.reimbifyapp.user.ui.ResetPasswordFragment"
+        android:name="com.example.reimbifyapp.general.ui.ResetPasswordFragment"
         android:label="Reset Password" >
         <action
             android:id="@+id/resetPasswordFragment_to_loginFragment"

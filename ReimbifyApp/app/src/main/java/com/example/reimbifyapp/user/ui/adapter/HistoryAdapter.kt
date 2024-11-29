@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.user.data.entities.History
+import com.example.reimbifyapp.data.entities.History
 
 class HistoryAdapter(private val listHistory: ArrayList<History>) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {

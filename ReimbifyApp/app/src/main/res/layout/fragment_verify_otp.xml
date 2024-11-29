@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.ui.VerifyOtpFragment">
+    tools:context=".general.ui.VerifyOtpFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-            <com.example.reimbifyapp.user.ui.component.CustomOTPEditText
+            <com.example.reimbifyapp.general.ui.component.CustomOTPEditText
                 android:id="@+id/otpEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

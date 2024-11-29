@@ -3,8 +3,8 @@ package com.example.reimbifyapp.user.factory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.reimbifyapp.user.data.repositories.ProfileRepository
-import com.example.reimbifyapp.user.di.Injection
+import com.example.reimbifyapp.data.repositories.ProfileRepository
+import com.example.reimbifyapp.di.Injection
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
 
 class ProfileViewModelFactory(

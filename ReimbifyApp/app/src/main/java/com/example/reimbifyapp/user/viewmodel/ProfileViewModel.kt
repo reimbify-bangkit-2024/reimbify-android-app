@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.reimbifyapp.user.data.network.response.ChangePasswordResponse
-import com.example.reimbifyapp.user.data.network.response.GetUserResponse
-import com.example.reimbifyapp.user.data.repositories.ProfileRepository
+import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
+import com.example.reimbifyapp.data.network.response.GetUserResponse
+import com.example.reimbifyapp.data.repositories.ProfileRepository
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {

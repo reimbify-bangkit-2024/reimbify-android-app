@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
+import com.example.reimbifyapp.general.factory.UserViewModelFactory
 import com.example.reimbifyapp.user.viewmodel.AddRequestViewModel
-import com.example.reimbifyapp.user.viewmodel.LoginViewModel
-import com.example.reimbifyapp.user.viewmodel.ViewModelFactory
+import com.example.reimbifyapp.general.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -42,8 +42,8 @@ class AddRequestFragment : Fragment() {
     ): View {
         _binding = FragmentAddRequestUserBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[AddRequestViewModel::class.java]
-        loginViewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this, UserViewModelFactory.getInstance(requireContext()))[AddRequestViewModel::class.java]
+        loginViewModel = ViewModelProvider(this, UserViewModelFactory.getInstance(requireContext()))[LoginViewModel::class.java]
 
         setupUI()
 

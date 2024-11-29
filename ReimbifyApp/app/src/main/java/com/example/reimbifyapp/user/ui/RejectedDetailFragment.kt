@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentRejectedDetailBinding
-import com.example.reimbifyapp.user.data.entities.History
+import com.example.reimbifyapp.data.entities.History
 
 class RejectedDetailFragment : Fragment() {
 
