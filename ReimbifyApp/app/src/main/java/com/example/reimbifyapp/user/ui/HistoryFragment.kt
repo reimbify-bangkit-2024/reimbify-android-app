@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentHistoryUserBinding
-import com.example.reimbifyapp.user.data.entities.History
+import com.example.reimbifyapp.data.entities.History
 import com.example.reimbifyapp.user.ui.adapter.HistoryAdapter
 
 class HistoryFragment : Fragment() {

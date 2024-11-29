@@ -9,7 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.reimbifyapp.databinding.FragmentSettingUserBinding
-import com.example.reimbifyapp.user.data.preferences.SettingPreferences
+import com.example.reimbifyapp.data.preferences.SettingPreferences
 import com.example.reimbifyapp.user.factory.SettingViewModelFactory
 import com.example.reimbifyapp.user.viewmodel.SettingViewModel
 
@@ -32,7 +32,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pref = SettingPreferences.getInstance(requireContext().dataStore)
+        val pref = com.example.reimbifyapp.data.preferences.SettingPreferences.getInstance(requireContext().dataStore)
         val settingViewModelFactory = SettingViewModelFactory(pref)
         settingViewModel = ViewModelProvider(this, settingViewModelFactory)[SettingViewModel::class.java]
 

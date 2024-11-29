@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@android:color/white"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvAccountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_account"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Edit Icon -->
+        <ImageView
+            android:id="@+id/ivEditIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_edit_24"
+            android:contentDescription="@string/edit_icon"
+            app:tint="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvAccountNameLabel"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:text="@string/account_name"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAccountTitle"
+            app:layout_constraintWidth_percent="0.4"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tvAccountName"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bordered_box"
+            android:padding="4dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/john_doe"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@id/tvAccountNameLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvAccountNameLabel" />
+
+        <TextView
+            android:id="@+id/tvAccountNumberLabel"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:text="@string/account_number"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAccountNameLabel"
+            app:layout_constraintWidth_percent="0.4"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tvAccountNumber"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bordered_box"
+            android:padding="4dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/default_bank_number"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@id/tvAccountNumberLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvAccountNumberLabel" />
+
+        <TextView
+            android:id="@+id/tvBankNameLabel"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:text="@string/bank_name"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAccountNumberLabel"
+            app:layout_constraintWidth_percent="0.4"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tvBankName"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bordered_box"
+            android:padding="4dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/default_bank"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@id/tvBankNameLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvBankNameLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.ui.LoginFragment">
+    tools:context=".general.ui.LoginFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/emailTextView"
                 app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-                <com.example.reimbifyapp.user.ui.component.CustomEmailEditText
+                <com.example.reimbifyapp.general.ui.component.CustomEmailEditText
                     android:id="@+id/emailEditText"
                     style="@style/CustomEditTextStyle"
                     android:layout_width="match_parent"
@@ -116,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
                 app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-                <com.example.reimbifyapp.user.ui.component.CustomPasswordEditText
+                <com.example.reimbifyapp.general.ui.component.CustomPasswordEditText
                     android:id="@+id/passwordEditText"
                     style="@style/CustomEditTextStyle"
                     android:layout_width="match_parent"

@@ -2,10 +2,10 @@ package com.example.reimbifyapp.user.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.reimbifyapp.user.data.preferences.SettingPreferences
+import com.example.reimbifyapp.data.preferences.SettingPreferences
 import com.example.reimbifyapp.user.viewmodel.SettingViewModel
 
-class SettingViewModelFactory(private val pref: SettingPreferences) : ViewModelProvider.NewInstanceFactory() {
+class SettingViewModelFactory(private val pref: com.example.reimbifyapp.data.preferences.SettingPreferences) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
