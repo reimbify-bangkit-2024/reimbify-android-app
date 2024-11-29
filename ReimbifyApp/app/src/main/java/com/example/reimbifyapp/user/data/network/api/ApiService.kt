@@ -12,9 +12,15 @@ import com.example.reimbifyapp.user.data.network.response.GetUserResponse
 import com.example.reimbifyapp.user.data.network.response.LoginResponse
 import com.example.reimbifyapp.user.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.user.data.network.response.SendOtpResponse
+import com.example.reimbifyapp.user.data.network.response.UploadResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -38,4 +44,12 @@ interface ApiService {
 
     @POST("/auth/password/update")
     suspend fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): ChangePasswordResponse
+
+    @Multipart
+    @POST("request/image/upload")
+    suspend fun uploadReceiptImage(
+        @Header("Authorization") authToken: String,
+        @Part image: MultipartBody.Part,
+        @Query("userId") userId: String
+    ): UploadResponse
 }
