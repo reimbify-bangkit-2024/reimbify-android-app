@@ -141,5 +141,10 @@
     <string name="title">Title</string>
     <string name="enter_title">Enter Title</string>
     <string name="update_bank_account">Update Bank Account</string>
+    <string name="reimbursement_history">Reimbursement History</string>
+    <string name="track_and_submit_your_expenses_with_ease">Track and submit your expenses with ease!</string>
+    <string name="reimbursement_under_review">Reimbursement: Under Review</string>
+    <string name="greeting">Hello, %1$s!</string>
+    <string name="default_user_name">User</string>
 
 </resources>
