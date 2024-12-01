@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.ui
+package com.example.reimbifyapp.auth.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,8 +7,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.ActivityAuthBinding
-import com.example.reimbifyapp.general.viewmodel.LoginViewModel
-import com.example.reimbifyapp.general.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
+import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 
 class AuthActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {

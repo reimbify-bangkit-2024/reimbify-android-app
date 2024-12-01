@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
-import com.example.reimbifyapp.general.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.user.viewmodel.AddRequestViewModel
-import com.example.reimbifyapp.general.viewmodel.LoginViewModel
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream

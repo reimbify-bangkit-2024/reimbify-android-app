@@ -19,6 +19,7 @@ material = "1.12.0"
 constraintlayout = "2.2.0"
 lifecycleLivedataKtx = "2.8.7"
 lifecycleViewmodelKtx = "2.8.7"
+mpandroidchartVersion = "v3.1.0"
 navigationFragmentKtx = "2.8.4"
 navigationFragmentKtxVersion = "2.7.3"
 navigationUiKtx = "2.8.4"
@@ -54,6 +55,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 okhttp3-integration = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "compiler" }
+philjay-mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchartVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 

@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.ui
+package com.example.reimbifyapp.auth.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -14,8 +14,8 @@ import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentVerifyOtpBinding
 import com.example.reimbifyapp.data.entities.UserSession
 import com.example.reimbifyapp.utils.children
-import com.example.reimbifyapp.general.viewmodel.LoginViewModel
-import com.example.reimbifyapp.general.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
+import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 
 class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
     private var _binding: FragmentVerifyOtpBinding? = null

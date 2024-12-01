@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.ui.component
+package com.example.reimbifyapp.user.ui.component
 
 import android.app.Dialog
 import android.os.Bundle
@@ -15,9 +15,11 @@ import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.DialogChangePasswordBinding
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
-import com.example.reimbifyapp.general.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.ui.component.CustomConfirmPasswordEditText
+import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
-import com.example.reimbifyapp.general.viewmodel.LoginViewModel
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -150,7 +152,7 @@ class ChangePasswordDialogFragment  : DialogFragment() {
     }
 
     private fun showSuccessDialog() {
-        val successDialog = SuccessDialogFragment.newInstance(
+        val successDialog = SuccessDialogFragment.Companion.newInstance(
             "Password Changed",
             "Your password has been updated successfully!"
         )

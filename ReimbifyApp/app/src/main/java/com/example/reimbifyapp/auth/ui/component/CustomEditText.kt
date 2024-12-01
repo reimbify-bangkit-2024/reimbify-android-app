@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.ui.component
+package com.example.reimbifyapp.auth.ui.component
 
 import android.content.Context
 import android.text.Editable
@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.example.reimbifyapp.R
 import com.google.android.material.textfield.TextInputLayout
 
-class CustomPasswordEditText @JvmOverloads constructor(
+class CustomEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.style.CustomEditTextStyle
@@ -17,15 +17,7 @@ class CustomPasswordEditText @JvmOverloads constructor(
     init {
         addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val parentLayout = getTextInputLayout()
-                val password = s.toString()
-                if (password.length < 8) {
-                    parentLayout?.error = "Password must be at least 8 characters"
-                } else {
-                    parentLayout?.error = null
-                }
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {}
         })
     }

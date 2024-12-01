@@ -21,31 +21,99 @@
         android:id="@+id/tvDialogTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/change_password"
+        android:text="@string/new_bank_account"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/prevPasswordTextView"
+        app:layout_constraintBottom_toTopOf="@+id/accountTitleTextView"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="32dp" />
 
     <TextView
-        android:id="@+id/prevPasswordTextView"
+        android:id="@+id/accountTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:text="@string/previous_password"
+        android:text="@string/title"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDialogTitle" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/prevPasswordEditTextLayout"
+        android:id="@+id/accountTitleEditTextLayout"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountTitleTextView"
+        app:startIconDrawable="@drawable/account_balance_cash_svgrepo_com">
+
+        <com.example.reimbifyapp.auth.ui.component.CustomEditText
+            android:id="@+id/accountTitleEditText"
+            style="@style/CustomEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/enter_title"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/accountNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/account_holder_name"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountTitleEditTextLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/accountNameEditTextLayout"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountNameTextView"
+        app:startIconDrawable="@drawable/ic_baseline_person_24">
+
+        <com.example.reimbifyapp.auth.ui.component.CustomEditText
+            android:id="@+id/accountNameEditText"
+            style="@style/CustomEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/enter_bank_account_holder_name"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/accountNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/account_number"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountNameEditTextLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/accountNumberEditTextLayout"
         style="@style/TextInputLayoutStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,91 +122,56 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prevPasswordTextView"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24">
+        app:layout_constraintTop_toBottomOf="@+id/accountNumberTextView"
+        app:startIconDrawable="@drawable/number_svgrepo_com">
 
-        <com.example.reimbifyapp.auth.ui.component.CustomPasswordEditText
-            android:id="@+id/prevPasswordEditText"
+        <com.example.reimbifyapp.user.ui.component.CustomBankNumberEditText
+            android:id="@+id/accountNumberEditText"
             style="@style/CustomEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/enter_new_your_password"
+            android:hint="@string/enter_bank_account_number"
             android:textColor="@color/black"
             android:textColorHint="@color/gray"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/newPasswordTextView"
+        android:id="@+id/bankNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/new_password"
+        android:text="@string/bank_name"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prevPasswordEditTextLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/accountNumberEditTextLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/newPasswordEditTextLayout"
-        style="@style/TextInputLayoutStyle"
+        android:id="@+id/bankNameEditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPasswordTextView"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24">
+        app:layout_constraintTop_toBottomOf="@+id/bankNameTextView"
+        android:hint="@string/select_bank"
+        app:boxBackgroundColor="@color/light_gray"
+        app:boxStrokeColor="@color/light_gray"
+        app:hintTextColor="@color/light_gray"
+        app:popupTheme="@style/CustomDropdownMenu">
 
-        <com.example.reimbifyapp.auth.ui.component.CustomPasswordEditText
-            android:id="@+id/newPasswordEditText"
-            style="@style/CustomEditTextStyle"
+    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/bankNameDropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/enter_new_your_password"
             android:textColor="@color/black"
-            android:textColorHint="@color/gray"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:textColorHint="@color/light_gray"
+            android:background="@color/light_gray" />
 
-    <TextView
-        android:id="@+id/confirmPasswordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/confirm_password"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPasswordEditTextLayout" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirmPasswordEditTextLayout"
-        style="@style/TextInputLayoutStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:endIconMode="password_toggle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextView"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24">
-
-        <com.example.reimbifyapp.auth.ui.component.CustomConfirmPasswordEditText
-            android:id="@+id/confirmPasswordEditText"
-            style="@style/CustomEditTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/confirm_your_password"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray"
-            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -147,7 +180,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="24dp"
-        app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditTextLayout"
+        app:layout_constraintTop_toBottomOf="@id/bankNameEditTextLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.factory
+package com.example.reimbifyapp.auth.factory
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.reimbifyapp.data.repositories.ImageRepository
 import com.example.reimbifyapp.data.repositories.UserRepository
 import com.example.reimbifyapp.di.Injection
-import com.example.reimbifyapp.general.viewmodel.LoginViewModel
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.AddRequestViewModel
 
 class UserViewModelFactory(
