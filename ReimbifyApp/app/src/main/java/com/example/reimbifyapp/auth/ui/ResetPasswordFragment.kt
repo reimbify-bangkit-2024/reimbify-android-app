@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.ui
+package com.example.reimbifyapp.auth.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -15,10 +15,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentResetPasswordBinding
-import com.example.reimbifyapp.general.ui.component.CustomConfirmPasswordEditText
+import com.example.reimbifyapp.auth.ui.component.CustomConfirmPasswordEditText
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
-import com.example.reimbifyapp.general.viewmodel.LoginViewModel
-import com.example.reimbifyapp.general.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
+import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 
 class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
     private var _binding: FragmentResetPasswordBinding? = null

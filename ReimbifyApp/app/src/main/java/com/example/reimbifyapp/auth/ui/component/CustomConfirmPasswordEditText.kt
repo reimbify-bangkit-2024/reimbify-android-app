@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.general.ui.component
+package com.example.reimbifyapp.auth.ui.component
 
 import android.content.Context
 import android.text.Editable

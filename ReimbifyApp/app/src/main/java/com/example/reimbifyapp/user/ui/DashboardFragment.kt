@@ -12,32 +12,46 @@ import com.example.reimbifyapp.user.viewmodel.DashboardViewModel
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentDashboardUserBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
-        _binding = FragmentDashboardUserBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        return inflater.inflate(R.layout.dashboard_fragment, container, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Set Greeting
+        user_greeting.text = "Hello, John Doe"
+
+        // Setup Reimbursement Chart
+        setupReimbursementHistory(line_chart)
+    }
+
+    private fun setupReimbursementHistory(chart: LineChart) {
+        val entries = listOf(
+            Entry(0f, 200f),
+            Entry(1f, 800f),
+            Entry(2f, 600f),
+            Entry(3f, 400f),
+            Entry(4f, 600f)
+        )
+
+        val dataSet = LineDataSet(entries, "Reimbursement History").apply {
+            lineWidth = 2f
+            circleRadius = 4f
+        }
+
+        val lineData = LineData(dataSet)
+        chart.apply {
+            data = lineData
+            description.isEnabled = false
+            axisLeft.setDrawLabels(false)
+            axisRight.setDrawLabels(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.granularity = 1f
+            invalidate()
+        }
     }
 }

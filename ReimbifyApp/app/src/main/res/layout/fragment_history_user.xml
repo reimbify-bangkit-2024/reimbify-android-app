@@ -83,7 +83,8 @@
             android:src="@drawable/swap_vert_24dp_48752c_fill0_wght400_grad0_opsz24" />
     </LinearLayout>
 
-    <!-- RecyclerView -->    <androidx.recyclerview.widget.RecyclerView
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="0dp"
         android:layout_height="0dp"

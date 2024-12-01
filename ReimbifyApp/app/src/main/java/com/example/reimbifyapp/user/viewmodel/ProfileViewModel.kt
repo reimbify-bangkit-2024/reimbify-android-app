@@ -6,7 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
+import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse
+import com.example.reimbifyapp.data.network.response.GetAllBankResponse
+import com.example.reimbifyapp.data.network.response.GetBankAccountByIdResponse
+import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
+import com.example.reimbifyapp.data.network.response.UpdateBankAccountResponse
 import com.example.reimbifyapp.data.repositories.ProfileRepository
 import kotlinx.coroutines.launch
 
@@ -16,6 +21,21 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
 
     private val _changePasswordResult = MutableLiveData<Result<ChangePasswordResponse>>()
     val changePasswordResult: LiveData<Result<ChangePasswordResponse>> = _changePasswordResult
+
+    private val _allBank = MutableLiveData<Result<GetAllBankResponse>>()
+    val allBank: LiveData<Result<GetAllBankResponse>> = _allBank
+
+    private val _createBankAccount = MutableLiveData<Result<CreateBankAccountResponse>>()
+    val createBankAccount: LiveData<Result<CreateBankAccountResponse>> = _createBankAccount
+
+    private val _bankAccountUserId = MutableLiveData<Result<GetBankAccountByUserIdResponse>>()
+    val bankAccountUserId: LiveData<Result<GetBankAccountByUserIdResponse>> = _bankAccountUserId
+
+    private val _updateBankAccount = MutableLiveData<Result<UpdateBankAccountResponse>>()
+    val updateBankAccount: LiveData<Result<UpdateBankAccountResponse>> = _updateBankAccount
+
+    private val _bankAccountById = MutableLiveData<Result<GetBankAccountByIdResponse>>()
+    val bankAccountById: LiveData<Result<GetBankAccountByIdResponse>> = _bankAccountById
 
     fun getUser(userId: String) {
         viewModelScope.launch {
@@ -36,6 +56,78 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
                 _changePasswordResult.postValue(Result.success(response))
             } catch (e: Exception) {
                 _changePasswordResult.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun getAllBank() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getAllBank()
+                Log.d("ALL BANK", response.toString())
+                _allBank.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _allBank.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun createBankAccount(
+        accountTitle: String,
+        holderName: String,
+        accountNumber: String,
+        bankId: Int,
+        userId: Int
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.createBankAccount(accountTitle, holderName, accountNumber, bankId, userId)
+                _createBankAccount.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _createBankAccount.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun getBankAccountByUserId(
+        userId: Int
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getBankAccountByUserId(userId)
+                _bankAccountUserId.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _bankAccountUserId.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun updateBankAccount(
+        accountId: Int,
+        accountTitle: String,
+        accountHolderName: String,
+        accountNumber: String,
+        bankId: Int
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.updateBankAccount(accountId, accountTitle, accountHolderName, accountNumber, bankId)
+                _updateBankAccount.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _updateBankAccount.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun getBankAccountById(
+        accountId: Int
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getBankAccountById(accountId)
+                _bankAccountById.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _bankAccountById.postValue(Result.failure(e))
             }
         }
     }
