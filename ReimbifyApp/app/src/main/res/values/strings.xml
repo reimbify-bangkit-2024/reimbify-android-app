@@ -29,10 +29,16 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="search">Search</string>
     <string name="sort_by_date">Sort By Date</string>
+    <string-array name="status_reviewed_options">
+        <item>All</item>
+        <item>Approved</item>
+        <item>Rejected</item>
+    </string-array>
+
     <string-array name="status_options">
         <item>All</item>
         <item>Under Review</item>
-        <item>Accepted</item>
+        <item>Approved</item>
         <item>Rejected</item>
     </string-array>
 
@@ -149,5 +155,9 @@
     <string name="requests">Requests</string>
     <string name="reviewed">Reviewed</string>
     <string name="users">Users</string>
+    <string name="filter_by_status">Filter by Status</string>
+    <string name="filter_by_department">Filter by Department</string>
+    <string name="no_request_found">No Reimbursement Request Found</string>
+    <string name="search_by_desc">Search by Description</string>
 
 </resources>

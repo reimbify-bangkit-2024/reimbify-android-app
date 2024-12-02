@@ -1,29 +1,33 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/card_background"
     android:layout_margin="8dp"
     android:elevation="4dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
 
+        <!-- Date and Time Section -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_alignParentStart="true"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/baseline_calendar_month_24"
                 android:contentDescription="@string/calendar_icon"
                 android:layout_marginEnd="8dp" />
@@ -34,16 +38,22 @@
                 android:layout_height="wrap_content"
                 android:text="@string/default_date"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:singleLine="false"
+                android:lineSpacingExtra="4dp" />
         </LinearLayout>
 
+        <!-- Status Section -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+            <!-- Under Review Status -->
             <LinearLayout
                 android:id="@+id/status_under_review"
                 android:layout_width="wrap_content"
@@ -72,6 +82,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- Approved Status -->
             <LinearLayout
                 android:id="@+id/status_approved"
                 android:layout_width="wrap_content"
@@ -100,6 +111,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- Rejected Status -->
             <LinearLayout
                 android:id="@+id/status_rejected"
                 android:layout_width="wrap_content"
@@ -127,7 +139,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:layout_width="match_parent"

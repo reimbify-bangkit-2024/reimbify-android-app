@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class History(
+    val id: Int,
     val timestamp: String,
     val status: String,
     val receiptDate: String,

@@ -146,6 +146,7 @@ class DashboardFragment : Fragment() {
     private fun getDummyHistory(): ArrayList<History> {
         return arrayListOf(
             History(
+                id = 1,
                 timestamp = "2024-11-21",
                 status = "Under Review",
                 receiptDate = "2024-11-20",
@@ -161,6 +162,7 @@ class DashboardFragment : Fragment() {
                 transferReceiptImage = null
             ),
             History(
+                id = 2,
                 timestamp = "2024-11-20",
                 status = "Under Review",
                 receiptDate = "2024-11-19",
@@ -176,6 +178,7 @@ class DashboardFragment : Fragment() {
                 transferReceiptImage = null
             ),
             History(
+                id = 3,
                 timestamp = "2024-11-19",
                 status = "Under Review",
                 receiptDate = "2024-11-18",
