@@ -99,7 +99,7 @@ class ReviewedFragment : Fragment() {
     }
 
     private fun setDepartmentSpinner(departments: List<Department>) {
-        val departmentNames = listOf("All Departments") + departments.map { it.departmentName }
+        val departmentNames = listOf("All") + departments.map { it.departmentName }
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, departmentNames)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 

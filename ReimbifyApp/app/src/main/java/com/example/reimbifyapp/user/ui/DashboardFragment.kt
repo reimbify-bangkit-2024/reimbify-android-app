@@ -11,13 +11,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reimbifyapp.R
+import com.example.reimbifyapp.admin.ui.adapter.RequestAdapter
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.History
 import com.example.reimbifyapp.databinding.FragmentDashboardUserBinding
+import com.example.reimbifyapp.user.factory.DashboardViewModelFactory
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
-import com.example.reimbifyapp.user.ui.adapter.HistoryAdapter
+import com.example.reimbifyapp.user.viewmodel.DashboardViewModel
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
+import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -31,7 +34,8 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardUserBinding? = null
     private val binding get() = _binding!!
 
-    private val listUnderReview = ArrayList<History>()
+    private var isFetchingUser = false
+    private var isFetchingRequests = false
 
     private val userViewModel by viewModels<LoginViewModel> {
         UserViewModelFactory.getInstance(requireContext())
@@ -40,6 +44,12 @@ class DashboardFragment : Fragment() {
     private val profileViewModel by viewModels<ProfileViewModel> {
         ProfileViewModelFactory.getInstance(requireContext())
     }
+
+    private val viewModel by viewModels<DashboardViewModel> {
+        DashboardViewModelFactory.getInstance(requireContext())
+    }
+
+    private lateinit var adapter: RequestAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,14 +62,17 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fetchUserIdAndLoadUser()
+        fetchRequests()
+
         setupRecyclerView()
         setupReimbursementHistory(binding.lineChart)
         setupObserver()
-        fetchUserIdAndLoadUser()
     }
 
     private fun fetchUserIdAndLoadUser() {
-        showLoading(true)
+        isFetchingUser = true
+        updateLoadingState()
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val session = userViewModel.getSession().first()
@@ -69,9 +82,16 @@ class DashboardFragment : Fragment() {
             } catch (e: Exception) {
                 showToast("Failed to fetch session or user details: ${e.localizedMessage}")
             } finally {
-                showLoading(false)
+                isFetchingUser = false
+                updateLoadingState()
             }
         }
+    }
+
+    private fun fetchRequests() {
+        isFetchingRequests = true
+        updateLoadingState()
+        viewModel.getUnderReviewRequest()
     }
 
     private fun setUserName(userName: String) {
@@ -84,7 +104,9 @@ class DashboardFragment : Fragment() {
 
     private fun setupObserver() {
         profileViewModel.getUserResult.observe(viewLifecycleOwner) { result ->
-            showLoading(false)
+            isFetchingUser = false
+            updateLoadingState()
+
             result.onSuccess { user ->
                 setUserName(user.user.userName)
             }
@@ -92,30 +114,52 @@ class DashboardFragment : Fragment() {
                 showToast("Failed to load user profile: ${throwable.localizedMessage}")
             }
         }
+
+        viewModel.underReviewResponse.observe(viewLifecycleOwner) { result ->
+            result.onSuccess { response ->
+                response.let {
+                    if (it.receipts.isEmpty()) {
+                        showNoRequestsMessage(true)
+                    } else {
+                        showNoRequestsMessage(false)
+                        adapter.updateData(it.receipts)
+                    }
+                }
+            }.onFailure { throwable ->
+                val errorMessage = parseErrorMessage(throwable)
+                showToast(errorMessage)
+                showNoRequestsMessage(true)
+            }.also {
+                isFetchingRequests = false
+                updateLoadingState()
+            }
+        }
     }
 
     private fun setupRecyclerView() {
-        showLoading(true)
-        if (listUnderReview.isEmpty()) {
-            listUnderReview.addAll(getDummyHistory())
-        }
-        val adapter = HistoryAdapter(listUnderReview)
-
+        adapter = RequestAdapter(ArrayList())
         binding.underReviewRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
-            this.adapter = adapter
+            adapter = this@DashboardFragment.adapter
         }
 
-        showLoading(false)
-
-        adapter.setOnItemClickCallback(object : HistoryAdapter.OnItemClickCallback {
+        adapter.setOnItemClickCallback(object : RequestAdapter.OnItemClickCallback {
             override fun onItemClicked(data: History) {
-                navigateToUnderReviewDetail(data)
+                navigateToDetail(data)
             }
         })
     }
 
+    private fun navigateToDetail(history: History) {
+        val bundle = Bundle().apply {
+            putParcelable("history_data", history)
+        }
+        findNavController().navigate(
+            R.id.action_navigation_history_to_underReviewDetailFragment,
+            bundle
+        )
+    }
 
     private fun setupReimbursementHistory(chart: LineChart) {
         val entries = listOf(
@@ -143,67 +187,13 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun getDummyHistory(): ArrayList<History> {
-        return arrayListOf(
-            History(
-                id = 1,
-                timestamp = "2024-11-21",
-                status = "Under Review",
-                receiptDate = "2024-11-20",
-                department = "Finance",
-                amount = 100000.0,
-                description = "Expense reimbursement for November",
-                adminName = null,
-                accountNumber = null,
-                receiveDate = null,
-                declineDate = null,
-                declineReason = null,
-                notaImage = "https://example.com/nota_under_review.jpg",
-                transferReceiptImage = null
-            ),
-            History(
-                id = 2,
-                timestamp = "2024-11-20",
-                status = "Under Review",
-                receiptDate = "2024-11-19",
-                department = "HR",
-                amount = 50000.0,
-                description = "Travel allowance reimbursement",
-                adminName = null,
-                accountNumber = null,
-                receiveDate = null,
-                declineDate = null,
-                declineReason = null,
-                notaImage = "https://example.com/nota_under_review.jpg",
-                transferReceiptImage = null
-            ),
-            History(
-                id = 3,
-                timestamp = "2024-11-19",
-                status = "Under Review",
-                receiptDate = "2024-11-18",
-                department = "IT",
-                amount = 30000.0,
-                description = "Equipment purchase reimbursement",
-                adminName = null,
-                accountNumber = null,
-                receiveDate = null,
-                declineDate = null,
-                declineReason = null,
-                notaImage = "https://example.com/nota_under_review.jpg",
-                transferReceiptImage = null
-            )
-        )
+    private fun showNoRequestsMessage(show: Boolean) {
+        binding.underReviewRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
+        binding.tvNoRequests.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun navigateToUnderReviewDetail(history: History) {
-        val bundle = Bundle().apply {
-            putParcelable("history_data", history)
-        }
-        findNavController().navigate(
-            R.id.action_navigation_history_to_underReviewDetailFragment,
-            bundle
-        )
+    private fun updateLoadingState() {
+        showLoading(isFetchingUser || isFetchingRequests)
     }
 
     private fun showLoading(isLoading: Boolean) {

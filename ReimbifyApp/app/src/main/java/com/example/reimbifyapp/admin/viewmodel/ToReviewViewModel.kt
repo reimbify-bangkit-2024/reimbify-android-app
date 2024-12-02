@@ -11,7 +11,7 @@ import com.example.reimbifyapp.data.repositories.DepartmentRepository
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
 import kotlinx.coroutines.launch
 
-class ToReviewViewModel(
+class ToReviewViewModel (
     private val reimbursementRepository: ReimbursementRepository,
     private val departmentRepository: DepartmentRepository
 ) : ViewModel() {
