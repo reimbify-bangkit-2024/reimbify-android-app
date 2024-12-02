@@ -15,6 +15,9 @@ import com.example.reimbifyapp.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.data.network.response.GetAllBankResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByIdResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
+import com.example.reimbifyapp.data.network.response.GetDepartmentByIdResponse
+import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
+import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
@@ -68,6 +71,15 @@ interface ApiService {
     @PUT("/bank-account/update")
     suspend fun updateBankAccount(@Query("accountId") accountId: Int, @Body updateBankAccountRequest: UpdateBankAccountRequest): UpdateBankAccountResponse
 
+    @GET("/request")
+    suspend fun getAllRequest(
+        @Query("userId") userId: Int?,
+        @Query("sorted") sorted: String?,
+        @Query("search") search: String?,
+        @Query("departmentId") departmentId: Int?,
+        @Query("status") status: String?,
+    ): GetReimbursementResponse
+
     @Multipart
     @POST("request/image/upload")
     suspend fun uploadReceiptImage(
@@ -75,4 +87,10 @@ interface ApiService {
         @Part image: MultipartBody.Part,
         @Query("userId") userId: String
     ): UploadResponse
+
+    @GET("/department")
+    suspend fun getAllDepartments() : GetDepartmentResponse
+
+    @GET("/department")
+    suspend fun getDepartmentById(@Query("departmentId") departmentId: Int) : GetDepartmentByIdResponse
 }
