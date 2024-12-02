@@ -149,5 +149,6 @@
     <string name="requests">Requests</string>
     <string name="reviewed">Reviewed</string>
     <string name="users">Users</string>
+    <string name="default_hello">Hello, John Doe!</string>
 
 </resources>
