@@ -1,143 +1,197 @@
 package com.example.reimbifyapp.user.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.databinding.FragmentHistoryUserBinding
+import com.example.reimbifyapp.user.factory.HistoryViewModelFactory
+import com.example.reimbifyapp.user.viewmodel.HistoryViewModel
+import com.example.reimbifyapp.data.entities.Department
 import com.example.reimbifyapp.data.entities.History
+import com.example.reimbifyapp.databinding.FragmentHistoryUserBinding
 import com.example.reimbifyapp.user.ui.adapter.HistoryAdapter
+import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 
 class HistoryFragment : Fragment() {
 
     private var _binding: FragmentHistoryUserBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var rvHistory: RecyclerView
-    private val listHistory = ArrayList<History>()
+    private val viewModel by viewModels<HistoryViewModel> {
+        HistoryViewModelFactory.getInstance(requireContext())
+    }
+
+    private lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHistoryUserBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        rvHistory = binding.rvHistory
-        rvHistory.layoutManager = LinearLayoutManager(context)
-        rvHistory.setHasFixedSize(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fetchDepartments()
+        fetchRequests(sort = false)
 
-        // Only populate the list if it is empty
-        if (listHistory.isEmpty()) {
-            listHistory.addAll(getDummyHistory())
+        setupRecyclerView()
+        setupListeners()
+        observeViewModel()
+    }
+
+    private fun setupRecyclerView() {
+        adapter = HistoryAdapter(ArrayList())
+        binding.rvRequest.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = this@HistoryFragment.adapter
         }
-        showRecyclerList()
-
-        return root
-    }
-
-    private fun getDummyHistory(): ArrayList<History> {
-        return arrayListOf(
-            History(
-                id = 1,
-                timestamp = "2024-11-21",
-                status = "Under Review",
-                receiptDate = "2024-11-20",
-                department = "Finance",
-                amount = 100000.0,
-                description = "Expense reimbursement for November",
-                adminName = null,
-                accountNumber = null,
-                receiveDate = null,
-                declineDate = null,
-                declineReason = null,
-                notaImage = "https://example.com/nota_under_review.jpg",
-                transferReceiptImage = null
-            ),
-            History(
-                id = 2,
-                timestamp = "2024-11-20",
-                status = "Approved",
-                receiptDate = "2024-11-19",
-                department = "HR",
-                amount = 50000.0,
-                description = "Travel allowance reimbursement",
-                adminName = "Admin John",
-                accountNumber = "1234567890",
-                receiveDate = "2024-11-21",
-                declineDate = null,
-                declineReason = null,
-                notaImage = "https://example.com/nota_approved.jpg",
-                transferReceiptImage = "https://example.com/transfer_receipt_approved.jpg"
-            ),
-            History(
-                id = 3,
-                timestamp = "2024-11-19",
-                status = "Rejected",
-                receiptDate = "2024-11-18",
-                department = "IT",
-                amount = 30000.0,
-                description = "Equipment purchase reimbursement",
-                adminName = "Admin Jane",
-                accountNumber = null,
-                receiveDate = null,
-                declineDate = "2024-11-20",
-                declineReason = "Insufficient documentation for the request",
-                notaImage = "https://example.com/nota_rejected.jpg",
-                transferReceiptImage = null
-            )
-        )
-    }
-
-    private fun showRecyclerList() {
-        val adapter = HistoryAdapter(listHistory)
-        rvHistory.adapter = adapter
 
         adapter.setOnItemClickCallback(object : HistoryAdapter.OnItemClickCallback {
             override fun onItemClicked(data: History) {
-                when (data.status) {
-                    "Under Review" -> navigateToUnderReviewDetail(data)
-                    "Approved" -> navigateToAcceptedDetail(data)
-                    "Rejected" -> navigateToRejectedDetail(data)
-                }
+                navigateToDetail(data)
             }
         })
     }
 
-    private fun navigateToUnderReviewDetail(history: History) {
-        val bundle = Bundle().apply {
-            putParcelable("history_data", history)
+    private fun observeViewModel() {
+        viewModel.departmentResponse.observe(viewLifecycleOwner) { result ->
+            result.getOrNull()?.let { setDepartmentSpinner(it.departments) }
         }
-        findNavController().navigate(
-            R.id.action_navigation_history_to_underReviewDetailFragment,
-            bundle
-        )
+
+        viewModel.historyResponse.observe(viewLifecycleOwner) { result ->
+            result.onSuccess { response ->
+                response.let {
+                    if (it.receipts.isEmpty()) {
+                        showNoRequestsMessage(true)
+                    } else {
+                        showNoRequestsMessage(false)
+                        adapter.updateData(it.receipts)
+                    }
+                }
+                showLoading(false)
+            }.onFailure { throwable ->
+                val errorMessage = parseErrorMessage(throwable)
+                showToast(errorMessage)
+                showNoRequestsMessage(true)
+                showLoading(false)
+            }
+        }
     }
 
-    private fun navigateToAcceptedDetail(history: History) {
-        val bundle = Bundle().apply {
-            putParcelable("history_data", history)
-        }
-        findNavController().navigate(
-            R.id.action_navigation_history_to_acceptedDetailFragment,
-            bundle
-        )
+    private fun fetchDepartments() {
+        viewModel.getAllDepartments()
     }
 
-    private fun navigateToRejectedDetail(history: History) {
-        val bundle = Bundle().apply {
-            putParcelable("history_data", history)
+    private fun fetchRequests(search: String? = null, departmentId: Int? = null, sort: Boolean? = null, status: String? = null) {
+        showLoading(true)
+        viewModel.getRequest(search, departmentId, sort == true, status)
+    }
+
+    private fun setDepartmentSpinner(departments: List<Department>) {
+        val departmentNames = listOf("All") + departments.map { it.departmentName }
+        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, departmentNames)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.spinnerDepartment.adapter = spinnerAdapter
+        binding.spinnerDepartment.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val departmentId = if (position == 0) null else departments[position - 1].departmentId
+                fetchRequests(
+                    search = binding.etSearch.text.toString(),
+                    departmentId = departmentId,
+                    sort = binding.btnSort.tag as? Boolean
+                )
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-        findNavController().navigate(
-            R.id.action_navigation_history_to_rejectedDetailFragment,
-            bundle
-        )
+    }
+
+    private fun setupListeners() {
+        binding.btnSearch.setOnClickListener {
+            val searchQuery = binding.etSearch.text.toString()
+            fetchRequests(search = searchQuery)
+        }
+
+        binding.btnSort.apply {
+            tag = false
+            setImageResource(R.drawable.sort_down_vertical_svgrepo_com)
+
+            setOnClickListener {
+                val isSortedDesc = tag as? Boolean == true
+                tag = !isSortedDesc
+
+                Log.d("SORT is", isSortedDesc.toString())
+                Log.d("SORT tag", tag.toString())
+
+                if (isSortedDesc) {
+                    setImageResource(R.drawable.sort_down_vertical_svgrepo_com)
+                } else {
+                    setImageResource(R.drawable.sort_up_vertical_svgrepo_com)
+                }
+
+                fetchRequests(sort = !isSortedDesc)
+            }
+        }
+
+        binding.spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val status = when (position) {
+                    1 -> "under review"
+                    2 -> "approved"
+                    3 -> "rejected"
+                    else -> null
+                }
+
+                fetchRequests(
+                    search = binding.etSearch.text.toString(),
+                    departmentId = binding.spinnerDepartment.selectedItemPosition.takeIf { it != 0 },
+                    sort = binding.btnSort.tag as? Boolean,
+                    status = status.toString()
+                )
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                fetchRequests(
+                    search = binding.etSearch.text.toString(),
+                    departmentId = binding.spinnerDepartment.selectedItemPosition.takeIf { it != 0 },
+                    sort = binding.btnSort.tag as? Boolean
+                )
+            }
+        }
+    }
+
+    private fun navigateToDetail(history: History) {
+        showToast("Navigate to Detail Page: ${history.id} ${history.status}")
+//        val bundle = Bundle().apply {
+//            putParcelable("history_data", history)
+//        }
+//        findNavController().navigate(R.id.action_navigation_history_to_underReviewDetailFragment, bundle)
+    }
+
+    private fun showNoRequestsMessage(show: Boolean) {
+        binding.rvRequest.visibility = if (show) View.GONE else View.VISIBLE
+        binding.tvNoRequests.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBar.isIndeterminate = isLoading
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
