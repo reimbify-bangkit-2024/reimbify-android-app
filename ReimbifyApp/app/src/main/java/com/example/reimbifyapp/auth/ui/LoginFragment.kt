@@ -15,11 +15,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.reimbifyapp.user.MainActivityUser
 import com.example.reimbifyapp.R
+import com.example.reimbifyapp.admin.MainActivityAdmin
 import com.example.reimbifyapp.databinding.FragmentLoginBinding
 import com.example.reimbifyapp.data.entities.UserSession
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
+import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
+import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
+import com.example.reimbifyapp.utils.TokenUtils.isTokenValid
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -60,7 +64,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val userSession = viewModel.getSession().first()
             Log.d("SESSION", "Checking session: $userSession")
 
-            if (userSession.isLogin) {
+            if (userSession.isLogin && isTokenValid(userSession.token)) {
                 moveToDashboard(userSession)
             }
         }
@@ -132,7 +136,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun moveToDashboard(userSession: UserSession) {
         when (userSession.role) {
-            "user" -> {
+            "user", "User" -> {
                 showToast("Navigating to User Dashboard")
                 val intent = Intent(requireContext(), MainActivityUser::class.java).apply {
                     putExtra("open_fragment", "dashboard")
@@ -141,9 +145,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 requireActivity().finish()
             }
 
-            "admin" -> {
+            "admin", "Admin" -> {
                 showToast("Navigating to Admin Dashboard")
-                // TODO: Navigate to Admin Dashboard
+                val intent = Intent(requireContext(), MainActivityAdmin::class.java).apply {
+                    putExtra("open_fragment", "dashboard")
+                }
+                startActivity(intent)
+                requireActivity().finish()
             }
 
             else -> {

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dashboard">
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.reimbifyapp.admin.ui.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard_admin" />
+
+    <fragment
+        android:id="@+id/navigation_to_approve"
+        android:name="com.example.reimbifyapp.admin.ui.ToApproveFragment"
+        android:label="@string/requests"
+        tools:layout="@layout/fragment_to_approve_admin">
+        <action
+            android:id="@+id/action_navigation_to_approve_to_underReviewDetailFragment"
+            app:destination="@id/underReviewDetailFragment"
+            app:popUpTo="@id/navigation_to_approve" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_approved"
+        android:name="com.example.reimbifyapp.admin.ui.ApprovedFragment"
+        android:label="@string/reviewed"
+        tools:layout="@layout/fragment_approved_admin" />
+    <fragment
+        android:id="@+id/navigation_list_user"
+        android:name="com.example.reimbifyapp.admin.ui.UserListFragment"
+        android:label="@string/users"
+        tools:layout="@layout/fragment_user_list_admin" />
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.example.reimbifyapp.admin.ui.SettingFragment"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_setting_user" />
+    <fragment
+        android:id="@+id/acceptedDetailFragment"
+        android:name="com.example.reimbifyapp.user.ui.AcceptedDetailFragment"
+        android:label="@string/title_accepted_detail"
+        tools:layout="@layout/fragment_accepted_detail" />
+    <fragment
+        android:id="@+id/rejectedDetailFragment"
+        android:name="com.example.reimbifyapp.user.ui.RejectedDetailFragment"
+        android:label="@string/title_rejected_detail"
+        tools:layout="@layout/fragment_rejected_detail" />
+    <fragment
+        android:id="@+id/underReviewDetailFragment"
+        android:name="com.example.reimbifyapp.user.ui.UnderReviewDetailFragment"
+        android:label="@string/title_under_review_detail"
+        tools:layout="@layout/fragment_under_review_detail" />
+</navigation>
+

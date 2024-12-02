@@ -146,5 +146,8 @@
     <string name="reimbursement_under_review">Reimbursement: Under Review</string>
     <string name="greeting">Hello, %1$s!</string>
     <string name="default_user_name">User</string>
+    <string name="requests">Requests</string>
+    <string name="reviewed">Reviewed</string>
+    <string name="users">Users</string>
 
 </resources>
