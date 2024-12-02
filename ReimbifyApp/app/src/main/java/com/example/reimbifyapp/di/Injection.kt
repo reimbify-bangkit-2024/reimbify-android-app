@@ -3,7 +3,9 @@ package com.example.reimbifyapp.di
 import android.content.Context
 import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.preferences.dataStore
+import com.example.reimbifyapp.data.repositories.DepartmentRepository
 import com.example.reimbifyapp.data.repositories.ProfileRepository
+import com.example.reimbifyapp.data.repositories.ReimbursementRepository
 import com.example.reimbifyapp.data.repositories.UserRepository
 
 object Injection {
@@ -33,5 +35,19 @@ object Injection {
         val unAuthApiService = provideUnauthenticatedApiService()
 
         return ProfileRepository.getInstance(authApiService, unAuthApiService)
+    }
+
+    fun provideReimbursementRepository(context: Context): ReimbursementRepository {
+        val authApiService = provideAuthenticatedApiService(context)
+        val unAuthApiService = provideUnauthenticatedApiService()
+
+        return ReimbursementRepository.getInstance(authApiService, unAuthApiService)
+    }
+
+    fun provideDepartmentRepository(context: Context): DepartmentRepository {
+        val authApiService = provideAuthenticatedApiService(context)
+        val unAuthApiService = provideUnauthenticatedApiService()
+
+        return DepartmentRepository.getInstance(authApiService, unAuthApiService)
     }
 }
