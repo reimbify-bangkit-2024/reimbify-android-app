@@ -20,6 +20,7 @@ class ReimbursementRepository private constructor(
             "under review", "under-review", "under_review" -> "under_review"
             "rejected" -> "rejected"
             "approved" -> "approved"
+            "rejected,approved", "approved,rejected" -> "rejected,approved"
             else -> null
         }
 

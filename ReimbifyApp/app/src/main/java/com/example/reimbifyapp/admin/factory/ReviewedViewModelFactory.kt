@@ -3,12 +3,12 @@ package com.example.reimbifyapp.admin.factory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.reimbifyapp.admin.viewmodel.ToReviewViewModel
+import com.example.reimbifyapp.admin.viewmodel.ReviewedViewModel
 import com.example.reimbifyapp.data.repositories.DepartmentRepository
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
 import com.example.reimbifyapp.di.Injection
 
-class ToReviewViewModelFactory (
+class ReviewedViewModelFactory (
     private val reimbursementRepository: ReimbursementRepository,
     private val departmentRepository: DepartmentRepository
 ) : ViewModelProvider.Factory {
@@ -16,8 +16,8 @@ class ToReviewViewModelFactory (
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(ToReviewViewModel::class.java) -> {
-                ToReviewViewModel(reimbursementRepository, departmentRepository) as T
+            modelClass.isAssignableFrom(ReviewedViewModel::class.java) -> {
+                ReviewedViewModel(reimbursementRepository, departmentRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
@@ -25,15 +25,15 @@ class ToReviewViewModelFactory (
 
     companion object {
         @Volatile
-        private var INSTANCE: ToReviewViewModelFactory? = null
+        private var INSTANCE: ReviewedViewModelFactory? = null
 
         @JvmStatic
-        fun getInstance(context: Context): ToReviewViewModelFactory {
+        fun getInstance(context: Context): ReviewedViewModelFactory {
             return INSTANCE ?: synchronized(this) {
                 val reimbursementRepository = Injection.provideReimbursementRepository(context)
                 val departmentRepository = Injection.provideDepartmentRepository(context)
 
-                ToReviewViewModelFactory(reimbursementRepository, departmentRepository).also { INSTANCE = it }
+                ReviewedViewModelFactory(reimbursementRepository, departmentRepository).also { INSTANCE = it }
             }
         }
     }

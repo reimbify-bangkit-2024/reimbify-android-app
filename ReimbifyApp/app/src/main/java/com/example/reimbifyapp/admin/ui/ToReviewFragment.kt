@@ -10,24 +10,23 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.admin.factory.ToApproveViewModelFactory
-import com.example.reimbifyapp.admin.viewmodel.ToApproveViewModel
+import com.example.reimbifyapp.admin.factory.ToReviewViewModelFactory
+import com.example.reimbifyapp.admin.viewmodel.ToReviewViewModel
 import com.example.reimbifyapp.data.entities.Department
 import com.example.reimbifyapp.data.entities.History
-import com.example.reimbifyapp.databinding.FragmentToApproveAdminBinding
+import com.example.reimbifyapp.databinding.FragmentToReviewAdminBinding
 import com.example.reimbifyapp.admin.ui.adapter.RequestAdapter
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 
-class ToApproveFragment : Fragment() {
+class ToReviewFragment : Fragment() {
 
-    private var _binding: FragmentToApproveAdminBinding? = null
+    private var _binding: FragmentToReviewAdminBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<ToApproveViewModel> {
-        ToApproveViewModelFactory.getInstance(requireContext())
+    private val viewModel by viewModels<ToReviewViewModel> {
+        ToReviewViewModelFactory.getInstance(requireContext())
     }
 
     private lateinit var adapter: RequestAdapter
@@ -36,7 +35,7 @@ class ToApproveFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentToApproveAdminBinding.inflate(inflater, container, false)
+        _binding = FragmentToReviewAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -55,7 +54,7 @@ class ToApproveFragment : Fragment() {
         binding.rvRequest.apply {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
-            adapter = this@ToApproveFragment.adapter
+            adapter = this@ToReviewFragment.adapter
         }
 
         adapter.setOnItemClickCallback(object : RequestAdapter.OnItemClickCallback {

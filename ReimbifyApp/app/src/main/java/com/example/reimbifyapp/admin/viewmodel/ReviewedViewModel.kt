@@ -1,5 +1,6 @@
 package com.example.reimbifyapp.admin.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,25 +12,25 @@ import com.example.reimbifyapp.data.repositories.DepartmentRepository
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
 import kotlinx.coroutines.launch
 
-class ToReviewViewModel(
+class ReviewedViewModel(
     private val reimbursementRepository: ReimbursementRepository,
     private val departmentRepository: DepartmentRepository
 ) : ViewModel() {
 
-    private val _underReviewResponse = MutableLiveData<Result<GetReimbursementResponse>>()
-    val underReviewResponse: LiveData<Result<GetReimbursementResponse>> = _underReviewResponse
+    private val _reviewedResponse = MutableLiveData<Result<GetReimbursementResponse>>()
+    val reviewedResponse: LiveData<Result<GetReimbursementResponse>> = _reviewedResponse
 
     private val _departmentResponse = MutableLiveData<Result<GetDepartmentResponse>>()
     val departmentResponse: LiveData<Result<GetDepartmentResponse>> = _departmentResponse
 
-    fun getUnderReviewRequest(search: String?, departmentId: Int?, sort: Boolean) {
-        Log.d("SORT", sort.toString())
+    fun getRequest(search: String?, departmentId: Int?, sort: Boolean, status: String) {
+        Log.d("STATUS", status)
         viewModelScope.launch {
             try {
-                val response = reimbursementRepository.getAllRequest(null, sort, search, departmentId, "under review")
-                _underReviewResponse.postValue(Result.success(response))
+                val response = reimbursementRepository.getAllRequest(null, sort, search, departmentId, status)
+                _reviewedResponse.postValue(Result.success(response))
             } catch (e: Exception) {
-                _underReviewResponse.postValue(Result.failure(e))
+                _reviewedResponse.postValue(Result.failure(e))
             }
         }
     }

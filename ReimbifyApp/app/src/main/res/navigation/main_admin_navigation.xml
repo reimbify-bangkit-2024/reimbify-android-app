@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_to_approve"
-        android:name="com.example.reimbifyapp.admin.ui.ToApproveFragment"
+        android:name="com.example.reimbifyapp.admin.ui.ToReviewFragment"
         android:label="@string/requests"
-        tools:layout="@layout/fragment_to_approve_admin">
+        tools:layout="@layout/fragment_to_review_admin">
         <action
             android:id="@+id/action_navigation_to_approve_to_underReviewDetailFragment"
             app:destination="@id/underReviewDetailFragment"
@@ -24,9 +24,9 @@
 
     <fragment
         android:id="@+id/navigation_approved"
-        android:name="com.example.reimbifyapp.admin.ui.ApprovedFragment"
+        android:name="com.example.reimbifyapp.admin.ui.ReviewedFragment"
         android:label="@string/reviewed"
-        tools:layout="@layout/fragment_approved_admin" />
+        tools:layout="@layout/fragment_reviewed_admin" />
     <fragment
         android:id="@+id/navigation_list_user"
         android:name="com.example.reimbifyapp.admin.ui.UserListFragment"
