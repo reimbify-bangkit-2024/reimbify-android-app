@@ -49,6 +49,12 @@
         <item>IT</item>
     </string-array>
 
+    <string-array name="role_options">
+        <item>All</item>
+        <item>Admin</item>
+        <item>User</item>
+    </string-array>
+
     <string-array name="bank_options">
         <item>Bank 1</item>
         <item>Bank 2</item>
@@ -160,5 +166,12 @@
     <string name="no_request_found">No Reimbursement Request Found</string>
     <string name="search_by_desc">Search by Description</string>
     <string name="default_hello">Hello, John Doe!</string>
+    <string name="sort_by_name">Sort by Name</string>
+    <string name="delete">Delete</string>
+    <string name="filter_by_role">Filter by Role</string>
+    <string name="no_user_found">No User Found</string>
+    <string name="are_you_sure_want_to_delete">Are you sure want to Delete?</string>
+    <string name="data_to_delete">Data to delete</string>
+    <string name="action">Action</string>
 
 </resources>

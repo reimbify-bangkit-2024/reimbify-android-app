@@ -1,5 +1,6 @@
 package com.example.reimbifyapp.data.repositories
 
+import android.icu.text.StringSearch
 import com.example.reimbifyapp.data.entities.UserSession
 import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.network.api.ApiService
@@ -8,7 +9,9 @@ import com.example.reimbifyapp.data.network.request.LoginRequest
 import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.VerifyOtpRequest
+import com.example.reimbifyapp.data.network.response.DeleteUserResponse
 import com.example.reimbifyapp.data.network.response.ForgotPasswordResponse
+import com.example.reimbifyapp.data.network.response.GetAllUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
@@ -56,6 +59,16 @@ class UserRepository private constructor(
     suspend fun resetPassword(userId: String, otp: String, newPassword: String) : ResetPasswordResponse {
         val resetPasswordRequest = ResetPasswordRequest(userId, otp, newPassword)
         return unAuthApiService.resetPassword(resetPasswordRequest)
+    }
+
+    suspend fun getAllUser(departmentId: Int?, role: String?, search: String?, sortedIncrement: Boolean) : GetAllUserResponse {
+        val paramSorted = if (sortedIncrement == true) "asc" else "desc"
+
+        return authApiService.getAllUsers(departmentId, role?.lowercase(), search, paramSorted)
+    }
+
+    suspend fun deleteUser(userId: Int) : DeleteUserResponse {
+        return authApiService.deleteUser(userId)
     }
 
     companion object {

@@ -94,7 +94,7 @@ class ToReviewFragment : Fragment() {
     }
 
     private fun fetchRequests(search: String? = null, departmentId: Int? = null, sort: Boolean? = null) {
-        showLoading(true)
+        showLoading(false)
         viewModel.getUnderReviewRequest(search, departmentId, sort == true)
     }
 
