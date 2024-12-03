@@ -188,6 +188,17 @@
             android:textColor="@android:color/black" />
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/add_user"
+        app:srcCompat="@drawable/baseline_add_circle_24"
+        app:backgroundTint="@color/light_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- No User Found -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_request"

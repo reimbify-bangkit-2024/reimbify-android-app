@@ -6,6 +6,7 @@ import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
 import com.example.reimbifyapp.data.network.request.LoginRequest
+import com.example.reimbifyapp.data.network.request.RegisterUserRequest
 import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.VerifyOtpRequest
@@ -13,6 +14,7 @@ import com.example.reimbifyapp.data.network.response.DeleteUserResponse
 import com.example.reimbifyapp.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.data.network.response.GetAllUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
+import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
 import com.example.reimbifyapp.data.preferences.UserPreference
@@ -69,6 +71,18 @@ class UserRepository private constructor(
 
     suspend fun deleteUser(userId: Int) : DeleteUserResponse {
         return authApiService.deleteUser(userId)
+    }
+
+    suspend fun registerUser(email: String, password: String, userName: String, departmentId: Int, role: String) : RegisterUserResponse {
+        val registerUserRequest = RegisterUserRequest(
+            email,
+            password,
+            userName,
+            departmentId,
+            role.lowercase()
+        )
+
+        return authApiService.registerUser(registerUserRequest)
     }
 
     companion object {

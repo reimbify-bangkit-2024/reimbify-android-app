@@ -5,6 +5,7 @@ import com.example.reimbifyapp.data.network.request.CreateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
 import com.example.reimbifyapp.data.network.request.GetBankAccountByUserIdRequest
 import com.example.reimbifyapp.data.network.request.LoginRequest
+import com.example.reimbifyapp.data.network.request.RegisterUserRequest
 import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
@@ -22,6 +23,7 @@ import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
+import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
 import com.example.reimbifyapp.data.network.response.UpdateBankAccountResponse
@@ -109,4 +111,7 @@ interface ApiService {
     suspend fun deleteUser(
         @Query("userId") userId: Int
     ) : DeleteUserResponse
+
+    @POST("/auth/register")
+    suspend fun registerUser(@Body registerUserRequest: RegisterUserRequest) : RegisterUserResponse
 }

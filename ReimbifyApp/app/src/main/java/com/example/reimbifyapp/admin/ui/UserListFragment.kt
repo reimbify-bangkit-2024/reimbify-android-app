@@ -1,5 +1,6 @@
 package com.example.reimbifyapp.admin.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.factory.UserListViewModelFactory
 import com.example.reimbifyapp.admin.ui.adapter.UserListAdapter
 import com.example.reimbifyapp.admin.ui.component.DeleteConfirmationDialog
+import com.example.reimbifyapp.admin.ui.component.RegisterUserDialog
 import com.example.reimbifyapp.admin.viewmodel.UserListViewModel
 import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.data.entities.Department
@@ -48,6 +50,7 @@ class UserListFragment : Fragment() {
         fetchUserData()
         fetchDepartments()
 
+        setupFab()
         setupRecyclerView()
         setupListeners()
         observeViewModel()
@@ -215,6 +218,13 @@ class UserListFragment : Fragment() {
             },
             instance = "User"
         ).show(parentFragmentManager, DeleteConfirmationDialog.TAG)
+    }
+
+    private fun setupFab() {
+        binding.fabAddUser.setOnClickListener {
+            val registerUserDialog = RegisterUserDialog()
+            registerUserDialog.show(parentFragmentManager, "RegisterUserDialog")
+        }
     }
 
     override fun onDestroyView() {

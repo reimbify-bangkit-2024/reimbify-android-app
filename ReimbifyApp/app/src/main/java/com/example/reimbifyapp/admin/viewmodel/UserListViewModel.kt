@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.reimbifyapp.data.network.response.DeleteUserResponse
 import com.example.reimbifyapp.data.network.response.GetAllUserResponse
 import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
+import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.repositories.DepartmentRepository
 import com.example.reimbifyapp.data.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -24,6 +25,9 @@ class UserListViewModel (
 
     private val _userDeleted = MutableLiveData<Result<DeleteUserResponse>>()
     val userDeleted: LiveData<Result<DeleteUserResponse>> = _userDeleted
+
+    private val _registerUser = MutableLiveData<Result<RegisterUserResponse>>()
+    val registerUser: LiveData<Result<RegisterUserResponse>> = _registerUser
 
     fun getAllUser(departmentId: Int?, role: String?, search: String?, sort: Boolean) {
         viewModelScope.launch {
@@ -54,6 +58,23 @@ class UserListViewModel (
                 _userDeleted.postValue(Result.success(response))
             } catch (e: Exception) {
                 _userDeleted.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun registerUser(
+        email: String,
+        password: String,
+        userName: String,
+        departmentId: Int,
+        role: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.registerUser(email, password, userName, departmentId, role)
+                _registerUser.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _registerUser.postValue(Result.failure(e))
             }
         }
     }
