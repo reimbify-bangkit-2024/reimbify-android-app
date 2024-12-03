@@ -94,7 +94,7 @@ class ReviewedFragment : Fragment() {
     }
 
     private fun fetchRequests(search: String? = null, departmentId: Int? = null, sort: Boolean? = null, status: String = "approved,rejected") {
-        showLoading(true)
+        showLoading(false)
         viewModel.getRequest(search, departmentId, sort == true, status)
     }
 

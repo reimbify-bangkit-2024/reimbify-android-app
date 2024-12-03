@@ -19,6 +19,7 @@
     <color name="red">#D32F2F</color>
     <color name="navy">#2D3D4F</color>
     <color name="cancel_red">#D25350</color>
+    <color name="warning_yellow">#ECD520</color>
 
     <color name="light_gray">#F2F2F2</color>
     <color name="dark_gray">#616161</color>

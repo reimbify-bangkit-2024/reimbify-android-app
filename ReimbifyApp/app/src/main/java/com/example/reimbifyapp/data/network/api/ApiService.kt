@@ -5,14 +5,17 @@ import com.example.reimbifyapp.data.network.request.CreateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
 import com.example.reimbifyapp.data.network.request.GetBankAccountByUserIdRequest
 import com.example.reimbifyapp.data.network.request.LoginRequest
+import com.example.reimbifyapp.data.network.request.RegisterUserRequest
 import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.VerifyOtpRequest
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
 import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse
+import com.example.reimbifyapp.data.network.response.DeleteUserResponse
 import com.example.reimbifyapp.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.data.network.response.GetAllBankResponse
+import com.example.reimbifyapp.data.network.response.GetAllUserResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByIdResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
 import com.example.reimbifyapp.data.network.response.GetDepartmentByIdResponse
@@ -20,12 +23,14 @@ import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
+import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
 import com.example.reimbifyapp.data.network.response.UpdateBankAccountResponse
 import com.example.reimbifyapp.data.network.response.UploadResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -93,4 +98,20 @@ interface ApiService {
 
     @GET("/department")
     suspend fun getDepartmentById(@Query("departmentId") departmentId: Int) : GetDepartmentByIdResponse
+
+    @GET("/auth/users")
+    suspend fun getAllUsers(
+        @Query("departmentId") departmentId: Int?,
+        @Query("role") role: String?,
+        @Query("search") search: String?,
+        @Query("sorted") sorted: String?
+    ) : GetAllUserResponse
+
+    @DELETE("/auth/delete")
+    suspend fun deleteUser(
+        @Query("userId") userId: Int
+    ) : DeleteUserResponse
+
+    @POST("/auth/register")
+    suspend fun registerUser(@Body registerUserRequest: RegisterUserRequest) : RegisterUserResponse
 }
