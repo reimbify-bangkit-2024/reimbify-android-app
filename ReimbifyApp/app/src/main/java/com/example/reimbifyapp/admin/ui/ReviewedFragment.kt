@@ -29,6 +29,9 @@ class ReviewedFragment : Fragment() {
         ReviewedViewModelFactory.getInstance(requireContext())
     }
 
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
+
     private lateinit var adapter: RequestAdapter
 
     override fun onCreateView(
@@ -191,7 +194,11 @@ class ReviewedFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

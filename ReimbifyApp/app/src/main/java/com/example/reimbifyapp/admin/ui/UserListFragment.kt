@@ -35,6 +35,8 @@ class UserListFragment : Fragment() {
     }
 
     private lateinit var adapter: UserListAdapter
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -169,12 +171,21 @@ class UserListFragment : Fragment() {
                     else -> null
                 }
 
-                fetchUserData(
-                    departmentId = binding.spinnerDepartment.selectedItemPosition.takeIf { it != 0 },
-                    role = role.toString(),
-                    search = binding.etSearch.text.toString(),
-                    sort = binding.btnSort.tag as? Boolean
-                )
+                if (role == null) {
+                    fetchUserData(
+                        departmentId = binding.spinnerDepartment.selectedItemPosition.takeIf { it != 0 },
+                        search = binding.etSearch.text.toString(),
+                        sort = binding.btnSort.tag as? Boolean
+                    )
+                } else {
+                    fetchUserData(
+                        departmentId = binding.spinnerDepartment.selectedItemPosition.takeIf { it != 0 },
+                        role = role.toString(),
+                        search = binding.etSearch.text.toString(),
+                        sort = binding.btnSort.tag as? Boolean
+                    )
+                }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -198,7 +209,11 @@ class UserListFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun onDeleteUser(user: User, position: Int) {
