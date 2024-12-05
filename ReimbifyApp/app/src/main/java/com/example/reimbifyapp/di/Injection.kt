@@ -1,6 +1,8 @@
 package com.example.reimbifyapp.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.preferences.dataStore
 import com.example.reimbifyapp.data.repositories.DepartmentRepository
@@ -20,6 +22,10 @@ object Injection {
 
     fun provideUserPreference(context: Context): com.example.reimbifyapp.data.preferences.UserPreference {
         return com.example.reimbifyapp.data.preferences.UserPreference.getInstance(context.dataStore)
+    }
+
+    fun provideDataStore(context: Context): DataStore<Preferences> {
+        return context.dataStore
     }
 
     fun provideUserRepository(context: Context): UserRepository {

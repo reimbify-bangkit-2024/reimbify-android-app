@@ -16,7 +16,7 @@ import com.example.reimbifyapp.data.entities.User
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.ui.AuthActivity
-import com.example.reimbifyapp.user.ui.component.ChangePasswordDialogFragment
+import com.example.reimbifyapp.auth.ui.component.ChangePasswordDialogFragment
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.Account
 import com.example.reimbifyapp.user.ui.adapter.BankAccountAdapter

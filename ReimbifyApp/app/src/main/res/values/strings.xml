@@ -179,5 +179,6 @@
     <string name="register_new_user">Register New User</string>
     <string name="register">Register</string>
     <string name="select_department">Select Department</string>
+    <string name="display_setting">Display Setting</string>
 
 </resources>
