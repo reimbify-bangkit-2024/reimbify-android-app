@@ -191,5 +191,11 @@
     <string name="notes">Notes</string>
     <string name="response_notes">Response Notes</string>
     <string name="title_request_detail">Request Details</string>
+    <string name="reject">Reject</string>
+    <string name="approve">Approve</string>
+    <string name="approval_section">Approval Section</string>
+    <string name="enter_your_approval_notes">Enter your approval notes</string>
+    <string name="are_you_sure_want_to_approve">Are you sure want to APPROVE?</string>
+    <string name="are_you_sure_want_to_reject">Are you sure want to REJECT?</string>
 
 </resources>

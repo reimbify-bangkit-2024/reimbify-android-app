@@ -16,6 +16,9 @@
         android:name="com.example.reimbifyapp.admin.ui.ToReviewFragment"
         android:label="@string/requests"
         tools:layout="@layout/fragment_to_review_admin">
+        <action
+            android:id="@+id/action_navigation_to_review_to_approvalFragment"
+            app:destination="@id/approvalFragment" />
     </fragment>
 
     <fragment
@@ -43,5 +46,19 @@
         android:name="com.example.reimbifyapp.admin.ui.SettingFragment"
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting_user" />
+
+    <fragment
+        android:id="@+id/approvalFragment"
+        android:name="com.example.reimbifyapp.admin.ui.component.ApprovalFragment"
+        android:label="ApprovalFragment" >
+        <action
+            android:id="@+id/action_approvalFragment_to_navigation_reviewed"
+            app:destination="@id/navigation_reviewed"
+            app:popUpTo="@id/navigation_to_review"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_approvalFragment_to_navigation_to_review"
+            app:destination="@id/navigation_to_review" />
+    </fragment>
 </navigation>
 

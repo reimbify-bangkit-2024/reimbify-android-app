@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.factory.ToReviewViewModelFactory
@@ -51,6 +52,12 @@ class ToReviewFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchRequests()
+    }
+
+
     private fun setupRecyclerView() {
         adapter = RequestAdapter(ArrayList())
         binding.rvRequest.apply {
@@ -72,6 +79,7 @@ class ToReviewFragment : Fragment() {
         }
 
         viewModel.underReviewResponse.observe(viewLifecycleOwner) { result ->
+            showLoading(false)
             result.onSuccess { response ->
                 response.let {
                     if (it.receipts.isEmpty()) {
@@ -81,22 +89,21 @@ class ToReviewFragment : Fragment() {
                         adapter.updateData(it.receipts)
                     }
                 }
-                showLoading(false)
             }.onFailure { throwable ->
                 val errorMessage = parseErrorMessage(throwable)
                 showToast(errorMessage)
                 showNoRequestsMessage(true)
-                showLoading(false)
             }
         }
     }
 
     private fun fetchDepartments() {
+        showLoading(true)
         viewModel.getAllDepartments()
     }
 
     private fun fetchRequests(search: String? = null, departmentId: Int? = null, sort: Boolean? = null) {
-        showLoading(false)
+        showLoading(true)
         viewModel.getUnderReviewRequest(search, departmentId, sort == true)
     }
 
@@ -149,11 +156,13 @@ class ToReviewFragment : Fragment() {
     }
 
     private fun navigateToDetail(history: History) {
-        showToast("Navigate to Approval Page: ${history.id}")
-//        val bundle = Bundle().apply {
-//            putParcelable("history_data", history)
-//        }
-//        findNavController().navigate(R.id.action_navigation_history_to_underReviewDetailFragment, bundle)
+        val bundle = Bundle()
+        bundle.putInt("requestId", history.id)
+
+        findNavController().navigate(
+            R.id.action_navigation_to_review_to_approvalFragment,
+            bundle
+        )
     }
 
     private fun showNoRequestsMessage(show: Boolean) {

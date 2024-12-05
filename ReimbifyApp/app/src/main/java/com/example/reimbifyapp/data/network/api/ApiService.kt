@@ -6,6 +6,7 @@ import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
 import com.example.reimbifyapp.data.network.request.GetBankAccountByUserIdRequest
 import com.example.reimbifyapp.data.network.request.LoginRequest
 import com.example.reimbifyapp.data.network.request.RegisterUserRequest
+import com.example.reimbifyapp.data.network.request.RequestApprovalRequest
 import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
@@ -24,6 +25,7 @@ import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
 import com.example.reimbifyapp.data.network.response.RegisterUserResponse
+import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
 import com.example.reimbifyapp.data.network.response.UpdateBankAccountResponse
@@ -34,6 +36,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -117,4 +120,10 @@ interface ApiService {
 
     @GET("/request")
     suspend fun getRequestById(@Query("receiptId") receiptId: Int) : GetReimbursementResponse
+
+    @PATCH("/request/approval")
+    suspend fun requestApproval(
+        @Query("receiptId") receiptId: Int,
+        @Body requestApprovalRequest: RequestApprovalRequest
+    ) : RequestApprovalResponse
 }
