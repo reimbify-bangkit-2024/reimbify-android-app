@@ -37,6 +37,8 @@ class AddBankAccountDialogFragment  : DialogFragment() {
         UserViewModelFactory.getInstance(requireContext())
     }
 
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -177,7 +179,8 @@ class AddBankAccountDialogFragment  : DialogFragment() {
                     dismiss()
                 }
                 result.onFailure { throwable ->
-                    showToast("Failed to add bank account: ${throwable.localizedMessage}")
+                    val errorMessage = parseErrorMessage(throwable)
+                    showToast("Failed to add bank account: $errorMessage")
                 }
             }
         } catch (e: Exception) {
@@ -189,7 +192,11 @@ class AddBankAccountDialogFragment  : DialogFragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

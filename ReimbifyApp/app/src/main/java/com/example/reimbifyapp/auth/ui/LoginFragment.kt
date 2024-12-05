@@ -35,6 +35,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         UserViewModelFactory.getInstance(requireActivity())
     }
 
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -170,7 +173,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun handleLoginError(throwable: Throwable) {

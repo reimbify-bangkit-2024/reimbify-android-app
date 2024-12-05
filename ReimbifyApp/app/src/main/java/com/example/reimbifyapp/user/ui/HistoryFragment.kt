@@ -30,6 +30,8 @@ class HistoryFragment : Fragment() {
     }
 
     private lateinit var adapter: HistoryAdapter
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -191,7 +193,11 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

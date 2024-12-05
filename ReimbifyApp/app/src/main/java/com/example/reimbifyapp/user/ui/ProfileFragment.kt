@@ -23,6 +23,7 @@ import com.example.reimbifyapp.user.ui.adapter.BankAccountAdapter
 import com.example.reimbifyapp.user.ui.component.AddBankAccountDialogFragment
 import com.example.reimbifyapp.user.ui.component.UpdateBankAccountDialogFragment
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
+import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -40,6 +41,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     private val userViewModel by viewModels<LoginViewModel> {
         UserViewModelFactory.getInstance(requireContext())
     }
+
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,8 +93,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         viewModel.getUserResult.observe(viewLifecycleOwner) { result ->
             showLoading(false)
             result.onSuccess { user ->
-                displayUserData(user.user)
-                fetchUserBankAccounts(user.user.userId.toInt())
+                displayUserData(user.users[0])
+                fetchUserBankAccounts(user.users[0].userId.toInt())
             }
             result.onFailure { throwable ->
                 showToast("Failed to load user profile: ${throwable.localizedMessage}")
@@ -149,7 +153,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
             try {
                 viewModel.getBankAccountByUserId(userId)
             } catch (e: Exception) {
-                showToast("Failed to load bank accounts: ${e.localizedMessage}")
+                val errorMessage = parseErrorMessage(e)
+                showToast("Failed to load bank accounts: $errorMessage")
             }
         }
     }
@@ -206,6 +211,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 }

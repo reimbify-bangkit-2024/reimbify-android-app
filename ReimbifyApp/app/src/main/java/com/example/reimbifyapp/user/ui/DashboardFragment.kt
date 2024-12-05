@@ -50,6 +50,8 @@ class DashboardFragment : Fragment() {
     }
 
     private lateinit var adapter: RequestAdapter
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,7 +82,8 @@ class DashboardFragment : Fragment() {
 
                 profileViewModel.getUser(userId)
             } catch (e: Exception) {
-                showToast("Failed to fetch session or user details: ${e.localizedMessage}")
+                val errorMessage = parseErrorMessage(e)
+                showToast("Failed to fetch session or user details: $errorMessage")
             } finally {
                 isFetchingUser = false
                 updateLoadingState()
@@ -108,9 +111,10 @@ class DashboardFragment : Fragment() {
             updateLoadingState()
 
             result.onSuccess { user ->
-                setUserName(user.user.userName)
+                setUserName(user.users[0].userName)
             }
             result.onFailure { throwable ->
+                println("Failed to load user profile: ${throwable.localizedMessage}")
                 showToast("Failed to load user profile: ${throwable.localizedMessage}")
             }
         }
@@ -209,7 +213,11 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

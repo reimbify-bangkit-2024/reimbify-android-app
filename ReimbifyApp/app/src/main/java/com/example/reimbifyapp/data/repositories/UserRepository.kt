@@ -64,7 +64,7 @@ class UserRepository private constructor(
     }
 
     suspend fun getAllUser(departmentId: Int?, role: String?, search: String?, sortedIncrement: Boolean) : GetAllUserResponse {
-        val paramSorted = if (sortedIncrement == true) "asc" else "desc"
+        val paramSorted = if (sortedIncrement == true) "user_name:asc" else "user_name:desc"
 
         return authApiService.getAllUsers(departmentId, role?.lowercase(), search, paramSorted)
     }
