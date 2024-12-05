@@ -74,6 +74,7 @@ class ReviewedFragment : Fragment() {
         }
 
         viewModel.reviewedResponse.observe(viewLifecycleOwner) { result ->
+            showLoading(false)
             result.onSuccess { response ->
                 response.let {
                     if (it.receipts.isEmpty()) {
@@ -94,11 +95,12 @@ class ReviewedFragment : Fragment() {
     }
 
     private fun fetchDepartments() {
+        showLoading(true)
         viewModel.getAllDepartments()
     }
 
     private fun fetchRequests(search: String? = null, departmentId: Int? = null, sort: Boolean? = null, status: String = "approved,rejected") {
-        showLoading(false)
+        showLoading(true)
         viewModel.getRequest(search, departmentId, sort == true, status)
     }
 
