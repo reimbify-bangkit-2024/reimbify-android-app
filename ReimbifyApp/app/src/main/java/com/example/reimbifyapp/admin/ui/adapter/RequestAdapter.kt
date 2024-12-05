@@ -74,6 +74,8 @@ class RequestAdapter(private val listHistory: ArrayList<History>) :
     override fun getItemCount(): Int = listHistory.size
 
     fun updateData(newData: List<Reimbursement>) {
+        Log.d("Adapter", "New data size: ${newData.size}")
+
         listHistory.clear()
 
         val newList = parsingList(newData)

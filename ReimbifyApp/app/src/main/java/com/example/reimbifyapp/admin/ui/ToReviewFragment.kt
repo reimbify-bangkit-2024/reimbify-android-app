@@ -82,6 +82,8 @@ class ToReviewFragment : Fragment() {
             showLoading(false)
             result.onSuccess { response ->
                 response.let {
+                    Log.d("Observer", "Received data: ${it.receipts}")
+
                     if (it.receipts.isEmpty()) {
                         showNoRequestsMessage(true)
                     } else {

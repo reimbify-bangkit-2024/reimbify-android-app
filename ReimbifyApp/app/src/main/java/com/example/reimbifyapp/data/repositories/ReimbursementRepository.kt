@@ -27,7 +27,7 @@ class ReimbursementRepository private constructor(
             else -> null
         }
 
-        val paramSorted = if (sortedIncrement == true) "asc" else "desc"
+        val paramSorted = if (sortedIncrement == true) "request_date:asc" else "request_date:desc"
 
         return authApiService.getAllRequest(
             userId = userId,
