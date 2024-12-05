@@ -1,4 +1,4 @@
-package com.example.reimbifyapp.user.ui.component
+package com.example.reimbifyapp.auth.ui.component
 
 import android.app.Dialog
 import android.os.Bundle
@@ -16,8 +16,6 @@ import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.DialogChangePasswordBinding
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
-import com.example.reimbifyapp.auth.ui.component.CustomConfirmPasswordEditText
-import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
