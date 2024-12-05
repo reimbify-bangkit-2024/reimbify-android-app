@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.user.factory.HistoryViewModelFactory
@@ -175,11 +176,13 @@ class HistoryFragment : Fragment() {
     }
 
     private fun navigateToDetail(history: History) {
-        showToast("Navigate to Detail Page: ${history.id} ${history.status}")
-//        val bundle = Bundle().apply {
-//            putParcelable("history_data", history)
-//        }
-//        findNavController().navigate(R.id.action_navigation_history_to_underReviewDetailFragment, bundle)
+        val bundle = Bundle()
+        bundle.putInt("requestId", history.id)
+
+        findNavController().navigate(
+            R.id.action_navigation_history_to_requestDetailFragment,
+            bundle
+        )
     }
 
     private fun showNoRequestsMessage(show: Boolean) {

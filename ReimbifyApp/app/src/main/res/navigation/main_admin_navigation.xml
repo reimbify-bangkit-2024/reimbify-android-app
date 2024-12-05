@@ -12,21 +12,30 @@
         tools:layout="@layout/fragment_dashboard_admin" />
 
     <fragment
-        android:id="@+id/navigation_to_approve"
+        android:id="@+id/navigation_to_review"
         android:name="com.example.reimbifyapp.admin.ui.ToReviewFragment"
         android:label="@string/requests"
         tools:layout="@layout/fragment_to_review_admin">
         <action
-            android:id="@+id/action_navigation_to_approve_to_underReviewDetailFragment"
-            app:destination="@id/underReviewDetailFragment"
-            app:popUpTo="@id/navigation_to_approve" />
+            android:id="@+id/action_navigation_to_review_to_approvalFragment"
+            app:destination="@id/approvalFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_approved"
+        android:id="@+id/requestDetailFragment"
+        android:name="com.example.reimbifyapp.auth.ui.component.RequestDetailFragment"
+        android:label="@string/title_request_detail"
+        tools:layout="@layout/fragment_request_detail" />
+
+    <fragment
+        android:id="@+id/navigation_reviewed"
         android:name="com.example.reimbifyapp.admin.ui.ReviewedFragment"
         android:label="@string/reviewed"
-        tools:layout="@layout/fragment_reviewed_admin" />
+        tools:layout="@layout/fragment_reviewed_admin" >
+        <action
+            android:id="@+id/action_navigation_reviewed_to_requestDetailFragment"
+            app:destination="@id/requestDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_list_user"
         android:name="com.example.reimbifyapp.admin.ui.UserListFragment"
@@ -37,20 +46,19 @@
         android:name="com.example.reimbifyapp.admin.ui.SettingFragment"
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting_user" />
+
     <fragment
-        android:id="@+id/acceptedDetailFragment"
-        android:name="com.example.reimbifyapp.user.ui.AcceptedDetailFragment"
-        android:label="@string/title_accepted_detail"
-        tools:layout="@layout/fragment_accepted_detail" />
-    <fragment
-        android:id="@+id/rejectedDetailFragment"
-        android:name="com.example.reimbifyapp.user.ui.RejectedDetailFragment"
-        android:label="@string/title_rejected_detail"
-        tools:layout="@layout/fragment_rejected_detail" />
-    <fragment
-        android:id="@+id/underReviewDetailFragment"
-        android:name="com.example.reimbifyapp.user.ui.UnderReviewDetailFragment"
-        android:label="@string/title_under_review_detail"
-        tools:layout="@layout/fragment_under_review_detail" />
+        android:id="@+id/approvalFragment"
+        android:name="com.example.reimbifyapp.admin.ui.component.ApprovalFragment"
+        android:label="ApprovalFragment" >
+        <action
+            android:id="@+id/action_approvalFragment_to_navigation_reviewed"
+            app:destination="@id/navigation_reviewed"
+            app:popUpTo="@id/navigation_to_review"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_approvalFragment_to_navigation_to_review"
+            app:destination="@id/navigation_to_review" />
+    </fragment>
 </navigation>
 

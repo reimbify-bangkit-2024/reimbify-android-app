@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.factory.ReviewedViewModelFactory
@@ -73,6 +74,7 @@ class ReviewedFragment : Fragment() {
         }
 
         viewModel.reviewedResponse.observe(viewLifecycleOwner) { result ->
+            showLoading(false)
             result.onSuccess { response ->
                 response.let {
                     if (it.receipts.isEmpty()) {
@@ -93,11 +95,12 @@ class ReviewedFragment : Fragment() {
     }
 
     private fun fetchDepartments() {
+        showLoading(true)
         viewModel.getAllDepartments()
     }
 
     private fun fetchRequests(search: String? = null, departmentId: Int? = null, sort: Boolean? = null, status: String = "approved,rejected") {
-        showLoading(false)
+        showLoading(true)
         viewModel.getRequest(search, departmentId, sort == true, status)
     }
 
@@ -176,11 +179,13 @@ class ReviewedFragment : Fragment() {
     }
 
     private fun navigateToDetail(history: History) {
-        showToast("Navigate to Detail Page: ${history.id} ${history.status}")
-//        val bundle = Bundle().apply {
-//            putParcelable("history_data", history)
-//        }
-//        findNavController().navigate(R.id.action_navigation_history_to_underReviewDetailFragment, bundle)
+        val bundle = Bundle()
+        bundle.putInt("requestId", history.id)
+
+        findNavController().navigate(
+            R.id.action_navigation_reviewed_to_requestDetailFragment,
+            bundle
+        )
     }
 
     private fun showNoRequestsMessage(show: Boolean) {

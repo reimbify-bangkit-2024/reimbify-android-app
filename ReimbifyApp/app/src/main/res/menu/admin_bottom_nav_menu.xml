@@ -7,12 +7,12 @@
         android:title="@string/title_dashboard" />
 
     <item
-        android:id="@+id/navigation_to_approve"
+        android:id="@+id/navigation_to_review"
         android:icon="@drawable/task_due_svgrepo_com"
         android:title="@string/requests" />
 
     <item
-        android:id="@+id/navigation_approved"
+        android:id="@+id/navigation_reviewed"
         android:icon="@drawable/task_square_svgrepo_com"
         android:title="@string/reviewed" />
 
