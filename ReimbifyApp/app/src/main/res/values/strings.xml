@@ -180,5 +180,16 @@
     <string name="register">Register</string>
     <string name="select_department">Select Department</string>
     <string name="display_setting">Display Setting</string>
+    <string name="request_detail">Request Detail</string>
+    <string name="request_by">Request by</string>
+    <string name="nota">Nota</string>
+    <string name="request_description">Request Description</string>
+    <string name="review_summary">Review Summary</string>
+    <string name="reviewer">Reviewer</string>
+    <string name="reviewer_name">Reviewer Name</string>
+    <string name="review_date">Review Date</string>
+    <string name="notes">Notes</string>
+    <string name="response_notes">Response Notes</string>
+    <string name="title_request_detail">Request Details</string>
 
 </resources>

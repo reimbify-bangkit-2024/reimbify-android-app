@@ -156,11 +156,11 @@ class DashboardFragment : Fragment() {
     }
 
     private fun navigateToDetail(history: History) {
-        val bundle = Bundle().apply {
-            putParcelable("history_data", history)
-        }
+        val bundle = Bundle()
+        bundle.putInt("requestId", history.id)
+
         findNavController().navigate(
-            R.id.action_navigation_history_to_underReviewDetailFragment,
+            R.id.action_dashboard_to_requestDetailFragment,
             bundle
         )
     }

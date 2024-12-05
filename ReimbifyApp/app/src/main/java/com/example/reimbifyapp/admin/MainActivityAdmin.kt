@@ -59,8 +59,8 @@ class MainActivityAdmin : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_dashboard,
-                R.id.navigation_to_approve,
-                R.id.navigation_approved,
+                R.id.navigation_to_review,
+                R.id.navigation_reviewed,
                 R.id.navigation_list_user,
                 R.id.navigation_setting
             )

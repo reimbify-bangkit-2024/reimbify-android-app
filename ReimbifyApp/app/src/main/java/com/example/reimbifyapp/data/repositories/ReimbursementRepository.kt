@@ -35,6 +35,10 @@ class ReimbursementRepository private constructor(
         )
     }
 
+    suspend fun getRequestById(receiptId: Int): GetReimbursementResponse {
+        return authApiService.getRequestById(receiptId)
+    }
+
     companion object {
         @Volatile
         private var instance: ReimbursementRepository? = null

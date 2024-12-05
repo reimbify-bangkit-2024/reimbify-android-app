@@ -114,4 +114,7 @@ interface ApiService {
 
     @POST("/auth/register")
     suspend fun registerUser(@Body registerUserRequest: RegisterUserRequest) : RegisterUserResponse
+
+    @GET("/request")
+    suspend fun getRequestById(@Query("receiptId") receiptId: Int) : GetReimbursementResponse
 }
