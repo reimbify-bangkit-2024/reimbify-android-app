@@ -78,6 +78,8 @@ class AddRequestFragment : Fragment() {
             if (response != null) {
                 Log.d(TAG, "Upload success: Status - ${response.message}, Message - ${response.message}, File URL - ${response.receiptImageUrl}")
                 val imageUrl = response.receiptImageUrl
+
+                viewModel.statusIconColor.value = R.color.green_500
                 binding.ivBlurStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
                 binding.ivRotationStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
                 binding.ivCropStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
@@ -126,10 +128,12 @@ class AddRequestFragment : Fragment() {
     }
 
     private fun resetIcons() {
+        viewModel.statusIconColor.value = R.color.red_500
         binding.ivBlurStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_500))
         binding.ivRotationStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_500))
         binding.ivCropStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_500))
     }
+
 
     private fun resetSpinner() {
         binding.spDepartment.setSelection(0)
@@ -336,6 +340,12 @@ class AddRequestFragment : Fragment() {
             Toast.makeText(context, "Failed to load image.", Toast.LENGTH_SHORT).show()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        resetIcons()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

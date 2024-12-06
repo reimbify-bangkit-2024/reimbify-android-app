@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.reimbifyapp.R
 import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.network.request.RequestData
 import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
@@ -27,6 +28,8 @@ class AddRequestViewModel(
     private val departmentRepository: DepartmentRepository,
     private val requestRepository: RequestRepository
 ) : ViewModel() {
+
+    val statusIconColor = MutableLiveData<Int>().apply { value = R.color.red_500 }
 
     private val _uploadResponse = MutableLiveData<UploadResponse?>()
     val uploadResponse: LiveData<UploadResponse?> = _uploadResponse
