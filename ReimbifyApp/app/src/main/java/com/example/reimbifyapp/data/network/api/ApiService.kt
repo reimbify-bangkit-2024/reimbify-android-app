@@ -3,10 +3,10 @@ package com.example.reimbifyapp.data.network.api
 import com.example.reimbifyapp.data.network.request.ChangePasswordRequest
 import com.example.reimbifyapp.data.network.request.CreateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
-import com.example.reimbifyapp.data.network.request.GetBankAccountByUserIdRequest
 import com.example.reimbifyapp.data.network.request.LoginRequest
 import com.example.reimbifyapp.data.network.request.RegisterUserRequest
 import com.example.reimbifyapp.data.network.request.RequestApprovalRequest
+import com.example.reimbifyapp.data.network.request.RequestData
 import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
@@ -28,13 +28,14 @@ import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
+import com.example.reimbifyapp.data.network.response.SubmitRequestResponse
 import com.example.reimbifyapp.data.network.response.UpdateBankAccountResponse
 import com.example.reimbifyapp.data.network.response.UploadResponse
 import okhttp3.MultipartBody
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -91,7 +92,6 @@ interface ApiService {
     @Multipart
     @POST("request/image/upload")
     suspend fun uploadReceiptImage(
-        @Header("Authorization") authToken: String,
         @Part image: MultipartBody.Part,
         @Query("userId") userId: String
     ): UploadResponse
@@ -117,7 +117,6 @@ interface ApiService {
 
     @POST("/auth/register")
     suspend fun registerUser(@Body registerUserRequest: RegisterUserRequest) : RegisterUserResponse
-
     @GET("/request")
     suspend fun getRequestById(@Query("receiptId") receiptId: Int) : GetReimbursementResponse
 
@@ -126,4 +125,9 @@ interface ApiService {
         @Query("receiptId") receiptId: Int,
         @Body requestApprovalRequest: RequestApprovalRequest
     ) : RequestApprovalResponse
+
+    @POST("request/create")
+    suspend fun uploadRequest(
+        @Body requestData: RequestData
+    ): Response<SubmitRequestResponse>
 }

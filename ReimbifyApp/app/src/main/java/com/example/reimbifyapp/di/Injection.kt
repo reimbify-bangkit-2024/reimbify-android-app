@@ -8,6 +8,7 @@ import com.example.reimbifyapp.data.preferences.dataStore
 import com.example.reimbifyapp.data.repositories.DepartmentRepository
 import com.example.reimbifyapp.data.repositories.ProfileRepository
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
+import com.example.reimbifyapp.data.repositories.RequestRepository
 import com.example.reimbifyapp.data.repositories.UserRepository
 
 object Injection {
@@ -55,5 +56,12 @@ object Injection {
         val unAuthApiService = provideUnauthenticatedApiService()
 
         return DepartmentRepository.getInstance(authApiService, unAuthApiService)
+    }
+
+    fun provideRequestRepository(context: Context): RequestRepository {
+        val authApiService = provideAuthenticatedApiService(context)
+        val unAuthApiService = provideUnauthenticatedApiService()
+
+        return RequestRepository.getInstance(authApiService, unAuthApiService)
     }
 }

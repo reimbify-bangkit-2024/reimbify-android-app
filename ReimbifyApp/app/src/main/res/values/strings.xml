@@ -197,5 +197,8 @@
     <string name="enter_your_approval_notes">Enter your approval notes</string>
     <string name="are_you_sure_want_to_approve">Are you sure want to APPROVE?</string>
     <string name="are_you_sure_want_to_reject">Are you sure want to REJECT?</string>
+    <string name="blur_status_icon">Not blur</string>
+    <string name="rotation_status_icon">Not rotate</string>
+    <string name="crop_status_icon">Not crop</string>
 
 </resources>
