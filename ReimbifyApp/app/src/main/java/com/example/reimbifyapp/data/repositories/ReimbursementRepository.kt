@@ -3,10 +3,10 @@ package com.example.reimbifyapp.data.repositories
 import android.util.Log
 import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.request.RequestApprovalRequest
-import com.example.reimbifyapp.data.network.request.SendOtpRequest
+import com.example.reimbifyapp.data.network.response.AmountResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
+import com.example.reimbifyapp.data.network.response.ReimbursementCountResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
-import com.example.reimbifyapp.data.network.response.SendOtpResponse
 
 class ReimbursementRepository private constructor(
     private val authApiService: ApiService,
@@ -36,6 +36,10 @@ class ReimbursementRepository private constructor(
             departmentId = departmentId,
             status = paramStatus
         )
+    }
+
+    suspend fun getAmount(status: String): AmountResponse {
+        return authApiService.getAmounts(status)
     }
 
     suspend fun getRequestById(receiptId: Int): GetReimbursementResponse {

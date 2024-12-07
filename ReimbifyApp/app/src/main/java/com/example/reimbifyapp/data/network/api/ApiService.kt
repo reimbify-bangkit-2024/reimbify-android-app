@@ -1,5 +1,6 @@
 package com.example.reimbifyapp.data.network.api
 
+import android.telecom.Call
 import com.example.reimbifyapp.data.network.request.ChangePasswordRequest
 import com.example.reimbifyapp.data.network.request.CreateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
@@ -11,6 +12,7 @@ import com.example.reimbifyapp.data.network.request.ResetPasswordRequest
 import com.example.reimbifyapp.data.network.request.SendOtpRequest
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.VerifyOtpRequest
+import com.example.reimbifyapp.data.network.response.AmountResponse
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
 import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse
 import com.example.reimbifyapp.data.network.response.DeleteUserResponse
@@ -25,6 +27,7 @@ import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
 import com.example.reimbifyapp.data.network.response.RegisterUserResponse
+import com.example.reimbifyapp.data.network.response.ReimbursementCountResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
@@ -130,4 +133,9 @@ interface ApiService {
     suspend fun uploadRequest(
         @Body requestData: RequestData
     ): Response<SubmitRequestResponse>
+
+    @GET("request/amount")
+    suspend fun getAmounts(
+        @Query("status") status: String
+    ): AmountResponse
 }
