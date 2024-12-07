@@ -5,6 +5,7 @@ import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.request.RequestApprovalRequest
 import com.example.reimbifyapp.data.network.response.AmountResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
+import com.example.reimbifyapp.data.network.response.ListHistoryResponse
 import com.example.reimbifyapp.data.network.response.ReimbursementCountResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 
@@ -44,6 +45,10 @@ class ReimbursementRepository private constructor(
 
     suspend fun getRequestById(receiptId: Int): GetReimbursementResponse {
         return authApiService.getRequestById(receiptId)
+    }
+
+    suspend fun getMonthlyAmount(year: Int, status: String): ListHistoryResponse {
+        return authApiService.getMonthlyAmount(year, status)
     }
 
     suspend fun requestApproval(

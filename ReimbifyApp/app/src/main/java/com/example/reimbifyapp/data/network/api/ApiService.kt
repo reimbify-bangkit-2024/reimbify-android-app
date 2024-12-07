@@ -1,6 +1,5 @@
 package com.example.reimbifyapp.data.network.api
 
-import android.telecom.Call
 import com.example.reimbifyapp.data.network.request.ChangePasswordRequest
 import com.example.reimbifyapp.data.network.request.CreateBankAccountRequest
 import com.example.reimbifyapp.data.network.request.ForgotPasswordRequest
@@ -25,9 +24,9 @@ import com.example.reimbifyapp.data.network.response.GetDepartmentByIdResponse
 import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
+import com.example.reimbifyapp.data.network.response.ListHistoryResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
 import com.example.reimbifyapp.data.network.response.RegisterUserResponse
-import com.example.reimbifyapp.data.network.response.ReimbursementCountResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
@@ -138,4 +137,7 @@ interface ApiService {
     suspend fun getAmounts(
         @Query("status") status: String
     ): AmountResponse
+
+    @GET("request/amount/monthly")
+    suspend fun getMonthlyAmount(@Query("year") year: Int, @Query("status") status: String): ListHistoryResponse
 }
