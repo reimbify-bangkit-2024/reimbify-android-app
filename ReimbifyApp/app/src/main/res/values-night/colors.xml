@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_color_setting">#FFFFFFFF</color>
+    <color name="color_profile_tint">#FFFFFFFF</color>
+    <color name="fab_background_color">#BB86FC</color>
+    <color name="fab_icon_color">#000000</color>
+    <color name="navy">#4A5D74</color>
+</resources>

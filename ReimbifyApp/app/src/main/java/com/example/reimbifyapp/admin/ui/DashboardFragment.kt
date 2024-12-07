@@ -1,7 +1,6 @@
 package com.example.reimbifyapp.admin.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -86,7 +85,7 @@ class DashboardFragment : Fragment() {
         val barDataSet = BarDataSet(entries, "Jumlah Request per Departemen").apply {
             color = ContextCompat.getColor(requireContext(), R.color.green_500)
             setDrawValues(true)
-            valueTextColor = Color.BLACK
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
             valueTextSize = 10f
 
             valueFormatter = object : ValueFormatter() {
@@ -101,6 +100,8 @@ class DashboardFragment : Fragment() {
         binding.barChart.apply {
             data = barData
             description.isEnabled = false
+            legend.isEnabled = false
+            setExtraOffsets(0f, 20f, 0f, 20f)
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
@@ -108,20 +109,21 @@ class DashboardFragment : Fragment() {
                 setDrawGridLines(false)
                 valueFormatter = IndexAxisValueFormatter(labels)
                 labelCount = labels.size
-                textColor = Color.BLACK
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
                 labelRotationAngle = 0f
                 setDrawAxisLine(true)
                 textSize = 12f
                 yOffset = 10f
+                axisMinimum = -0.5f
+                axisMaximum = departmentData.size.toFloat() - 0.5f
             }
             axisLeft.apply {
                 setDrawGridLines(true)
                 setDrawLabels(true)
-                textColor = Color.WHITE
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
                 setDrawZeroLine(true)
-                zeroLineColor = Color.BLACK
+                zeroLineColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
                 axisMinimum = 0f
-
                 labelCount = 5
                 setDrawLabels(true)
                 valueFormatter = object : ValueFormatter() {
@@ -129,7 +131,6 @@ class DashboardFragment : Fragment() {
                         return value.toInt().toString()
                     }
                 }
-
                 axisMaximum = maxValue * 1.1f
             }
             axisRight.isEnabled = false
@@ -159,7 +160,7 @@ class DashboardFragment : Fragment() {
             valueTextSize = 12f
             setDrawValues(true)
             sliceSpace = 3f
-            setValueTextColor(Color.WHITE)
+            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.text_color_setting))
 
             valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                 @SuppressLint("DefaultLocale")
@@ -175,11 +176,11 @@ class DashboardFragment : Fragment() {
             data = pieData
             description.isEnabled = false
             legend.isEnabled = true
-            setEntryLabelColor(Color.WHITE)
+            legend.textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
+            setEntryLabelColor(ContextCompat.getColor(requireContext(), R.color.text_color_setting))
             invalidate()
         }
     }
-
 
     private fun updateLineChart(histories: List<GetHistoryAllUserResponse>) {
         val dataSets = mutableListOf<ILineDataSet>()
@@ -187,19 +188,23 @@ class DashboardFragment : Fragment() {
             Entry(index.toFloat(), history.status.approved.toFloat())
         }
 
-        val approvedDataSet = LineDataSet(approvedEntries, "Approved Amount").apply {
-            color = android.graphics.Color.GREEN
-            setCircleColor(android.graphics.Color.GREEN)
+        val approvedDataSet = LineDataSet(approvedEntries, "").apply {
+            color = ContextCompat.getColor(requireContext(), R.color.green_500)
+            setCircleColor(ContextCompat.getColor(requireContext(), R.color.green_500))
             setDrawValues(false)
         }
         dataSets.add(approvedDataSet)
+
         val approvedAmounts = histories.map { it.status.approved }
         val min = approvedAmounts.minOrNull() ?: 0.0
         val max = approvedAmounts.maxOrNull() ?: 0.0
         val lineData = LineData(dataSets)
+
         binding.lineChart.apply {
             data = lineData
             description.isEnabled = false
+            legend.isEnabled = false // Menonaktifkan legend
+            setExtraOffsets(0f, 10f, 0f, 10f)
 
             xAxis.apply {
                 granularity = 1f
@@ -207,8 +212,13 @@ class DashboardFragment : Fragment() {
                 valueFormatter = MonthAxisValueFormatter(histories.map { it.month })
                 position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
                 yOffset = 10f
+                axisMinimum = -0.5f
+                axisMaximum = histories.size.toFloat() - 0.5f
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
             }
+
             axisRight.isEnabled = false
+
             axisLeft.apply {
                 axisMinimum = min.toFloat()
                 axisMaximum = max.toFloat()
@@ -219,13 +229,14 @@ class DashboardFragment : Fragment() {
                     }
                 }
                 setLabelCount(5, true)
-                axisMinimum = min.toFloat()
-                axisMaximum = max.toFloat()
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Ganti warna label sumbu Y
             }
 
+            animateY(500)
             invalidate()
         }
     }
+
 
     @SuppressLint("DefaultLocale")
     private fun formatCurrency(amount: Double): String {

@@ -11,10 +11,11 @@ import java.util.concurrent.TimeUnit
 object ApiConfig {
 
     private const val BASE_URL = BuildConfig.BASE_URL
+    private val BASE_URL_MODEL = BuildConfig.BASE_URL_MODEL
 
-    private fun createRetrofit(client: OkHttpClient): Retrofit {
+    private fun createRetrofit(client: OkHttpClient, baseUrl: String = BASE_URL): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -47,6 +48,11 @@ object ApiConfig {
     fun createUnauthenticatedApiService(): com.example.reimbifyapp.data.network.api.ApiService {
         val client = createClient(withAuth = false)
         return createRetrofit(client).create(com.example.reimbifyapp.data.network.api.ApiService::class.java)
+    }
+
+    fun createModelApiService(): ApiService {
+        val client = createClient(withAuth = false)
+        return createRetrofit(client, BASE_URL_MODEL.toString()).create(ApiService::class.java)
     }
 
     val apiService: com.example.reimbifyapp.data.network.api.ApiService by lazy {

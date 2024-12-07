@@ -46,4 +46,8 @@
     <color name="dark_on_background">#FFFFFF</color>
     <color name="dark_error">#CF6679</color>
     <color name="dark_on_error">#FFFFFF</color>
+    <color name="text_color_setting">#FF000000</color>
+    <color name="color_profile_tint">#FF000000</color>
+    <color name="fab_background_color">#FF6200EE</color>
+    <color name="fab_icon_color">#FFFFFF</color>
 </resources>

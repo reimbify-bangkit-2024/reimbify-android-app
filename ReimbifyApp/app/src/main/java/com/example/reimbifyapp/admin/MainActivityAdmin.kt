@@ -71,7 +71,6 @@ class MainActivityAdmin : AppCompatActivity() {
         }
         navController = navHostFragment.navController
 
-
 //        val openFragment = intent.getStringExtra("open_fragment")
 //        if (openFragment == "dashboard") {
 //            navController.navigate(R.id.navigation_dashboard)

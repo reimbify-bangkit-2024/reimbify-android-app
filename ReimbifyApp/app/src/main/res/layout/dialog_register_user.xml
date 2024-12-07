@@ -51,7 +51,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailTextView"
-        app:startIconDrawable="@drawable/ic_baseline_email_24">
+        app:startIconDrawable="@drawable/ic_baseline_email_24"
+        app:boxStrokeColor="@android:color/black">
 
         <com.example.reimbifyapp.auth.ui.component.CustomEmailEditText
             android:id="@+id/emailEditText"
@@ -83,14 +84,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameTextView"
-        app:startIconDrawable="@drawable/baseline_account_circle_24">
+        app:startIconDrawable="@drawable/baseline_account_circle_24"
+        app:boxStrokeColor="@android:color/black">
 
         <com.example.reimbifyapp.auth.ui.component.CustomEditText
             android:id="@+id/usernameEditText"
             style="@style/CustomEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_your_username" />
+            android:hint="@string/enter_your_username"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -115,7 +118,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordTextView"
         app:endIconMode="password_toggle"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24">
+        app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        app:boxStrokeColor="@android:color/black">
 
         <com.example.reimbifyapp.auth.ui.component.CustomPasswordEditText
             android:id="@+id/passwordEditText"

@@ -11,6 +11,7 @@ import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.network.request.RequestData
 import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
 import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
+import com.example.reimbifyapp.data.network.response.PredictionResponse
 import com.example.reimbifyapp.data.network.response.SubmitRequestResponse
 import com.example.reimbifyapp.data.network.response.UploadResponse
 import com.example.reimbifyapp.data.preferences.UserPreference
@@ -43,6 +44,9 @@ class AddRequestViewModel(
     private val _submitRequestResponse = MutableLiveData<Result<SubmitRequestResponse>>()
     val submitRequestResponse: LiveData<Result<SubmitRequestResponse>> = _submitRequestResponse
 
+    private val _predictionResponse = MutableLiveData<PredictionResponse?>()
+    val predictionResponse: LiveData<PredictionResponse?> = _predictionResponse
+
     fun submitRequest(requestData: RequestData) {
         viewModelScope.launch {
             try {
@@ -57,6 +61,19 @@ class AddRequestViewModel(
             } catch (e: Exception) {
                 _submitRequestResponse.value = Result.failure(e)
                 Log.e("AddRequestViewModel", "Request submission error: ${e.message}", e)
+            }
+        }
+    }
+
+    fun predictImage(imageUri: Uri) {
+        viewModelScope.launch {
+            try {
+                val predictionResult = imageRepository.predictImage(imageUri)
+                _predictionResponse.value = predictionResult
+                Log.d("AddRequestViewModel", "Image prediction result: $predictionResult")
+            } catch (e: Exception) {
+                Log.e("AddRequestViewModel", "Image prediction failed: ${e.message}", e)
+                _predictionResponse.value = null
             }
         }
     }
