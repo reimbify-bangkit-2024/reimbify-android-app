@@ -1,5 +1,6 @@
 package com.example.reimbifyapp.admin
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -22,7 +24,10 @@ import com.example.reimbifyapp.R
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.ui.AuthActivity
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
+import com.example.reimbifyapp.data.preferences.SettingPreferences
 import com.example.reimbifyapp.databinding.ActivityMainAdminBinding
+import com.example.reimbifyapp.user.factory.SettingViewModelFactory
+import com.example.reimbifyapp.user.viewmodel.SettingViewModel
 import com.example.reimbifyapp.utils.TokenUtils.isTokenValid
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -34,14 +39,30 @@ class MainActivityAdmin : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var userViewModel: LoginViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val Context.dataStore by preferencesDataStore(name = "settings")
 
     private val sessionCheckInterval: Long = 5 * 60 * 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val pref = SettingPreferences.getInstance(dataStore)
+        val settingViewModelFactory = SettingViewModelFactory(pref)
+        val settingViewModel = ViewModelProvider(this, settingViewModelFactory)[SettingViewModel::class.java]
+
         binding = ActivityMainAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+            val nightMode = if (isDarkModeActive) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+            if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+                AppCompatDelegate.setDefaultNightMode(nightMode)
+            }
+        }
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main_admin)
         if (navHostFragment == null || navHostFragment !is NavHostFragment) {
@@ -51,10 +72,10 @@ class MainActivityAdmin : AppCompatActivity() {
         navController = navHostFragment.navController
 
 
-        val openFragment = intent.getStringExtra("open_fragment")
-        if (openFragment == "dashboard") {
-            navController.navigate(R.id.navigation_dashboard)
-        }
+//        val openFragment = intent.getStringExtra("open_fragment")
+//        if (openFragment == "dashboard") {
+//            navController.navigate(R.id.navigation_dashboard)
+//        }
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
