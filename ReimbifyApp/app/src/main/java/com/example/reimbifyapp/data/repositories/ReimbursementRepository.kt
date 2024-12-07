@@ -8,6 +8,7 @@ import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.network.response.ListHistoryResponse
 import com.example.reimbifyapp.data.network.response.ReimbursementCountResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
+import com.example.reimbifyapp.data.network.response.StatusResponse
 
 class ReimbursementRepository private constructor(
     private val authApiService: ApiService,
@@ -64,6 +65,10 @@ class ReimbursementRepository private constructor(
         Log.d("RECEIPT ID", receiptId.toString())
         Log.d("STATUS", status)
         return authApiService.requestApproval(receiptId, requestApprovalRequest)
+    }
+
+    suspend fun getTotalRequestStatus(): StatusResponse {
+        return authApiService.getTotalRequestStatus()
     }
 
     companion object {

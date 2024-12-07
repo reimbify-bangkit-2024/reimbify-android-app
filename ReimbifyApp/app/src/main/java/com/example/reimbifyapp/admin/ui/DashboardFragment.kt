@@ -1,12 +1,15 @@
 package com.example.reimbifyapp.admin.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.viewmodel.DashboardViewModel
 import com.example.reimbifyapp.admin.factory.DashboardViewModelFactory
 import com.example.reimbifyapp.databinding.FragmentDashboardAdminBinding
@@ -15,6 +18,9 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.example.reimbifyapp.data.network.response.GetHistoryAllUserResponse
+import com.example.reimbifyapp.data.network.response.StatusResponse
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.ColorTemplate
 import java.util.Calendar
 
 class DashboardFragment : Fragment() {
@@ -44,7 +50,38 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        dashboardViewModel.getTotalRequestStatus().observe(viewLifecycleOwner) { statusResponse ->
+            updatePieChart(statusResponse)
+        }
+
         return binding.root
+    }
+
+    private fun updatePieChart(statusResponse: StatusResponse) {
+        val pieEntries = mutableListOf<PieEntry>()
+        pieEntries.add(PieEntry(statusResponse.approved.toFloat(), "Approved"))
+        pieEntries.add(PieEntry(statusResponse.under_review.toFloat(), "Under Review"))
+        pieEntries.add(PieEntry(statusResponse.rejected.toFloat(), "Rejected"))
+        val pieDataSet = com.github.mikephil.charting.data.PieDataSet(pieEntries, "").apply {
+            colors = listOf(
+                ContextCompat.getColor(requireContext(), R.color.green_500),
+                ContextCompat.getColor(requireContext(), R.color.purple_500),
+                ContextCompat.getColor(requireContext(), R.color.red_500)
+            )
+            valueTextSize = 12f
+            setDrawValues(true)
+            sliceSpace = 3f
+            setValueTextColor(Color.WHITE)
+        }
+
+        val pieData = com.github.mikephil.charting.data.PieData(pieDataSet)
+        binding.pieChart.apply {
+            data = pieData
+            description.isEnabled = false
+            legend.isEnabled = true
+            setEntryLabelColor(Color.WHITE)
+            invalidate()
+        }
     }
 
     private fun updateLineChart(histories: List<GetHistoryAllUserResponse>) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
 import com.example.reimbifyapp.data.network.response.AmountResponse
+import com.example.reimbifyapp.data.network.response.StatusResponse
 import kotlinx.coroutines.Dispatchers
 
 class DashboardViewModel(private val reimbursementRepository: ReimbursementRepository) : ViewModel() {
@@ -28,6 +29,17 @@ class DashboardViewModel(private val reimbursementRepository: ReimbursementRepos
         } catch (e: Exception) {
             Log.e("DashboardViewModel", "Error fetching monthly amount: ${e.message}")
             emit(null)
+        }
+    }
+
+    fun getTotalRequestStatus() = liveData(Dispatchers.IO) {
+        try {
+            val response = reimbursementRepository.getTotalRequestStatus()
+            Log.d("DashboardViewModel", "getTotalRequestStatus response: $response")
+            emit(response)
+        } catch (e: Exception) {
+            Log.e("DashboardViewModel", "Error fetching total request status: ${e.message}")
+            emit(StatusResponse(under_review = 0, approved = 0, rejected = 0)) // Emit nilai default jika error
         }
     }
 }

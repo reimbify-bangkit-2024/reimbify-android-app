@@ -30,6 +30,7 @@ import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
 import com.example.reimbifyapp.data.network.response.SendOtpResponse
+import com.example.reimbifyapp.data.network.response.StatusResponse
 import com.example.reimbifyapp.data.network.response.SubmitRequestResponse
 import com.example.reimbifyapp.data.network.response.UpdateBankAccountResponse
 import com.example.reimbifyapp.data.network.response.UploadResponse
@@ -140,4 +141,7 @@ interface ApiService {
 
     @GET("request/amount/monthly")
     suspend fun getMonthlyAmount(@Query("year") year: Int, @Query("status") status: String): ListHistoryResponse
+
+    @GET("request/total")
+    suspend fun getTotalRequestStatus(): StatusResponse
 }
