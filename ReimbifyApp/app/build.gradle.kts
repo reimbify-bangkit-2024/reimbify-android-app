@@ -17,6 +17,7 @@ android {
         versionName = "1.0"
 
         buildConfigField("String", "BASE_URL", "\"https://reimbify.et.r.appspot.com/\"")
+        buildConfigField("String", "BASE_URL_MODEL", "\"https://reimbify-ml-model-538511005576.asia-southeast2.run.app/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

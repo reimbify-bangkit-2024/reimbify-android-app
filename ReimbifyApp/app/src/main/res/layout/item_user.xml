@@ -17,7 +17,7 @@
         android:padding="4dp"
         android:text="@string/username"
         android:textSize="12sp"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/text_color_setting" />
 
     <TextView
         android:id="@+id/tv_department"
@@ -28,7 +28,7 @@
         android:padding="4dp"
         android:text="@string/department"
         android:textSize="12sp"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/text_color_setting" />
 
     <TextView
         android:id="@+id/tv_role"
@@ -39,7 +39,7 @@
         android:padding="4dp"
         android:text="@string/role"
         android:textSize="12sp"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/text_color_setting" />
 
     <ImageButton
         android:id="@+id/btn_delete"

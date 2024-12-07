@@ -7,6 +7,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +76,34 @@ class AddRequestFragment : Fragment() {
 
         setupBankAccountSpinner()
 
+        viewModel.predictionResponse.observe(viewLifecycleOwner) { predictionResponse ->
+            predictionResponse?.let { prediction ->
+                Log.d(TAG, "Prediction Response: $prediction")
+                val isCropValid = !prediction.crop.cropped
+                val isRotateValid = !prediction.rotate.rotated
+
+                if (isCropValid && isRotateValid) {
+                    lifecycleScope.launch {
+                        loginViewModel.getSession().collect { user ->
+                            if (user.isLogin) {
+                                val userId = user.userId
+                                selectedImageUri?.let { uri ->
+                                    viewModel.uploadImage(uri, userId)
+                                }
+                            }
+                        }
+                    }
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.progressBar.visibility = View.GONE
+                    }, 1000)
+                } else {
+                    val errorMessage = buildErrorMessage(isCropValid, isRotateValid)
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    updateStatusIcons(isCropValid, isRotateValid)
+                }
+            }
+        }
+
         viewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d(TAG, "Upload success: Status - ${response.message}, Message - ${response.message}, File URL - ${response.receiptImageUrl}")
@@ -114,6 +144,29 @@ class AddRequestFragment : Fragment() {
         }
 
         return root
+    }
+
+    private fun buildErrorMessage(isCropValid: Boolean, isRotateValid: Boolean): String {
+        val errorParts = mutableListOf<String>()
+        if (!isCropValid) errorParts.add("Image is not cropped correctly")
+        if (!isRotateValid) errorParts.add("Image is rotated incorrectly")
+        return "Please adjust the image: ${errorParts.joinToString(", ")}"
+    }
+
+    private fun updateStatusIcons(isCropValid: Boolean, isRotateValid: Boolean) {
+        binding.ivCropStatusIcon.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                if (isCropValid) R.color.green_500 else R.color.red_500
+            )
+        )
+
+        binding.ivRotationStatusIcon.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                if (isRotateValid) R.color.green_500 else R.color.red_500
+            )
+        )
     }
 
     private fun resetForm() {
@@ -260,7 +313,7 @@ class AddRequestFragment : Fragment() {
                                 if (description.isNullOrEmpty() || amount == null || selectedDate.isNullOrEmpty()) {
                                     Toast.makeText(context, "Please fill all fields.", Toast.LENGTH_SHORT).show()
                                 } else {
-                                    viewModel.uploadImage(uri, userId)
+                                    viewModel.predictImage(uri)
                                 }
                             } ?: run {
                                 Toast.makeText(context, "Please select an image first.", Toast.LENGTH_SHORT).show()
@@ -278,6 +331,7 @@ class AddRequestFragment : Fragment() {
         binding.btnOpenCamera.setOnClickListener { openCamera() }
         binding.btnUploadGallery.setOnClickListener { openGallery() }
     }
+
 
     private fun openCamera() {
         val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)

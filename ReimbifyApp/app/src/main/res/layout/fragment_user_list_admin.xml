@@ -72,7 +72,7 @@
                 android:text="@string/filter_by_department"
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <Spinner
                 android:id="@+id/spinner_department"
@@ -95,7 +95,7 @@
                 android:text="@string/filter_by_role"
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <Spinner
                 android:id="@+id/spinner_role"
@@ -118,7 +118,7 @@
                 android:text="@string/sort_by_name"
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <ImageButton
                 android:id="@+id/btn_sort"
@@ -126,7 +126,8 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/sort_by_date"
-                android:src="@drawable/sort_down_vertical_svgrepo_com" />
+                android:src="@drawable/sort_down_vertical_svgrepo_com"
+                app:tint="@color/color_profile_tint"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -153,7 +154,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="start"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/text_color_setting" />
 
         <TextView
             android:id="@+id/tv_column_department"
@@ -164,7 +165,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="start"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/text_color_setting" />
 
         <TextView
             android:id="@+id/tv_column_role"
@@ -175,7 +176,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="start"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/text_color_setting" />
 
         <TextView
             android:id="@+id/tv_column_action"
@@ -185,7 +186,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/text_color_setting" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -195,7 +196,8 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/add_user"
         app:srcCompat="@drawable/baseline_add_circle_24"
-        app:backgroundTint="@color/light_gray"
+        app:backgroundTint="@color/fab_background_color"
+        app:tint="@color/fab_icon_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

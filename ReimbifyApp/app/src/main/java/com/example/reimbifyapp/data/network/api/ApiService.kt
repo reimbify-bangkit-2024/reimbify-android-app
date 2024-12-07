@@ -27,6 +27,7 @@ import com.example.reimbifyapp.data.network.response.GetRequestGroupByDepartemen
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.ListHistoryResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
+import com.example.reimbifyapp.data.network.response.PredictionResponse
 import com.example.reimbifyapp.data.network.response.RegisterUserResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.ResetPasswordResponse
@@ -150,4 +151,10 @@ interface ApiService {
     suspend fun getTotalRequestByDepartment(
         @Query("status") status: String
     ): GetRequestGroupByDepartementResponse
+
+    @Multipart
+    @POST("predict")
+    suspend fun predictImage(
+        @Part image: MultipartBody.Part
+    ): PredictionResponse
 }

@@ -72,7 +72,7 @@
                 android:text="@string/filter_by_status"
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <Spinner
                 android:id="@+id/spinner_status"
@@ -96,7 +96,7 @@
                 android:text="@string/filter_by_department"
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <Spinner
                 android:id="@+id/spinner_department"
@@ -118,7 +118,7 @@
                 android:text="@string/request_date"
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <ImageButton
                 android:id="@+id/btn_sort"
@@ -126,11 +126,12 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/sort_by_date"
-                android:src="@drawable/sort_down_vertical_svgrepo_com" />
+                android:src="@drawable/sort_down_vertical_svgrepo_com"
+                app:tint="@color/color_profile_tint" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- RecyclerView -->
+    <!-- RecyclerView -->S
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_request"
         android:layout_width="0dp"
@@ -151,7 +152,7 @@
         android:layout_gravity="center"
         android:text="@string/no_request_found"
         android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color_setting"
         android:gravity="center"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/filter_section"

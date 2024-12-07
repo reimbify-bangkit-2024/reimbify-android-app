@@ -2,7 +2,9 @@ package com.example.reimbifyapp.data.repositories
 
 import android.content.Context
 import android.net.Uri
+import com.example.reimbifyapp.data.network.api.ApiConfig.createModelApiService
 import com.example.reimbifyapp.data.network.api.ApiService
+import com.example.reimbifyapp.data.network.response.PredictionResponse
 import com.example.reimbifyapp.data.network.response.UploadResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,4 +33,16 @@ class ImageRepository(private val context: Context) {
         inputStream?.close()
         return tempFile
     }
+
+    suspend fun predictImage(imageUri: Uri): PredictionResponse {
+        val apiService = createModelApiService()
+        return withContext(Dispatchers.IO) {
+            val inputStream = context.contentResolver.openInputStream(imageUri)
+            val tempFile = createTempFileFromInputStream(inputStream)
+            val requestBody = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+            val imagePart = MultipartBody.Part.createFormData("image", tempFile.name, requestBody)
+            return@withContext apiService.predictImage(imagePart)
+        }
+    }
+
 }
