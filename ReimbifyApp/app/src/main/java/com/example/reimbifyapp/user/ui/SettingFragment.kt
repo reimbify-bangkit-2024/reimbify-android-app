@@ -32,18 +32,16 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pref = com.example.reimbifyapp.data.preferences.SettingPreferences.getInstance(requireContext().dataStore)
+        val pref = SettingPreferences.getInstance(requireContext().dataStore)
         val settingViewModelFactory = SettingViewModelFactory(pref)
         settingViewModel = ViewModelProvider(this, settingViewModelFactory)[SettingViewModel::class.java]
-
-        // Observasi pengaturan tema dari ViewModel
         settingViewModel.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive ->
+            binding.switchTheme.setOnCheckedChangeListener(null)
             binding.switchTheme.isChecked = isDarkModeActive
-        }
 
-        // Listener untuk switch tema
-        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            settingViewModel.saveThemeSetting(isChecked)
+            binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
+                settingViewModel.saveThemeSetting(isChecked)
+            }
         }
     }
 
