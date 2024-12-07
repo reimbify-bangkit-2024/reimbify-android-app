@@ -42,4 +42,16 @@ class DashboardViewModel(private val reimbursementRepository: ReimbursementRepos
             emit(StatusResponse(under_review = 0, approved = 0, rejected = 0)) // Emit nilai default jika error
         }
     }
+
+    fun getTotalRequestByDepartment(status: String) = liveData(Dispatchers.IO) {
+        try {
+            val response = reimbursementRepository.getTotalRequestByDepartment(status)
+            Log.d("DashboardViewModel", "getTotalRequestByDepartment response: $response")
+            emit(response.histories) // Emit hanya bagian histories
+        } catch (e: Exception) {
+            Log.e("DashboardViewModel", "Error fetching total request by department: ${e.message}")
+            emit(emptyList())
+        }
+    }
+
 }

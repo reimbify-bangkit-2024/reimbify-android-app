@@ -3,6 +3,7 @@ package com.example.reimbifyapp.admin.ui
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +13,23 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.viewmodel.DashboardViewModel
 import com.example.reimbifyapp.admin.factory.DashboardViewModelFactory
+import com.example.reimbifyapp.data.network.response.DepartmentRequest
 import com.example.reimbifyapp.databinding.FragmentDashboardAdminBinding
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.example.reimbifyapp.data.network.response.GetHistoryAllUserResponse
+import com.example.reimbifyapp.data.network.response.GetRequestGroupByDepartementResponse
 import com.example.reimbifyapp.data.network.response.StatusResponse
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import java.util.Calendar
 
 class DashboardFragment : Fragment() {
@@ -54,14 +63,93 @@ class DashboardFragment : Fragment() {
             updatePieChart(statusResponse)
         }
 
+        dashboardViewModel.getTotalRequestByDepartment("approved").observe(viewLifecycleOwner) { departmentData ->
+            Log.d("DashboardFragment", "Department Data: $departmentData")
+            updateBarChart(departmentData)
+        }
         return binding.root
     }
 
+    private fun updateBarChart(departmentData: List<DepartmentRequest>) {
+        if (departmentData.isEmpty()) {
+            binding.tvNoRequests.visibility = View.VISIBLE
+            binding.barChart.visibility = View.GONE
+            return
+        }
+
+        binding.tvNoRequests.visibility = View.GONE
+        binding.barChart.visibility = View.VISIBLE
+        val entries = departmentData.mapIndexed { index, data ->
+            BarEntry(index.toFloat(), data.total.toFloat())
+        }
+        val labels = departmentData.map { it.departmentName }
+        val barDataSet = BarDataSet(entries, "Jumlah Request per Departemen").apply {
+            color = ContextCompat.getColor(requireContext(), R.color.green_500)
+            setDrawValues(true)
+            valueTextColor = Color.BLACK
+            valueTextSize = 10f
+
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return value.toInt().toString()
+                }
+            }
+        }
+        val barData = BarData(barDataSet)
+        val maxValue = departmentData.maxOfOrNull { it.total }?.toFloat() ?: 0f
+
+        binding.barChart.apply {
+            data = barData
+            description.isEnabled = false
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                isGranularityEnabled = true
+                setDrawGridLines(false)
+                valueFormatter = IndexAxisValueFormatter(labels)
+                labelCount = labels.size
+                textColor = Color.BLACK
+                labelRotationAngle = 0f
+                setDrawAxisLine(true)
+                textSize = 12f
+                yOffset = 10f
+            }
+            axisLeft.apply {
+                setDrawGridLines(true)
+                setDrawLabels(true)
+                textColor = Color.WHITE
+                setDrawZeroLine(true)
+                zeroLineColor = Color.BLACK
+                axisMinimum = 0f
+
+                labelCount = 5
+                setDrawLabels(true)
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return value.toInt().toString()
+                    }
+                }
+
+                axisMaximum = maxValue * 1.1f
+            }
+            axisRight.isEnabled = false
+            animateY(500)
+            invalidate()
+        }
+    }
+
     private fun updatePieChart(statusResponse: StatusResponse) {
+        val total = statusResponse.approved + statusResponse.under_review + statusResponse.rejected
+
+        val approvedPercentage = (statusResponse.approved / total.toFloat()) * 100
+        val underReviewPercentage = (statusResponse.under_review / total.toFloat()) * 100
+        val rejectedPercentage = (statusResponse.rejected / total.toFloat()) * 100
+
         val pieEntries = mutableListOf<PieEntry>()
-        pieEntries.add(PieEntry(statusResponse.approved.toFloat(), "Approved"))
-        pieEntries.add(PieEntry(statusResponse.under_review.toFloat(), "Under Review"))
-        pieEntries.add(PieEntry(statusResponse.rejected.toFloat(), "Rejected"))
+        pieEntries.add(PieEntry(approvedPercentage, "Approved"))
+        pieEntries.add(PieEntry(underReviewPercentage, "Under Review"))
+        pieEntries.add(PieEntry(rejectedPercentage, "Rejected"))
+
         val pieDataSet = com.github.mikephil.charting.data.PieDataSet(pieEntries, "").apply {
             colors = listOf(
                 ContextCompat.getColor(requireContext(), R.color.green_500),
@@ -72,9 +160,17 @@ class DashboardFragment : Fragment() {
             setDrawValues(true)
             sliceSpace = 3f
             setValueTextColor(Color.WHITE)
+
+            valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                @SuppressLint("DefaultLocale")
+                override fun getFormattedValue(value: Float): String {
+                    return String.format("%.1f%%", value)
+                }
+            }
         }
 
         val pieData = com.github.mikephil.charting.data.PieData(pieDataSet)
+
         binding.pieChart.apply {
             data = pieData
             description.isEnabled = false
@@ -84,8 +180,8 @@ class DashboardFragment : Fragment() {
         }
     }
 
+
     private fun updateLineChart(histories: List<GetHistoryAllUserResponse>) {
-        val entries = mutableListOf<Entry>()
         val dataSets = mutableListOf<ILineDataSet>()
         val approvedEntries = histories.mapIndexed { index, history ->
             Entry(index.toFloat(), history.status.approved.toFloat())
@@ -100,9 +196,6 @@ class DashboardFragment : Fragment() {
         val approvedAmounts = histories.map { it.status.approved }
         val min = approvedAmounts.minOrNull() ?: 0.0
         val max = approvedAmounts.maxOrNull() ?: 0.0
-        val q1 = approvedAmounts.sorted().let { it[it.size / 4] }
-        val q2 = approvedAmounts.sorted().let { it[it.size / 2] }
-        val q3 = approvedAmounts.sorted().let { it[3 * it.size / 4] }
         val lineData = LineData(dataSets)
         binding.lineChart.apply {
             data = lineData
@@ -139,11 +232,11 @@ class DashboardFragment : Fragment() {
         val formattedAmount = when {
             amount >= 1_000_000_000.0 -> {
                 val billions = amount / 1_000_000_000.0
-                String.format("%.1f M", billions)  // "M" untuk Miliar
+                String.format("%.1f M", billions)
             }
             amount >= 1_000_000.0 -> {
                 val millions = amount / 1_000_000.0
-                String.format("%.1f jt", millions)  // "jt" untuk Juta
+                String.format("%.1f jt", millions)
             }
             else -> String.format("%,.0f", amount)
         }

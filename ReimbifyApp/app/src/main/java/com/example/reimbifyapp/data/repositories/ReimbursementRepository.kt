@@ -5,8 +5,8 @@ import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.request.RequestApprovalRequest
 import com.example.reimbifyapp.data.network.response.AmountResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
+import com.example.reimbifyapp.data.network.response.GetRequestGroupByDepartementResponse
 import com.example.reimbifyapp.data.network.response.ListHistoryResponse
-import com.example.reimbifyapp.data.network.response.ReimbursementCountResponse
 import com.example.reimbifyapp.data.network.response.RequestApprovalResponse
 import com.example.reimbifyapp.data.network.response.StatusResponse
 
@@ -81,5 +81,9 @@ class ReimbursementRepository private constructor(
             instance ?: synchronized(this) {
                 instance ?: ReimbursementRepository(authApiService, unAuthApiService)
             }.also { instance = it }
+    }
+
+    suspend fun getTotalRequestByDepartment(status: String): GetRequestGroupByDepartementResponse {
+        return authApiService.getTotalRequestByDepartment(status)
     }
 }

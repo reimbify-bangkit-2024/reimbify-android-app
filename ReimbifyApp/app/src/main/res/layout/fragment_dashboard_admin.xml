@@ -106,5 +106,40 @@
             android:id="@+id/pieChart"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
+
+        <!-- Reimbursement Amount Bar Chart -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reimbursement_amount"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="16dp" />
+
+        <View
+            android:id="@+id/dividerProfile"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/tv_no_requests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_request_found"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="16dp" />
+
     </LinearLayout>
 </ScrollView>

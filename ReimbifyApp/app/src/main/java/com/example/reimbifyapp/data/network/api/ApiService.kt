@@ -23,6 +23,7 @@ import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdRespo
 import com.example.reimbifyapp.data.network.response.GetDepartmentByIdResponse
 import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
+import com.example.reimbifyapp.data.network.response.GetRequestGroupByDepartementResponse
 import com.example.reimbifyapp.data.network.response.GetUserResponse
 import com.example.reimbifyapp.data.network.response.ListHistoryResponse
 import com.example.reimbifyapp.data.network.response.LoginResponse
@@ -144,4 +145,9 @@ interface ApiService {
 
     @GET("request/total")
     suspend fun getTotalRequestStatus(): StatusResponse
+
+    @GET("request/total")
+    suspend fun getTotalRequestByDepartment(
+        @Query("status") status: String
+    ): GetRequestGroupByDepartementResponse
 }
