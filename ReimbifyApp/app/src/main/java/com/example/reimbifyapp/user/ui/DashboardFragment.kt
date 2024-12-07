@@ -1,6 +1,8 @@
 package com.example.reimbifyapp.user.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import com.example.reimbifyapp.admin.ui.adapter.RequestAdapter
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.History
+import com.example.reimbifyapp.data.network.response.GetHistoryAllUserResponse
 import com.example.reimbifyapp.databinding.FragmentDashboardUserBinding
 import com.example.reimbifyapp.user.factory.DashboardViewModelFactory
 import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
@@ -26,8 +29,10 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class DashboardFragment : Fragment() {
 
@@ -68,7 +73,24 @@ class DashboardFragment : Fragment() {
         fetchRequests()
 
         setupRecyclerView()
-        setupReimbursementHistory(binding.lineChart)
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val session = userViewModel.getSession().first()
+                val userId = session.userId.toInt()
+
+                viewModel.getMonthlyAmountByUserId(year, userId).observe(viewLifecycleOwner) { listHistoryResponse ->
+                    listHistoryResponse?.let { response ->
+                        Log.d("DashboardFragment", "Fetched history data: ${response.histories}")
+                        updateLineChart(response.histories)
+                    }
+                }
+
+            } catch (e: Exception) {
+                val errorMessage = parseErrorMessage(e)
+                showToast("Failed to fetch monthly amount: $errorMessage")
+            }
+        }
         setupObserver()
     }
 
@@ -165,29 +187,107 @@ class DashboardFragment : Fragment() {
         )
     }
 
-    private fun setupReimbursementHistory(chart: LineChart) {
-        val entries = listOf(
-            Entry(0f, 200f),
-            Entry(1f, 800f),
-            Entry(2f, 600f),
-            Entry(3f, 400f),
-            Entry(4f, 600f)
-        )
-
-        val dataSet = LineDataSet(entries, "Reimbursement History").apply {
-            lineWidth = 2f
-            circleRadius = 4f
+    private fun updateLineChart(histories: List<GetHistoryAllUserResponse>) {
+        if (histories.isEmpty()) {
+            binding.lineChart.clear()
+            binding.lineChart.invalidate()
+            return
         }
 
-        val lineData = LineData(dataSet)
-        chart.apply {
+        val dataSets = mutableListOf<ILineDataSet>()
+        val totalEntries = histories.mapIndexed { index, history ->
+            val totalAmount = history.status.approved + history.status.under_review + history.status.rejected
+            Entry(index.toFloat(), totalAmount.toFloat())
+        }
+        val totalDataSet = LineDataSet(totalEntries, "Total Amount").apply {
+            color = android.graphics.Color.BLUE
+            setCircleColor(android.graphics.Color.BLUE)
+            setDrawValues(true)
+            valueTextColor = android.graphics.Color.BLACK
+            valueTextSize = 10f
+        }
+        dataSets.add(totalDataSet)
+        val totalAmountSum = histories.sumOf { it.status.approved + it.status.under_review + it.status.rejected }
+        val lineData = LineData(dataSets)
+        binding.lineChart.apply {
             data = lineData
             description.isEnabled = false
-            axisLeft.setDrawLabels(false)
-            axisRight.setDrawLabels(false)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.granularity = 1f
+            legend.isEnabled = false
+            setExtraOffsets(20f, 0f, 0f, 20f)
+            xAxis.apply {
+                granularity = 1f
+                isGranularityEnabled = true
+                valueFormatter = MonthAxisValueFormatter(histories.map { it.month })
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                yOffset = 10f
+            }
+            axisRight.isEnabled = false
+            axisLeft.apply {
+                val min = histories.minOf { it.status.approved + it.status.under_review + it.status.rejected }
+                val max = histories.maxOf { it.status.approved + it.status.under_review + it.status.rejected }
+                axisMinimum = (min.toFloat() * 0.9f)
+                axisMaximum = (max.toFloat() * 1.1f)
+                setDrawLabels(true)
+                setDrawGridLines(true)
+                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return formatCurrency(value.toDouble())
+                    }
+                }
+                setLabelCount(5, true)
+                setPosition(com.github.mikephil.charting.components.YAxis.YAxisLabelPosition.OUTSIDE_CHART)  // Move labels outside the chart
+            }
+            animateX(1000)
             invalidate()
+        }
+
+        Log.d("DashboardFragment", "Total Amount: $totalAmountSum")
+        Log.d("DashboardFragment", "Total Amount Details: ${histories.joinToString { "Month: ${it.month}, Approved: ${it.status.approved}, Pending: ${it.status.under_review}, Rejected: ${it.status.rejected}" }}")
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun formatCurrency(amount: Double): String {
+        val formattedAmount = when {
+            amount >= 1_000_000_000.0 -> {
+                val billions = amount / 1_000_000_000.0
+                String.format("%.1f M", billions)
+            }
+            amount >= 1_000_000.0 -> {
+                val millions = amount / 1_000_000.0
+                String.format("%.1f jt", millions)
+            }
+            else -> String.format("%,.0f", amount)
+        }
+        return "Rp $formattedAmount"
+    }
+
+    inner class MonthAxisValueFormatter(private val months: List<Int>) : com.github.mikephil.charting.formatter.ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            val index = value.toInt()
+            return if (index >= 0 && index < months.size) {
+                getMonthName(months[index])
+            } else {
+                ""
+            }
+        }
+
+        private fun getMonthName(monthNumber: Int): String {
+            return when (monthNumber) {
+                1 -> "Jan"
+                2 -> "Feb"
+                3 -> "Mar"
+                4 -> "Apr"
+                5 -> "May"
+                6 -> "Jun"
+                7 -> "Jul"
+                8 -> "Aug"
+                9 -> "Sep"
+                10 -> "Oct"
+                11 -> "Nov"
+                12 -> "Dec"
+                else -> ""
+            }
         }
     }
 

@@ -52,6 +52,10 @@ class ReimbursementRepository private constructor(
         return authApiService.getMonthlyAmount(year, status)
     }
 
+    suspend fun getMonthlyAmountByUserId(year: Int, userId: Int): ListHistoryResponse {
+        return authApiService.getMonthlyAmountByUser(year, userId)
+    }
+
     suspend fun requestApproval(
         receiptId: Int,
         status: String,

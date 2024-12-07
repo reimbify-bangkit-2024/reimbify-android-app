@@ -144,6 +144,12 @@ interface ApiService {
     @GET("request/amount/monthly")
     suspend fun getMonthlyAmount(@Query("year") year: Int, @Query("status") status: String): ListHistoryResponse
 
+    @GET("request/amount/monthly")
+    suspend fun getMonthlyAmountByUser(
+        @Query("year") year: Int,
+        @Query("userId") userId: Int
+    ): ListHistoryResponse
+
     @GET("request/total")
     suspend fun getTotalRequestStatus(): StatusResponse
 
