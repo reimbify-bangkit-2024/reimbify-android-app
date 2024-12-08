@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -240,13 +242,28 @@ class AddRequestFragment : Fragment() {
 
     private fun setBankAccountSpinner(accounts: List<Account>) {
         val accountNames = listOf("Select Bank Account") + accounts.map { it.accountTitle }
-        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, accountNames)
+        val spinnerAdapter = object : ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            accountNames
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent) as TextView
+                return view
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent) as TextView
+                return view
+            }
+        }
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding.spBankAccount.adapter = spinnerAdapter
 
         binding.spBankAccount.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                (parent.getChildAt(0) as? TextView)?.setTextColor(Color.BLACK)
                 accountId = if (position == 0) null else accounts[position - 1].accountId
             }
 
@@ -283,12 +300,27 @@ class AddRequestFragment : Fragment() {
             binding.spDepartment.adapter = null
         } else {
             val departmentNames = listOf("Select Department") + departments.map { it.departmentName }
-            val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, departmentNames)
+            val spinnerAdapter = object : ArrayAdapter<String>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                departmentNames
+            ) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getView(position, convertView, parent) as TextView
+                    return view
+                }
+
+                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getDropDownView(position, convertView, parent) as TextView
+                    return view
+                }
+            }
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spDepartment.adapter = spinnerAdapter
 
             binding.spDepartment.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    (parent.getChildAt(0) as? TextView)?.setTextColor(Color.BLACK)
                     departmentId = if (position == 0) null else departments[position - 1].departmentId
                 }
 

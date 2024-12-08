@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -188,27 +189,25 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateLineChart(histories: List<GetHistoryAllUserResponse>) {
-        if (histories.isEmpty()) {
-            binding.lineChart.clear()
-            binding.lineChart.invalidate()
-            return
-        }
-
         val dataSets = mutableListOf<ILineDataSet>()
         val totalEntries = histories.mapIndexed { index, history ->
             val totalAmount = history.status.approved + history.status.under_review + history.status.rejected
             Entry(index.toFloat(), totalAmount.toFloat())
         }
+
         val totalDataSet = LineDataSet(totalEntries, "Total Amount").apply {
-            color = android.graphics.Color.BLUE
-            setCircleColor(android.graphics.Color.BLUE)
+            color = ContextCompat.getColor(requireContext(), R.color.purple_500) // Pastikan warna sesuai
+            setCircleColor(ContextCompat.getColor(requireContext(), R.color.purple_500)) // Warna titik
             setDrawValues(true)
-            valueTextColor = android.graphics.Color.BLACK
             valueTextSize = 10f
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Warna teks untuk total amount
         }
+
         dataSets.add(totalDataSet)
+
         val totalAmountSum = histories.sumOf { it.status.approved + it.status.under_review + it.status.rejected }
         val lineData = LineData(dataSets)
+
         binding.lineChart.apply {
             data = lineData
             description.isEnabled = false
@@ -219,9 +218,12 @@ class DashboardFragment : Fragment() {
                 isGranularityEnabled = true
                 valueFormatter = MonthAxisValueFormatter(histories.map { it.month })
                 position = XAxis.XAxisPosition.BOTTOM
-                setDrawGridLines(false)
                 yOffset = 10f
+                axisMinimum = -0.5f
+                axisMaximum = histories.size.toFloat() - 0.5f
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Sesuaikan warna teks sumbu X
             }
+
             axisRight.isEnabled = false
             axisLeft.apply {
                 val min = histories.minOf { it.status.approved + it.status.under_review + it.status.rejected }
@@ -229,22 +231,23 @@ class DashboardFragment : Fragment() {
                 axisMinimum = (min.toFloat() * 0.9f)
                 axisMaximum = (max.toFloat() * 1.1f)
                 setDrawLabels(true)
-                setDrawGridLines(true)
                 valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
                         return formatCurrency(value.toDouble())
                     }
                 }
                 setLabelCount(5, true)
-                setPosition(com.github.mikephil.charting.components.YAxis.YAxisLabelPosition.OUTSIDE_CHART)  // Move labels outside the chart
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Sesuaikan warna teks sumbu Y
             }
-            animateX(1000)
+
+            animateY(500)
             invalidate()
         }
 
         Log.d("DashboardFragment", "Total Amount: $totalAmountSum")
-        Log.d("DashboardFragment", "Total Amount Details: ${histories.joinToString { "Month: ${it.month}, Approved: ${it.status.approved}, Pending: ${it.status.under_review}, Rejected: ${it.status.rejected}" }}")
     }
+
+
 
     @SuppressLint("DefaultLocale")
     private fun formatCurrency(amount: Double): String {

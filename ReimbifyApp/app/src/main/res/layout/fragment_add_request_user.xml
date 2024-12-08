@@ -217,6 +217,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/default_date_v2"
+            android:textColor="@android:color/black"
             android:background="@drawable/input_box"
             android:importantForAutofill="no"
             android:inputType="none"
@@ -251,7 +252,9 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_departement"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            style="@style/Widget.AppCompat.Spinner.DropDown" />
 
         <TextView
             android:id="@+id/tv_description"
@@ -272,6 +275,7 @@
             android:background="@drawable/input_box"
             android:padding="8dp"
             android:inputType="text"
+            android:textColor="@android:color/black"
             app:layout_constraintTop_toBottomOf="@+id/tv_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -293,6 +297,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/amount"
+            android:textColor="@android:color/black"
             android:background="@drawable/input_box"
             android:padding="8dp"
             android:inputType="numberDecimal"
@@ -321,7 +326,9 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_bank_account"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            android:dropDownSelector="@android:color/black"/>
 
         <LinearLayout
             android:id="@+id/ll_submit_buttons"
