@@ -83,10 +83,10 @@
                 android:id="@+id/tvEmail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bordered_box"
+                android:background="@drawable/input_box"
                 android:padding="8dp"
                 android:text="@string/default_email"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toEndOf="@id/tvEmailLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvEmailLabel" />
@@ -108,10 +108,10 @@
                 android:id="@+id/tvRole"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bordered_box"
+                android:background="@drawable/input_box"
                 android:padding="8dp"
                 android:text="@string/user"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toEndOf="@id/tvRoleLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvRoleLabel" />
@@ -123,7 +123,6 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/change_password"
                 android:backgroundTint="@color/navy"
-                android:textColor="@android:color/white"
                 app:layout_constraintTop_toBottomOf="@id/tvRole"
                 app:layout_constraintEnd_toEndOf="parent" />
 
