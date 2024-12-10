@@ -105,6 +105,13 @@ interface ApiService {
         @Query("userId") userId: String
     ): UploadResponse
 
+    @Multipart
+    @PUT("profile/image/update")
+    suspend fun uploadImage(
+        @Part image: MultipartBody.Part,
+        @Query("userId") userId: String
+    ): UploadResponse
+
     @GET("/department")
     suspend fun getAllDepartments() : GetDepartmentResponse
 

@@ -2,6 +2,8 @@ package com.example.reimbifyapp.data.repositories
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
+import com.example.reimbifyapp.admin.ui.component.ApprovalConfirmationDialog.Companion.TAG
 import com.example.reimbifyapp.data.network.api.ApiConfig.createModelApiService
 import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.response.PredictionResponse
@@ -22,6 +24,29 @@ class ImageRepository(private val context: Context) {
             val requestBody = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
             val imagePart = MultipartBody.Part.createFormData("receiptImage", tempFile.name, requestBody)
             return@withContext apiService.uploadReceiptImage(imagePart, userId)
+        }
+    }
+
+    suspend fun uploadImageProfile(apiService: ApiService, imageUri: Uri, userId: String): UploadResponse {
+        return withContext(Dispatchers.IO) {
+            try {
+                val inputStream = context.contentResolver.openInputStream(imageUri)
+                if (inputStream == null) {
+                    Log.e(TAG, "Failed to open input stream for image URI: $imageUri")
+                    throw Exception("Input stream is null")
+                }
+                val tempFile = createTempFileFromInputStream(inputStream)
+                Log.d(TAG, "Temporary file created at: ${tempFile.absolutePath}")
+                val requestBody = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+                val imagePart = MultipartBody.Part.createFormData("profileImage", tempFile.name, requestBody)
+                Log.d(TAG, "Uploading profile image to server for userId: $userId")
+                val response = apiService.uploadImage(imagePart, userId)
+                Log.d(TAG, "Server response: $response")
+                return@withContext response
+            } catch (e: Exception) {
+                Log.e(TAG, "Error uploading profile image: ${e.message}", e)
+                throw e
+            }
         }
     }
 

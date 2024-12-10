@@ -37,4 +37,12 @@
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/splash_background</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

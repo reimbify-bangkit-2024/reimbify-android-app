@@ -1,7 +1,10 @@
 package com.example.reimbifyapp.user.ui
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentProfileUserBinding
 import com.example.reimbifyapp.data.entities.User
@@ -19,6 +23,7 @@ import com.example.reimbifyapp.auth.ui.AuthActivity
 import com.example.reimbifyapp.auth.ui.component.ChangePasswordDialogFragment
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.Account
+import com.example.reimbifyapp.user.ui.AddRequestFragment.Companion
 import com.example.reimbifyapp.user.ui.adapter.BankAccountAdapter
 import com.example.reimbifyapp.user.ui.component.AddBankAccountDialogFragment
 import com.example.reimbifyapp.user.ui.component.UpdateBankAccountDialogFragment
@@ -27,12 +32,19 @@ import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
 
     private var _binding: FragmentProfileUserBinding? = null
     private val binding get() = _binding!!
 
+    private var selectedImageUri: Uri? = null
+    private var userId: Int? = null
     private lateinit var bankAccountAdapter: BankAccountAdapter
+
+    companion object{
+        private const val REQUEST_GALLERY = 200
+    }
 
     private val viewModel by viewModels<ProfileViewModel> {
         ProfileViewModelFactory.getInstance(requireContext())
@@ -96,6 +108,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         _binding = null
     }
 
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
+        startActivityForResult(intent, REQUEST_GALLERY)
+    }
+
     private fun setupObservers() {
         viewModel.getUserResult.observe(viewLifecycleOwner) { result ->
             showLoading(false)
@@ -132,7 +151,43 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
                 showToast("Failed to add bank account: ${throwable.localizedMessage}")
             }
         }
+
+        viewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                if (it.success) {
+                    showToast("Profile picture uploaded successfully!")
+                    fetchUserProfile()
+                } else {
+                    showToast("Failed to upload profile picture: ${it.message}")
+                }
+            } ?: showToast("Upload failed: Unknown error")
+        }
     }
+
+    private fun uploadProfilePicture() {
+        selectedImageUri?.let { uri ->
+            lifecycleScope.launch {
+                try {
+                    val userSession = userViewModel.getSession().first()
+                    viewModel.UploadImage(uri, userSession.userId)
+                } catch (e: Exception) {
+                    showToast("Failed to upload profile picture: ${e.localizedMessage}")
+                }
+            }
+        } ?: showToast("Please select an image first")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                selectedImageUri = uri
+                binding.profilePicture.setImageURI(uri)
+                uploadProfilePicture()
+            }
+        }
+    }
+
 
     private fun fetchUserProfile() {
         showLoading(true)
@@ -184,6 +239,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         binding.tvProfileDepartment.text = user.department.departmentName
         binding.tvEmail.text = user.email
         binding.tvRole.text = user.role
+        val profileImageUrl = user.profileImageUrl
+        Log.d("ProfileFragment", "Profile image URL: $profileImageUrl")
+        profileImageUrl?.let { url ->
+            Glide.with(requireContext())
+                .load(url)
+                .placeholder(R.drawable.baseline_account_circle_24)
+                .error(R.drawable.baseline_account_circle_24)
+                .into(binding.profilePicture)
+                .onLoadFailed(null)
+        } ?: run {
+            Log.e("ProfileFragment", "Profile image URL is null")
+        }
     }
 
     private fun setupActions() {
@@ -205,6 +272,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
                 val dialog = AddBankAccountDialogFragment()
                 dialog.show(parentFragmentManager, "AddBankAccountDialog")
             }
+        }
+
+        binding.profilePicture.setOnClickListener {
+            openGallery()
         }
     }
 
