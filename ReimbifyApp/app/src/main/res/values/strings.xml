@@ -206,5 +206,9 @@
     <string name="reimbursement_status">Persentation Approved, Pending and Rejected</string>
     <string name="reimbursement_amount">Distribution Approved Reimbursment per Category</string>
     <string name="approved_reimbursment_history">Approved Reimbursment History</string>
+    <string name="check_image">Check Image</string>
+    <string name="error_message_upload">Image upload failed. Please try again</string>
+    <string name="failed_upload">Failed</string>
+    <string name="success_message">Image uploaded successfully</string>
 
 </resources>

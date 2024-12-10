@@ -8,14 +8,13 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -38,6 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class AddRequestFragment : Fragment() {
 
     private var _binding: FragmentAddRequestUserBinding? = null
@@ -51,6 +51,7 @@ class AddRequestFragment : Fragment() {
     private var description: String?= null
     private var amount: Int? = null
     private var userId: Int? = null
+    private var goodImage = false
 
     companion object {
         private const val REQUEST_CAMERA = 100
@@ -85,42 +86,31 @@ class AddRequestFragment : Fragment() {
                 val isRotateValid = !prediction.rotate.rotated
 
                 if (isCropValid && isRotateValid) {
-                    lifecycleScope.launch {
-                        loginViewModel.getSession().collect { user ->
-                            if (user.isLogin) {
-                                val userId = user.userId
-                                selectedImageUri?.let { uri ->
-                                    viewModel.uploadImage(uri, userId)
-                                }
-                            }
-                        }
-                    }
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        binding.progressBar.visibility = View.GONE
-                    }, 1000)
+                    viewModel.statusIconColor.value = R.color.green_500
+                    binding.ivBlurStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
+                    binding.ivRotationStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
+                    binding.ivCropStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
+                    goodImage = true
                 } else {
                     val errorMessage = buildErrorMessage(isCropValid, isRotateValid)
                     Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
                     updateStatusIcons(isCropValid, isRotateValid)
+                    goodImage = false
                 }
             }
         }
 
         viewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
+            showLoading(false)
             if (response != null) {
                 Log.d(TAG, "Upload success: Status - ${response.message}, Message - ${response.message}, File URL - ${response.receiptImageUrl}")
                 val imageUrl = response.receiptImageUrl
-
-                viewModel.statusIconColor.value = R.color.green_500
-                binding.ivBlurStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
-                binding.ivRotationStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
-                binding.ivCropStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
                 val userId = userId
                 Log.d("AddRequestFragment", "UserId: $userId, DepartmentId: $departmentId, AccountId: $accountId, SelectedDate: $selectedDate, Description: $description, Amount: $amount")
                 val requestData = imageUrl?.let {
                     userId?.let { it1 ->
                         RequestData(
-                            requesterId = it1.toInt(),
+                            requesterId = it1,
                             departmentId = departmentId ?: 0,
                             accountId = accountId ?: 0,
                             receiptDate = selectedDate ?: "",
@@ -134,11 +124,13 @@ class AddRequestFragment : Fragment() {
                 if (requestData != null) {
                     viewModel.submitRequest(requestData)
                     showSuccessDialog(true)
-
                 }
             } else {
                 Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show()
+                showSuccessDialog(false)
             }
+
+            goodImage = false
         }
 
         binding.etDate.setOnClickListener {
@@ -197,21 +189,51 @@ class AddRequestFragment : Fragment() {
 
     private fun showSuccessDialog(isSuccess: Boolean) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
+        showLoading(false)
         if (isSuccess) {
-            dialogBuilder.setTitle("Success")
-            dialogBuilder.setMessage("Your request has been successfully submitted.")
-            dialogBuilder.setPositiveButton("OK") { dialog, _ ->
+            val dialogViewSuccess = layoutInflater.inflate(R.layout.dialog_success, null)
+            val ivSuccessStatusIcon: ImageView = dialogViewSuccess.findViewById(R.id.ivSuccessIcon)
+            val tvDialogSuccessTitle: TextView = dialogViewSuccess.findViewById(R.id.tvDialogTitle)
+            val tvDialogSuccessMessage: TextView = dialogViewSuccess.findViewById(R.id.tvDialogMessage)
+            val btnCloseSuccessDialog: ImageView = dialogViewSuccess.findViewById(R.id.btnCloseDialog)
+
+            ivSuccessStatusIcon.setImageResource(R.drawable.correct_success_tick_svgrepo_com)
+            tvDialogSuccessTitle.text = getString(R.string.success)
+            tvDialogSuccessMessage.text = getString(R.string.success_message)
+
+            val dialog = dialogBuilder
+                .setView(dialogViewSuccess)
+                .create()
+
+            btnCloseSuccessDialog.setOnClickListener {
                 dialog.dismiss()
                 resetForm()
             }
+
+            dialog.show()
         } else {
-            dialogBuilder.setTitle("Error")
-            dialogBuilder.setMessage("Failed to submit request. Please try again.")
-            dialogBuilder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            val dialogFailedView = layoutInflater.inflate(R.layout.dialog_failed, null)
+            val ivFailedStatusIcon: ImageView = dialogFailedView.findViewById(R.id.ivFailedIcon)
+            val tvDialogFailedTitle: TextView = dialogFailedView.findViewById(R.id.tvDialogTitle)
+            val tvDialogFailedMessage: TextView = dialogFailedView.findViewById(R.id.tvDialogMessage)
+            val btnCloseDialogFailed: ImageView = dialogFailedView.findViewById(R.id.btnCloseDialog)
+
+            ivFailedStatusIcon.setImageResource(R.drawable.cancel_delete_remove_svgrepo_com)
+            tvDialogFailedTitle.text = getString(R.string.failed_upload)
+            tvDialogFailedMessage.text = getString(R.string.error_message_upload)
+
+            val dialog = dialogBuilder
+                .setView(dialogFailedView)
+                .create()
+
+            btnCloseDialogFailed.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
         }
-        val dialog = dialogBuilder.create()
-        dialog.show()
     }
+
     private fun setupBankAccountSpinner(){
         lifecycleScope.launch {
             try {
@@ -328,42 +350,54 @@ class AddRequestFragment : Fragment() {
             }
         }
     }
-
     private fun setupUI() {
         binding.btnSubmitRequest.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     loginViewModel.getSession().collect { user ->
                         if (user.isLogin) {
+                            showLoading(true)
                             val userId = user.userId
-                            Log.d(TAG, "User ID: $userId")
-                            Log.d(TAG, "User Token: ${user.token}")
+
                             selectedImageUri?.let { uri ->
                                 description = binding.etDescription.text.toString()
                                 amount = binding.etAmount.text.toString().toIntOrNull()
 
-                                if (description.isNullOrEmpty() || amount == null || selectedDate.isNullOrEmpty()) {
-                                    Toast.makeText(context, "Please fill all fields.", Toast.LENGTH_SHORT).show()
+                                if (description != null && amount != null && selectedImageUri != null && selectedDate != null && accountId != null) {
+                                    if(goodImage){
+                                        viewModel.uploadImage(uri, userId)
+                                    }
+                                    else{
+                                        showLoading(false)
+                                        showSuccessDialog(false)
+                                    }
                                 } else {
-                                    viewModel.predictImage(uri)
+                                    showLoading(false)
+                                    showSuccessDialog(false)
                                 }
-                            } ?: run {
-                                Toast.makeText(context, "Please select an image first.", Toast.LENGTH_SHORT).show()
                             }
-                        } else {
-                            Toast.makeText(context, "User is not logged in.", Toast.LENGTH_SHORT).show()
                         }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    showLoading(false)
+                }
+            }
+        }
+        binding.btnOpenCamera.setOnClickListener { openCamera() }
+        binding.btnUploadGallery.setOnClickListener { openGallery() }
+        binding.btnSubmitModel.setOnClickListener{
+            lifecycleScope.launch {
+                try { selectedImageUri?.let { uri ->
+                    viewModel.predictImage(uri)
+                } ?: run {
+                    Toast.makeText(context, "Please select an image first.", Toast.LENGTH_SHORT).show() }
                 } catch (e: Exception) {
                     Toast.makeText(context, "Error retrieving session: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-        binding.btnOpenCamera.setOnClickListener { openCamera() }
-        binding.btnUploadGallery.setOnClickListener { openGallery() }
     }
-
 
     private fun openCamera() {
         val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
@@ -373,6 +407,19 @@ class AddRequestFragment : Fragment() {
     private fun openGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, REQUEST_GALLERY)
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        Log.d(TAG, "showLoading called with isLoading = $isLoading")
+        _binding?.let { binding ->
+            if (isLoading) {
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.progressBar.isIndeterminate = true
+            } else {
+                binding.loadingOverlay.visibility = View.GONE
+                binding.progressBar.isIndeterminate = false
+            }
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -417,6 +464,7 @@ class AddRequestFragment : Fragment() {
             file
         )
     }
+
     private fun displayImage(uri: Uri?) {
         if (uri != null) {
             binding.ivReceipt.setImageURI(uri)
@@ -430,6 +478,10 @@ class AddRequestFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         resetIcons()
+        resetSpinner()
+        binding.etDescription.text.clear()
+        binding.etAmount.text.clear()
+        binding.etDate.text.clear()
     }
 
 
