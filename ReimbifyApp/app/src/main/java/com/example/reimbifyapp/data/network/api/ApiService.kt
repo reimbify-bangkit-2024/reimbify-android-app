@@ -61,7 +61,7 @@ interface ApiService {
     @POST("/auth/otp/resend")
     suspend fun sendOtp(@Body sendOtpRequest: SendOtpRequest): SendOtpResponse
 
-    @POST("/auth/password/forgot")
+    @POST("/auth/password/reset")
     suspend fun resetPassword(@Body resetPasswordRequest: ResetPasswordRequest): ResetPasswordResponse
 
     @GET("/auth/users")

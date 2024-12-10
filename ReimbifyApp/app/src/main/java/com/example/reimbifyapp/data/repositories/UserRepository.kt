@@ -60,7 +60,7 @@ class UserRepository private constructor(
 
     suspend fun resetPassword(userId: String, otp: String, newPassword: String) : ResetPasswordResponse {
         val resetPasswordRequest = ResetPasswordRequest(userId, otp, newPassword)
-        return unAuthApiService.resetPassword(resetPasswordRequest)
+        return authApiService.resetPassword(resetPasswordRequest)
     }
 
     suspend fun getAllUser(departmentId: Int?, role: String?, search: String?, sortedIncrement: Boolean) : GetAllUserResponse {

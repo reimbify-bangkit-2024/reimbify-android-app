@@ -60,7 +60,7 @@ class VerifyOtpFragment : Fragment(R.layout.fragment_verify_otp) {
                         userId = response.userId,
                         token = response.accessToken,
                         role = response.role,
-                        isLogin = true
+                        isLogin = false
                     )
                 )
 
