@@ -7,6 +7,7 @@ import com.example.reimbifyapp.data.network.request.GetBankAccountByUserIdReques
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
 import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse
+import com.example.reimbifyapp.data.network.response.DeleteBankAccountResponse
 import com.example.reimbifyapp.data.network.response.GetAllBankResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByIdResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
@@ -68,6 +69,12 @@ class ProfileRepository private constructor(
         accountId: Int
     ): GetBankAccountByIdResponse {
         return authApiService.getBankAccountById(accountId)
+    }
+
+    suspend fun deleteBankAccount(
+        accountId: Int
+    ): DeleteBankAccountResponse {
+        return authApiService.deleteBankAccount(accountId)
     }
 
     companion object {

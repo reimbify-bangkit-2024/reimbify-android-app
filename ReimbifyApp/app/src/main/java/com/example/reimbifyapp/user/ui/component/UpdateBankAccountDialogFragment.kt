@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
+import com.example.reimbifyapp.admin.ui.component.DeleteConfirmationDialog
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
@@ -105,6 +106,16 @@ class UpdateBankAccountDialogFragment  : DialogFragment() {
                 showToast(errorMessage)
             }
         }
+
+        viewModel.bankAccountDeleted.observe(viewLifecycleOwner) { result ->
+            result.onSuccess {
+                showToast("Bank account updated successfully!")
+            }
+            result.onFailure { throwable ->
+                val errorMessage = parseErrorMessage(throwable)
+                showToast(errorMessage)
+            }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -128,7 +139,7 @@ class UpdateBankAccountDialogFragment  : DialogFragment() {
     }
 
     private fun setupActions() {
-        binding.btnCancel.setOnClickListener {
+        binding.btnCloseDialog.setOnClickListener {
             dismiss()
         }
 
@@ -148,6 +159,29 @@ class UpdateBankAccountDialogFragment  : DialogFragment() {
                 } else {
                     showToast("Invalid bank selected. Please try again.")
                 }
+            }
+        }
+
+        binding.btnDelete.setOnClickListener {
+            val selectedAccount = viewModel.bankAccountById.value?.getOrNull()?.account
+
+            if (selectedAccount != null) {
+                val warningMessage = """
+                    <b>Title:</b> ${selectedAccount.accountTitle}<br>
+                """.trimIndent()
+
+                DeleteConfirmationDialog.newInstance(
+                    warningMessage = warningMessage,
+                    onDeleteConfirmed = {
+                        viewModel.deleteBankAccount(accountId)
+                        parentFragmentManager.setFragmentResult("bank_account_deleted", Bundle())
+                        dismiss()
+                    },
+                    instance = "Bank Account"
+                ).show(parentFragmentManager, DeleteConfirmationDialog.TAG)
+
+            } else {
+                showToast("Invalid account selected.")
             }
         }
     }
@@ -180,7 +214,7 @@ class UpdateBankAccountDialogFragment  : DialogFragment() {
 
             viewModel.updateBankAccount(accountId, title, name, number, bankId)
         } catch (e: Exception) {
-            showToast("Failed to update bank account. Please try again.")
+            showToast("Failed to update bank account. Please try again: $e")
         } finally {
             showLoading(false)
         }
@@ -196,12 +230,14 @@ class UpdateBankAccountDialogFragment  : DialogFragment() {
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
-            binding.btnCancel.isEnabled = false
+            binding.btnCloseDialog.isEnabled = false
             binding.btnSave.isEnabled = false
+            binding.btnDelete.isEnabled = false
             binding.btnSave.text = getString(R.string.loading)
         } else {
-            binding.btnCancel.isEnabled = true
+            binding.btnCloseDialog.isEnabled = true
             binding.btnSave.isEnabled = true
+            binding.btnDelete.isEnabled = false
             binding.btnSave.text = getString(R.string.save)
         }
     }
@@ -210,7 +246,7 @@ class UpdateBankAccountDialogFragment  : DialogFragment() {
         showLoading(false)
         val successDialog = SuccessDialogFragment.Companion.newInstance(
             "Bank Account Updated",
-            "Your new bank account has been updates successfully!"
+            "Your bank account has been updated successfully!"
         )
 
         parentFragmentManager.setFragmentResult("bank_account_updated", Bundle())

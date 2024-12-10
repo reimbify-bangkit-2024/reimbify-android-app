@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
 import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse
+import com.example.reimbifyapp.data.network.response.DeleteBankAccountResponse
 import com.example.reimbifyapp.data.network.response.GetAllBankResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByIdResponse
 import com.example.reimbifyapp.data.network.response.GetBankAccountByUserIdResponse
@@ -36,6 +37,9 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
 
     private val _bankAccountById = MutableLiveData<Result<GetBankAccountByIdResponse>>()
     val bankAccountById: LiveData<Result<GetBankAccountByIdResponse>> = _bankAccountById
+
+    private val _bankAccountDeleted = MutableLiveData<Result<DeleteBankAccountResponse>>()
+    val bankAccountDeleted: LiveData<Result<DeleteBankAccountResponse>> = _bankAccountDeleted
 
     fun getUser(userId: String) {
         viewModelScope.launch {
@@ -128,6 +132,19 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
                 _bankAccountById.postValue(Result.success(response))
             } catch (e: Exception) {
                 _bankAccountById.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun deleteBankAccount(
+        accountId: Int
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.deleteBankAccount(accountId)
+                _bankAccountDeleted.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _bankAccountDeleted.postValue(Result.failure(e))
             }
         }
     }

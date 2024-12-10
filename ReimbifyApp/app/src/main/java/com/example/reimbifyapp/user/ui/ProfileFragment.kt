@@ -71,6 +71,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
             }
         }
 
+        parentFragmentManager.setFragmentResultListener("bank_account_deleted", viewLifecycleOwner) { _, _ ->
+            lifecycleScope.launch {
+                val userId = userViewModel.getSession().first().userId.toInt()
+                viewModel.getBankAccountByUserId(userId)
+            }
+        }
+
         bankAccountAdapter = BankAccountAdapter(mutableListOf()) { account ->
             val dialog = UpdateBankAccountDialogFragment.newInstance(account.accountId)
             dialog.show(parentFragmentManager, "UpdateBankAccountDialog")

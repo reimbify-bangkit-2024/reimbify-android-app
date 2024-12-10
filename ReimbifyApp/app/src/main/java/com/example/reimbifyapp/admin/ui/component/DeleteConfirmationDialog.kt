@@ -40,6 +40,8 @@ class DeleteConfirmationDialog(
         binding.btnDelete.setOnClickListener {
             onDeleteConfirmed.invoke()
             showSuccessDialog(instance)
+
+            (parentFragment as? DialogFragment)?.dismiss()
             dismiss()
         }
     }

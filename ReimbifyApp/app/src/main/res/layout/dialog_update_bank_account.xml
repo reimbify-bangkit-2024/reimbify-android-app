@@ -13,7 +13,6 @@
         android:layout_height="24dp"
         android:src="@drawable/outline_cancel_24"
         android:contentDescription="@string/close"
-        android:visibility="gone"
         app:tint="?attr/colorOnSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -176,6 +175,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
+        android:id="@+id/linear_button_bar"
         style="?android:attr/buttonBarStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -186,16 +186,16 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/btnCancel"
+            android:id="@+id/btnDelete"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/gray"
-            android:textColor="@android:color/white"
-            android:text="@string/cancel" />
+            android:backgroundTint="@color/cancel_red"
+            android:textColor="@color/white"
+            android:text="@string/delete" />
 
         <Button
             android:id="@+id/btnSave"
@@ -205,7 +205,7 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/button_background_tint"
+            android:backgroundTint="@color/navy"
             android:textColor="@color/button_text"
             android:text="@string/save" />
     </LinearLayout>
