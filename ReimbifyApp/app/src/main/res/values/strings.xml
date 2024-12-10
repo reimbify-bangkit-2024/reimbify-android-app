@@ -209,6 +209,7 @@
     <string name="check_image">Check Image</string>
     <string name="error_message_upload">Image upload failed. Please try again</string>
     <string name="failed_upload">Failed</string>
-    <string name="success_message">Image uploaded successfully</string>
+    <string name="request_sent">Success Sent Request!</string>
+    <string name="success_message">Your request sent successfully. Please wait for admin to review it.</string>
 
 </resources>
