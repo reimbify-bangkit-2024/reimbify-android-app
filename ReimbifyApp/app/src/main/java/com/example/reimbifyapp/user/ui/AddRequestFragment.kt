@@ -25,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.user.viewmodel.AddRequestViewModel
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.Account
@@ -80,7 +81,15 @@ class AddRequestFragment : Fragment() {
         setupBankAccountSpinner()
 
         viewModel.predictionResponse.observe(viewLifecycleOwner) { predictionResponse ->
-            predictionResponse?.let { prediction ->
+            if (predictionResponse == null) {
+                showLoading(false)
+                Toast.makeText(context, "Failed to detect your receipt. Please try again.", Toast.LENGTH_SHORT).show()
+                goodImage = false
+                return@observe
+            }
+
+            predictionResponse.let { prediction ->
+                showLoading(false)
                 Log.d(TAG, "Prediction Response: $prediction")
                 val isCropValid = !prediction.crop.cropped
                 val isRotateValid = !prediction.rotate.rotated
@@ -90,6 +99,8 @@ class AddRequestFragment : Fragment() {
                     binding.ivBlurStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
                     binding.ivRotationStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
                     binding.ivCropStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
+                    Toast.makeText(context, "Success detect your receipt", Toast.LENGTH_SHORT).show()
+
                     goodImage = true
                 } else {
                     val errorMessage = buildErrorMessage(isCropValid, isRotateValid)
@@ -167,12 +178,23 @@ class AddRequestFragment : Fragment() {
         binding.etDescription.text.clear()
         binding.etAmount.text.clear()
         binding.etDate.text.clear()
+
         selectedImageUri = null
+        binding.ivReceipt.setImageResource(0)
         binding.ivReceipt.visibility = View.GONE
         binding.ivPlaceholderIcon.visibility = View.VISIBLE
+
         resetSpinner()
         resetIcons()
+
+        goodImage = false
+        selectedDate = null
+        accountId = null
+        departmentId = null
+        description = null
+        amount = null
     }
+
 
     private fun resetIcons() {
         viewModel.statusIconColor.value = R.color.red_500
@@ -198,7 +220,7 @@ class AddRequestFragment : Fragment() {
             val btnCloseSuccessDialog: ImageView = dialogViewSuccess.findViewById(R.id.btnCloseDialog)
 
             ivSuccessStatusIcon.setImageResource(R.drawable.correct_success_tick_svgrepo_com)
-            tvDialogSuccessTitle.text = getString(R.string.success)
+            tvDialogSuccessTitle.text = getString(R.string.request_sent)
             tvDialogSuccessMessage.text = getString(R.string.success_message)
 
             val dialog = dialogBuilder
@@ -207,6 +229,9 @@ class AddRequestFragment : Fragment() {
 
             btnCloseSuccessDialog.setOnClickListener {
                 dialog.dismiss()
+            }
+
+            dialog.setOnDismissListener {
                 resetForm()
             }
 
@@ -350,50 +375,81 @@ class AddRequestFragment : Fragment() {
             }
         }
     }
+
     private fun setupUI() {
         binding.btnSubmitRequest.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     loginViewModel.getSession().collect { user ->
                         if (user.isLogin) {
-                            showLoading(true)
-                            val userId = user.userId
-
                             selectedImageUri?.let { uri ->
+                                showLoading(true)
                                 description = binding.etDescription.text.toString()
                                 amount = binding.etAmount.text.toString().toIntOrNull()
 
-                                if (description != null && amount != null && selectedImageUri != null && selectedDate != null && accountId != null) {
-                                    if(goodImage){
-                                        viewModel.uploadImage(uri, userId)
-                                    }
-                                    else{
+                                when {
+                                    description.isNullOrEmpty() -> {
                                         showLoading(false)
-                                        showSuccessDialog(false)
+                                        Toast.makeText(context, "Description cannot be empty.", Toast.LENGTH_SHORT).show()
+                                        return@let
                                     }
-                                } else {
-                                    showLoading(false)
-                                    showSuccessDialog(false)
+                                    amount == null -> {
+                                        showLoading(false)
+                                        Toast.makeText(context, "Amount must be a valid number.", Toast.LENGTH_SHORT).show()
+                                        return@let
+                                    }
+                                    selectedDate.isNullOrEmpty() -> {
+                                        showLoading(false)
+                                        Toast.makeText(context, "Please select a date.", Toast.LENGTH_SHORT).show()
+                                        return@let
+                                    }
+                                    accountId == null -> {
+                                        showLoading(false)
+                                        Toast.makeText(context, "Please select a bank account.", Toast.LENGTH_SHORT).show()
+                                        return@let
+                                    }
+                                    !goodImage -> {
+                                        showLoading(false)
+                                        Toast.makeText(
+                                            context,
+                                            "The image does not meet the required criteria. Please ensure the image is not blurry, cropped incorrectly, or rotated.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@let
+                                    }
+                                    else -> {
+                                        viewModel.uploadImage(uri, user.userId)
+                                    }
                                 }
+                            } ?: run {
+                                showLoading(false)
+                                Toast.makeText(context, "Please select an image first.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     showLoading(false)
+                    Toast.makeText(context, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
         binding.btnOpenCamera.setOnClickListener { openCamera() }
         binding.btnUploadGallery.setOnClickListener { openGallery() }
-        binding.btnSubmitModel.setOnClickListener{
+        binding.btnSubmitModel.setOnClickListener {
             lifecycleScope.launch {
-                try { selectedImageUri?.let { uri ->
-                    viewModel.predictImage(uri)
-                } ?: run {
-                    Toast.makeText(context, "Please select an image first.", Toast.LENGTH_SHORT).show() }
+                try {
+                    selectedImageUri?.let { uri ->
+                        showLoading(true)
+                        viewModel.predictImage(uri)
+                    } ?: run {
+                        showLoading(false)
+                        Toast.makeText(context, "Please select an image first.", Toast.LENGTH_SHORT).show()
+                    }
                 } catch (e: Exception) {
-                    Toast.makeText(context, "Error retrieving session: ${e.message}", Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -415,9 +471,13 @@ class AddRequestFragment : Fragment() {
             if (isLoading) {
                 binding.loadingOverlay.visibility = View.VISIBLE
                 binding.progressBar.isIndeterminate = true
+                binding.btnSubmitRequest.isEnabled = false
+                binding.btnCancel.isEnabled = false
             } else {
                 binding.loadingOverlay.visibility = View.GONE
                 binding.progressBar.isIndeterminate = false
+                binding.btnSubmitRequest.isEnabled = true
+                binding.btnCancel.isEnabled = true
             }
         }
     }
