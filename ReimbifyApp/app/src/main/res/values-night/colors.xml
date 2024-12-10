@@ -2,7 +2,13 @@
 <resources>
     <color name="text_color_setting">#FFFFFFFF</color>
     <color name="color_profile_tint">#FFFFFFFF</color>
-    <color name="fab_background_color">#BB86FC</color>
+    <color name="fab_background_color">#afc5e0</color>
     <color name="fab_icon_color">#000000</color>
-    <color name="navy">#4A5D74</color>
+    <color name="navy">#afc5e0</color>
+    <color name="dark_gray">#bababa</color>
+
+    <color name="color_card_background_dark">#2D2D2D</color>
+    <color name="color_card_border_dark">#757575</color>
+    <color name="button_text">#000000</color>
+
 </resources>

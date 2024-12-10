@@ -136,7 +136,6 @@
             android:layout_height="wrap_content"
             android:text="@string/no_request_found"
             android:textSize="16sp"
-            android:textColor="@color/black"
             android:gravity="center"
             android:visibility="gone"
             android:layout_marginTop="16dp" />

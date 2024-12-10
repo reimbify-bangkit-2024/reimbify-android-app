@@ -69,6 +69,8 @@ class CustomOTPEditText @JvmOverloads constructor(
         box.inputType = InputType.TYPE_CLASS_NUMBER
         box.filters = arrayOf(InputFilter.LengthFilter(1))
         box.isSingleLine = true
+        box.setTextColor(Color.BLACK)
+        box.setHintTextColor(Color.GRAY)
 
         box.alpha = 1f
         box.visibility = VISIBLE

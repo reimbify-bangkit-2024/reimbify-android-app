@@ -48,6 +48,12 @@
     <color name="dark_on_error">#FFFFFF</color>
     <color name="text_color_setting">#FF000000</color>
     <color name="color_profile_tint">#FF000000</color>
-    <color name="fab_background_color">#FF6200EE</color>
+    <color name="fab_background_color">#2D3D4F</color>
     <color name="fab_icon_color">#FFFFFF</color>
+    <color name="color_card_background_light">#FAF9FF</color>
+    <color name="color_card_background_dark">#2D2D2D</color>
+    <color name="color_card_border_light">#E0E0E0</color>
+    <color name="color_card_border_dark">#757575</color>
+    <color name="button_text">#FFFFFF</color>
+
 </resources>
