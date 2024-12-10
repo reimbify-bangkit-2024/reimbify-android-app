@@ -56,7 +56,7 @@
                     android:layout_height="43dp"
                     android:gravity="center"
                     android:text="@string/upload_your_receipt"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color_setting"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -217,7 +217,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/default_date_v2"
-            android:textColor="@android:color/black"
+            android:textColor="@color/text_color_setting"
             android:background="@drawable/input_box"
             android:importantForAutofill="no"
             android:inputType="none"
@@ -247,14 +247,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/department_options"
-            android:background="@drawable/input_box"
+            android:background="@drawable/spinner_background"
             android:padding="8dp"
+            android:textColor="?attr/colorOnSurface"
+            android:popupBackground="?attr/colorSurface"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:dropDownSelector="?attr/colorOnSurface"
             app:layout_constraintTop_toBottomOf="@+id/tv_departement"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/black"
-            style="@style/Widget.AppCompat.Spinner.DropDown" />
+            android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/tv_description"
@@ -275,7 +277,7 @@
             android:background="@drawable/input_box"
             android:padding="8dp"
             android:inputType="text"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintTop_toBottomOf="@+id/tv_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -297,7 +299,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/amount"
-            android:textColor="@android:color/black"
+            android:textColor="@color/text_color_setting"
             android:background="@drawable/input_box"
             android:padding="8dp"
             android:inputType="numberDecimal"
@@ -321,14 +323,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/bank_options"
-            android:background="@drawable/input_box"
+            android:background="@drawable/spinner_background"
             android:padding="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_bank_account"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
-            android:textColor="@android:color/black"
-            android:dropDownSelector="@android:color/black"/>
+            android:textColor="?attr/colorOnSurface"
+            android:dropDownSelector="?attr/colorOnSurface"/>
 
         <LinearLayout
             android:id="@+id/ll_submit_buttons"
@@ -348,7 +350,7 @@
                 android:text="@string/cancel"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/gray"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_setting" />
 
             <Button
                 android:id="@+id/btn_submit_request"

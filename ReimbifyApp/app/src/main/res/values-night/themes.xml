@@ -11,7 +11,13 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <!-- Customize your theme here. -->
-        <item name="colorOnSurface">@color/white</item>
+
+        <item name="colorCardBackground">@color/color_card_background_dark</item>
+        <item name="colorCardBorder">@color/color_card_border_dark</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorOnSurface">@color/dark_on_background</item>
+
+        <item name="colorHint">#808080</item>
     </style>
+
 </resources>

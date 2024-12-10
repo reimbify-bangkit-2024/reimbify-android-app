@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
     android:padding="24dp">
 
     <ImageView
@@ -13,7 +14,7 @@
         android:src="@drawable/outline_cancel_24"
         android:contentDescription="@string/close"
         android:visibility="gone"
-        app:tint="@android:color/black"
+        app:tint="?attr/colorOnSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -24,7 +25,7 @@
         android:text="@string/update_bank_account"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +41,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="@string/title"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDialogTitle" />
 
@@ -63,7 +64,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/enter_title"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             android:textColorHint="@color/gray"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +75,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="@string/account_holder_name"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accountTitleEditTextLayout" />
 
@@ -97,7 +98,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/enter_bank_account_holder_name"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             android:textColorHint="@color/gray"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,7 +109,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/account_number"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accountNameEditTextLayout" />
 
@@ -132,7 +133,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/enter_bank_account_number"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             android:textColorHint="@color/gray"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -144,7 +145,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/bank_name"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accountNumberEditTextLayout" />
 
@@ -159,8 +160,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bankNameTextView"
         android:hint="@string/select_bank"
-        app:boxBackgroundColor="@color/light_gray"
-        app:boxStrokeColor="@color/light_gray"
+        app:boxBackgroundColor="?attr/colorSurface"
+        app:boxStrokeColor="?attr/colorOnSurface"
         app:hintTextColor="@color/light_gray"
         app:popupTheme="@style/CustomDropdownMenu">
 
@@ -168,9 +169,9 @@
             android:id="@+id/bankNameDropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textColorHint="@color/light_gray"
-            android:background="@color/light_gray" />
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorHint"
+            android:background="?attr/colorSurface" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,8 +193,8 @@
             android:layout_weight="1"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/cancel_button_background_tint"
-            android:textColor="@android:color/white"
+            android:backgroundTint="@color/gray"
+            android:textColor="?attr/colorOnSurface"
             android:text="@string/cancel" />
 
         <Button

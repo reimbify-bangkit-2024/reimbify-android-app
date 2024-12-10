@@ -222,7 +222,6 @@
         android:layout_gravity="center"
         android:text="@string/no_user_found"
         android:textSize="16sp"
-        android:textColor="@color/black"
         android:gravity="center"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/filter_section"
