@@ -87,8 +87,8 @@ class AddRequestFragment : Fragment() {
                 goodImage = false
                 return@observe
             }
-            
-            predictionResponse?.let { prediction ->
+
+            predictionResponse.let { prediction ->
                 showLoading(false)
                 Log.d(TAG, "Prediction Response: $prediction")
                 val isCropValid = !prediction.crop.cropped

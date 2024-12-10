@@ -145,7 +145,7 @@
                         android:layout_weight="1"
                         android:text="@string/request_date"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_request_date"
@@ -158,7 +158,7 @@
                         android:inputType="datetime"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -177,7 +177,7 @@
                         android:layout_weight="1"
                         android:text="@string/request_by"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_name"
@@ -190,7 +190,7 @@
                         android:inputType="text"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -209,7 +209,7 @@
                         android:layout_weight="1"
                         android:text="@string/email"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_email"
@@ -222,7 +222,7 @@
                         android:inputType="textEmailAddress"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -240,7 +240,7 @@
                         android:layout_weight="1"
                         android:text="@string/department"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_department"
@@ -253,7 +253,7 @@
                         android:inputType="text"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -271,7 +271,7 @@
                         android:layout_weight="1"
                         android:text="@string/amount"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_amount"
@@ -284,7 +284,7 @@
                         android:inputType="text"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -302,7 +302,7 @@
                         android:layout_weight="1"
                         android:text="@string/receipt_date"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_receipt_date"
@@ -315,7 +315,7 @@
                         android:inputType="datetime"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -333,7 +333,7 @@
                         android:layout_weight="1"
                         android:text="@string/description"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_description"
@@ -346,7 +346,7 @@
                         android:inputType="textMultiLine"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -406,7 +406,7 @@
                         android:layout_weight="1"
                         android:text="@string/reviewer"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_reviewer"
@@ -419,7 +419,7 @@
                         android:inputType="text"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -437,7 +437,7 @@
                         android:layout_weight="1"
                         android:text="@string/review_date"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_review_date"
@@ -450,7 +450,7 @@
                         android:inputType="datetime"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
@@ -468,7 +468,7 @@
                         android:layout_weight="1"
                         android:text="@string/notes"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <EditText
                         android:id="@+id/et_response_notes"
@@ -481,7 +481,7 @@
                         android:inputType="textMultiLine"
                         android:padding="8dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:focusable="false"
                         android:clickable="false" />
                 </LinearLayout>
