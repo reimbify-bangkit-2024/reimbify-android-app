@@ -14,6 +14,7 @@ import com.example.reimbifyapp.data.network.request.VerifyOtpRequest
 import com.example.reimbifyapp.data.network.response.AmountResponse
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
 import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse
+import com.example.reimbifyapp.data.network.response.DeleteBankAccountResponse
 import com.example.reimbifyapp.data.network.response.DeleteUserResponse
 import com.example.reimbifyapp.data.network.response.ForgotPasswordResponse
 import com.example.reimbifyapp.data.network.response.GetAllBankResponse
@@ -84,6 +85,9 @@ interface ApiService {
 
     @PUT("/bank-account/update")
     suspend fun updateBankAccount(@Query("accountId") accountId: Int, @Body updateBankAccountRequest: UpdateBankAccountRequest): UpdateBankAccountResponse
+
+    @DELETE("/bank-account/delete")
+    suspend fun deleteBankAccount(@Query("accountId") accountId: Int): DeleteBankAccountResponse
 
     @GET("/request")
     suspend fun getAllRequest(
