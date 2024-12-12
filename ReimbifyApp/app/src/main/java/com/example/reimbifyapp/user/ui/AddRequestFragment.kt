@@ -1,9 +1,11 @@
 package com.example.reimbifyapp.user.ui
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
@@ -17,6 +19,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -153,6 +156,44 @@ class AddRequestFragment : Fragment() {
 
         return root
     }
+
+    private val requestCameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                openCamera()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Camera permission is required to take photos",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                openCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Camera Permission")
+                    .setMessage("Camera access is required to take receipt photos for reimbursement.")
+                    .setPositiveButton("OK") { _, _ ->
+                        requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+            else -> {
+                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
 
     private fun buildErrorMessage(isCropValid: Boolean, isRotateValid: Boolean): String {
         val errorParts = mutableListOf<String>()
@@ -446,7 +487,9 @@ class AddRequestFragment : Fragment() {
             }
         }
 
-        binding.btnOpenCamera.setOnClickListener { openCamera() }
+        binding.btnOpenCamera.setOnClickListener {
+            checkCameraPermission()
+        }
         binding.btnUploadGallery.setOnClickListener { openGallery() }
         binding.btnSubmitModel.setOnClickListener {
             lifecycleScope.launch {

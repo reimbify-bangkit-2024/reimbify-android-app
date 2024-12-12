@@ -39,10 +39,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     private var _binding: FragmentProfileUserBinding? = null
     private val binding get() = _binding!!
     private var isUploading = false
-
+    private var isShowingUploadToast = false
     private var lastImageSelectionTime = 0L
     private val IMAGE_SELECTION_DELAY = 1000L
-
     private var selectedImageUri: Uri? = null
     private var userId: Int? = null
     private lateinit var bankAccountAdapter: BankAccountAdapter
@@ -158,7 +157,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         }
 
         viewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
-            isUploading = false // Pastikan flag upload direset
+            // Reset flag upload dan toast setelah proses selesai
+            isUploading = false
+            isShowingUploadToast = false
+
             response?.let {
                 if (it.success) {
                     showToast("Profile picture uploaded successfully!")
@@ -171,21 +173,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     }
 
     private fun uploadProfilePicture() {
-        if (isUploading) {
-            // Jika sedang dalam proses upload, keluar dari fungsi
+        // Cek apakah sedang dalam proses upload atau sudah menampilkan toast
+        if (isUploading || isShowingUploadToast) {
             return
         }
 
         selectedImageUri?.let { uri ->
-            isUploading = true // Set flag upload
+            // Set flag upload dan toast
+            isUploading = true
+            isShowingUploadToast = true
+
             lifecycleScope.launch {
                 try {
                     val userSession = userViewModel.getSession().first()
                     viewModel.UploadImage(uri, userSession.userId)
                 } catch (e: Exception) {
                     showToast("Failed to upload profile picture: ${e.localizedMessage}")
-                } finally {
-                    isUploading = false // Reset flag upload setelah proses selesai
+                    isUploading = false
+                    isShowingUploadToast = false
                 }
             }
         } ?: showToast("Please select an image first")
@@ -196,7 +201,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         val currentTime = System.currentTimeMillis()
 
         if (requestCode == REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
-            // Cegah upload berulang dalam waktu singkat
             if (currentTime - lastImageSelectionTime > IMAGE_SELECTION_DELAY) {
                 data?.data?.let { uri ->
                     selectedImageUri = uri
