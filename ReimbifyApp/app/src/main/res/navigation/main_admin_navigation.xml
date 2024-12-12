@@ -53,9 +53,7 @@
         android:label="ApprovalFragment" >
         <action
             android:id="@+id/action_approvalFragment_to_navigation_reviewed"
-            app:destination="@id/navigation_reviewed"
-            app:popUpTo="@id/navigation_to_review"
-            app:popUpToInclusive="false" />
+            app:destination="@id/navigation_reviewed" />
         <action
             android:id="@+id/action_approvalFragment_to_navigation_to_review"
             app:destination="@id/navigation_to_review" />

@@ -2,6 +2,7 @@ package com.example.reimbifyapp.admin.ui.component
 
 import android.icu.text.NumberFormat
 import android.icu.text.SimpleDateFormat
+import android.icu.util.Currency
 import android.icu.util.TimeZone
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.reimbifyapp.R
@@ -133,8 +135,9 @@ class ApprovalFragment : Fragment() {
     }
 
     private fun setCurrency(amount: Double): String {
-        val locale = Locale.getDefault()
+        val locale = Locale("id", "ID")
         val currencyFormat = NumberFormat.getCurrencyInstance(locale)
+        currencyFormat.currency = Currency.getInstance("IDR")
         return currencyFormat.format(amount)
     }
 
@@ -246,8 +249,13 @@ class ApprovalFragment : Fragment() {
     }
 
     private fun navigateToReviewed() {
-        findNavController().popBackStack(R.id.navigation_to_review, false)
-        findNavController().navigate(R.id.navigation_reviewed)
+        findNavController().navigate(
+            R.id.navigation_reviewed,
+            null,
+            NavOptions.Builder()
+                .setPopUpTo(R.id.navigation_dashboard, false)
+                .build()
+        )
     }
 
     private fun showToast(message: String) {
