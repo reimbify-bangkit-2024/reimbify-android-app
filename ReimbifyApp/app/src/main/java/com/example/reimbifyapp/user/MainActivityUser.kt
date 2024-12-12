@@ -72,10 +72,10 @@ class MainActivityUser : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main_user) as NavHostFragment
         navController = navHostFragment.navController
 
-//        val openFragment = intent.getStringExtra("open_fragment")
-//        if (openFragment == "dashboard") {
-//            navController.navigate(R.id.navigation_dashboard)
-//        }
+        val openFragment = intent.getStringExtra("open_fragment")
+        if (openFragment == "dashboard") {
+            navController.navigate(R.id.navigation_dashboard)
+        }
 
         appBarConfiguration = AppBarConfiguration(
             setOf(

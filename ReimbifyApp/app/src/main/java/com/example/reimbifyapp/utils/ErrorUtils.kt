@@ -10,6 +10,7 @@ object ErrorUtils {
         return try {
             if (throwable is HttpException) {
                 val errorBody = throwable.response()?.errorBody()?.string()
+                Log.e("PARSE ERROR", errorBody.toString())
                 if (!errorBody.isNullOrEmpty()) {
                     val jsonObject = JSONObject(errorBody)
                     return jsonObject.optString("message", "An unknown error occurred")

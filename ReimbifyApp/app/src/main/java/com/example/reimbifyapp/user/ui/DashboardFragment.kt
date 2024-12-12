@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,8 +32,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class DashboardFragment : Fragment() {
@@ -42,6 +46,7 @@ class DashboardFragment : Fragment() {
 
     private var isFetchingUser = false
     private var isFetchingRequests = false
+    private var fetchJob: Job? = null
 
     private val userViewModel by viewModels<LoginViewModel> {
         UserViewModelFactory.getInstance(requireContext())
@@ -72,41 +77,58 @@ class DashboardFragment : Fragment() {
 
         fetchUserIdAndLoadUser()
         fetchRequests()
-
         setupRecyclerView()
+        setupObserver()
+
         val year = Calendar.getInstance().get(Calendar.YEAR)
+
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val session = userViewModel.getSession().first()
                 val userId = session.userId.toInt()
 
-                viewModel.getMonthlyAmountByUserId(year, userId).observe(viewLifecycleOwner) { listHistoryResponse ->
-                    listHistoryResponse?.let { response ->
-                        Log.d("DashboardFragment", "Fetched history data: ${response.histories}")
-                        updateLineChart(response.histories)
+                if (_binding != null && viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                    viewModel.getMonthlyAmountByUserId(year, userId).observe(viewLifecycleOwner) { listHistoryResponse ->
+                        listHistoryResponse?.let { response ->
+                            if (isAdded && view != null) {
+                                Log.d("DashboardFragment", "Fetched history data: ${response.histories}")
+                                updateLineChart(response.histories)
+                            }
+                        }
                     }
                 }
-
             } catch (e: Exception) {
                 val errorMessage = parseErrorMessage(e)
-                showToast("Failed to fetch monthly amount: $errorMessage")
+                Log.e("ERROR", e.toString())
+
+                activity?.runOnUiThread {
+                    showToast("Failed to fetch monthly amount: $errorMessage")
+                }
             }
         }
-        setupObserver()
     }
 
     private fun fetchUserIdAndLoadUser() {
         isFetchingUser = true
         updateLoadingState()
-        viewLifecycleOwner.lifecycleScope.launch {
+
+        lifecycleScope.launch {
             try {
                 val session = userViewModel.getSession().first()
                 val userId = session.userId
 
-                profileViewModel.getUser(userId)
+                withContext(Dispatchers.Main) {
+                    if (isAdded && view != null) {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            profileViewModel.getUser(userId)
+                        }
+                    }
+                }
             } catch (e: Exception) {
-                val errorMessage = parseErrorMessage(e)
-                showToast("Failed to fetch session or user details: $errorMessage")
+                withContext(Dispatchers.Main) {
+                    val errorMessage = parseErrorMessage(e)
+                    showToast("Failed to fetch session or user details: $errorMessage")
+                }
             } finally {
                 isFetchingUser = false
                 updateLoadingState()
@@ -121,36 +143,49 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setUserName(userName: String) {
-        if (userName.isNotEmpty()) {
-            binding.userGreeting.text = getString(R.string.greeting, userName)
-        } else {
-            _binding?.userGreeting?.text = getString(R.string.greeting, getString(R.string.default_user_name))
+        _binding?.let { binding ->
+            if (userName.isNotEmpty()) {
+                binding.userGreeting.text = getString(R.string.greeting, userName)
+            } else {
+                binding.userGreeting.text =
+                    getString(R.string.greeting, getString(R.string.default_user_name))
+            }
         }
     }
 
     private fun setupObserver() {
         profileViewModel.getUserResult.observe(viewLifecycleOwner) { result ->
+            if (!isAdded || view == null ||
+                viewLifecycleOwner.lifecycle.currentState != Lifecycle.State.RESUMED) {
+                return@observe
+            }
+
             isFetchingUser = false
             updateLoadingState()
 
             result.onSuccess { user ->
-                setUserName(user.users[0].userName)
+                user.users.firstOrNull()?.let { userDetails ->
+                    setUserName(userDetails.userName)
+                }
             }
             result.onFailure { throwable ->
-                println("Failed to load user profile: ${throwable.localizedMessage}")
+                Log.e("DashboardFragment", "Failed to load user profile", throwable)
                 showToast("Failed to load user profile: ${throwable.localizedMessage}")
             }
         }
 
         viewModel.underReviewResponse.observe(viewLifecycleOwner) { result ->
+            if (!isAdded || view == null ||
+                viewLifecycleOwner.lifecycle.currentState != Lifecycle.State.RESUMED) {
+                return@observe
+            }
+
             result.onSuccess { response ->
-                response.let {
-                    if (it.receipts.isEmpty()) {
-                        showNoRequestsMessage(true)
-                    } else {
-                        showNoRequestsMessage(false)
-                        adapter.updateData(it.receipts)
-                    }
+                if (response.receipts.isEmpty()) {
+                    showNoRequestsMessage(true)
+                } else {
+                    showNoRequestsMessage(false)
+                    adapter.updateData(response.receipts)
                 }
             }.onFailure { throwable ->
                 val errorMessage = parseErrorMessage(throwable)
@@ -196,11 +231,11 @@ class DashboardFragment : Fragment() {
         }
 
         val totalDataSet = LineDataSet(totalEntries, "Total Amount").apply {
-            color = ContextCompat.getColor(requireContext(), R.color.purple_500) // Pastikan warna sesuai
-            setCircleColor(ContextCompat.getColor(requireContext(), R.color.purple_500)) // Warna titik
+            color = ContextCompat.getColor(requireContext(), R.color.navy)
+            setCircleColor(ContextCompat.getColor(requireContext(), R.color.navy))
             setDrawValues(true)
             valueTextSize = 10f
-            valueTextColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Warna teks untuk total amount
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
         }
 
         dataSets.add(totalDataSet)
@@ -221,7 +256,7 @@ class DashboardFragment : Fragment() {
                 yOffset = 10f
                 axisMinimum = -0.5f
                 axisMaximum = histories.size.toFloat() - 0.5f
-                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Sesuaikan warna teks sumbu X
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
             }
 
             axisRight.isEnabled = false
@@ -237,7 +272,7 @@ class DashboardFragment : Fragment() {
                     }
                 }
                 setLabelCount(5, true)
-                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Sesuaikan warna teks sumbu Y
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
             }
 
             animateY(500)
@@ -300,31 +335,34 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateLoadingState() {
-        showLoading(isFetchingUser || isFetchingRequests)
+        _binding?.let {
+            showLoading(isFetchingUser || isFetchingRequests)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        _binding?.let { binding ->
-            if (isLoading) {
-                binding.loadingOverlay.visibility = View.VISIBLE
-                binding.progressBar.isIndeterminate = true
-            } else {
-                binding.loadingOverlay.visibility = View.GONE
-                binding.progressBar.isIndeterminate = false
-            }
+        if (isLoading) {
+            binding.loadingOverlay.visibility = View.VISIBLE
+            binding.progressBar.isIndeterminate = true
+        } else {
+            binding.loadingOverlay.visibility = View.GONE
+            binding.progressBar.isIndeterminate = false
         }
     }
 
     private fun showToast(message: String) {
-        val currentTime = System.currentTimeMillis()
-        if (currentTime - lastToastTime > toastDelay) {
-            lastToastTime = currentTime
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        activity?.let {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastToastTime > toastDelay) {
+                lastToastTime = currentTime
+                Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        fetchJob?.cancel()
         _binding = null
     }
 }
