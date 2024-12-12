@@ -162,7 +162,7 @@ class DashboardFragment : Fragment() {
             sliceSpace = 3f
             setValueTextColor(ContextCompat.getColor(requireContext(), R.color.text_color_setting))
 
-            valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+            valueFormatter = object : ValueFormatter() {
                 @SuppressLint("DefaultLocale")
                 override fun getFormattedValue(value: Float): String {
                     return String.format("%.1f%%", value)
@@ -210,7 +210,7 @@ class DashboardFragment : Fragment() {
                 granularity = 1f
                 isGranularityEnabled = true
                 valueFormatter = MonthAxisValueFormatter(histories.map { it.month })
-                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                position = XAxis.XAxisPosition.BOTTOM
                 yOffset = 10f
                 axisMinimum = -0.5f
                 axisMaximum = histories.size.toFloat() - 0.5f
@@ -223,7 +223,7 @@ class DashboardFragment : Fragment() {
                 axisMinimum = min.toFloat()
                 axisMaximum = max.toFloat()
                 setDrawLabels(true)
-                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
                         return formatCurrency(value.toDouble())
                     }
@@ -254,7 +254,7 @@ class DashboardFragment : Fragment() {
         return "Rp $formattedAmount"
     }
 
-    inner class MonthAxisValueFormatter(private val months: List<Int>) : com.github.mikephil.charting.formatter.ValueFormatter() {
+    inner class MonthAxisValueFormatter(private val months: List<Int>) : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
             val index = value.toInt()
             return if (index >= 0 && index < months.size) {

@@ -11,6 +11,8 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reimbifyapp.auth.ui.AuthActivity
 import com.example.reimbifyapp.databinding.ActivitySplashScreenBinding
+import kotlin.math.cos
+import kotlin.math.sin
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -60,8 +62,8 @@ class SplashScreenActivity : AppCompatActivity() {
         coins.forEachIndexed { index, coin ->
 
             val angle = (index * 90).toFloat() // Each coin placed at 90-degree intervals
-            val x = centerX + radius * Math.cos(Math.toRadians(angle.toDouble())).toFloat()
-            val y = centerY + radius * Math.sin(Math.toRadians(angle.toDouble())).toFloat()
+            val x = centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat()
+            val y = centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat()
             coin.x = x
             coin.y = y
         }

@@ -40,14 +40,14 @@ object ApiConfig {
         return builder.build()
     }
 
-    fun createAuthenticatedApiService(userPreference: com.example.reimbifyapp.data.preferences.UserPreference): com.example.reimbifyapp.data.network.api.ApiService {
+    fun createAuthenticatedApiService(userPreference: com.example.reimbifyapp.data.preferences.UserPreference): ApiService {
         val client = createClient(withAuth = true, userPreference = userPreference)
-        return createRetrofit(client).create(com.example.reimbifyapp.data.network.api.ApiService::class.java)
+        return createRetrofit(client).create(ApiService::class.java)
     }
 
-    fun createUnauthenticatedApiService(): com.example.reimbifyapp.data.network.api.ApiService {
+    fun createUnauthenticatedApiService(): ApiService {
         val client = createClient(withAuth = false)
-        return createRetrofit(client).create(com.example.reimbifyapp.data.network.api.ApiService::class.java)
+        return createRetrofit(client).create(ApiService::class.java)
     }
 
     fun createModelApiService(): ApiService {
@@ -55,7 +55,7 @@ object ApiConfig {
         return createRetrofit(client, BASE_URL_MODEL.toString()).create(ApiService::class.java)
     }
 
-    val apiService: com.example.reimbifyapp.data.network.api.ApiService by lazy {
+    val apiService: ApiService by lazy {
         createUnauthenticatedApiService()
     }
 }

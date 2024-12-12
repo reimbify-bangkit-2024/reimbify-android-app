@@ -13,7 +13,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
 
     fun getThemeSetting(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
-            preferences[THEME_KEY] ?: false
+            preferences[THEME_KEY] == true
         }
     }
 
@@ -25,13 +25,13 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
 
     companion object {
         @Volatile
-        private var INSTANCE: com.example.reimbifyapp.data.preferences.SettingPreferences? = null
+        private var INSTANCE: SettingPreferences? = null
 
-        fun getInstance(dataStore: DataStore<Preferences>): com.example.reimbifyapp.data.preferences.SettingPreferences {
-            return com.example.reimbifyapp.data.preferences.SettingPreferences.Companion.INSTANCE ?: synchronized(this) {
+        fun getInstance(dataStore: DataStore<Preferences>): SettingPreferences {
+            return INSTANCE ?: synchronized(this) {
                 val instance =
-                    com.example.reimbifyapp.data.preferences.SettingPreferences(dataStore)
-                com.example.reimbifyapp.data.preferences.SettingPreferences.Companion.INSTANCE = instance
+                    SettingPreferences(dataStore)
+                INSTANCE = instance
                 instance
             }
         }

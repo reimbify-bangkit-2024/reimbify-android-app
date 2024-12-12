@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.data.entities.History
+import java.util.Locale
 
 class UnderReviewAdapter(private val listHistory: ArrayList<History>) :
     RecyclerView.Adapter<UnderReviewAdapter.UnderReviewViewHolder>() {
@@ -32,7 +33,7 @@ class UnderReviewAdapter(private val listHistory: ArrayList<History>) :
         holder.tvTimestamp.text = history.timestamp
         holder.tvReceiptDate.text = history.receiptDate
         holder.tvDepartment.text = history.department
-        holder.tvAmount.text = history.amount.toString()
+        holder.tvAmount.text = String.format(Locale.getDefault(), "%,d", history.amount)
         holder.tvDescription.text = history.description
 
         // Set visibility for status views

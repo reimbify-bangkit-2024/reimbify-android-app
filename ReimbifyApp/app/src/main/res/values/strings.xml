@@ -8,7 +8,6 @@
     <string name="label_profile">Profile</string>
     <string name="title_profile">Profile</string>
     <string name="title_setting">Setting</string>
-    <string name="title_notifications">Notifications</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="display">Display</string>
     <string name="calendar_icon">Calendar Icon</string>
@@ -63,35 +62,20 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_detail_request">Detail Request</string>
     <string name="nota_image">Nota Image</string>
-    <string name="transfer_receipt_image">Transfer Receipt Image</string>
-    <string name="details">Details</string>
     <string name="name">Name</string>
-    <string name="admin_name">Admin Name</string>
     <string name="account_number">Account Number</string>
     <string name="request_date">Request Date</string>
-    <string name="receive_date">Receive Date</string>
-    <string name="decline_date">Decline Date</string>
-    <string name="reason_decline">Reason Decline</string>
-    <string name="default_reason_rejection">Nota Tidak Valid</string>
-    <string name="title_accepted_detail">Accepted Detail</string>
-    <string name="title_rejected_detail">Rejected Detail</string>
-    <string name="title_under_review_detail">Under Review Detail</string>
     <string name="receipt">Receipt</string>
     <string name="upload_icon">Upload Icon</string>
     <string name="upload_your_receipt">Upload Your Receipt</string>
     <string name="open_camera">Open Camera</string>
     <string name="upload">Upload</string>
-    <string name="icon_circle">icon circle</string>
-    <string name="image_accepted">Image Accepted</string>
     <string name="reimbursement_details">Reimbursement Details</string>
     <string name="date">Date</string>
     <string name="bank_account">Bank Account</string>
     <string name="cancel">Cancel</string>
     <string name="submit_request">Submit Request</string>
-    <string name="image_preview">Image Preview\n</string>
     <string name="login_banner">Login Banner</string>
     <string name="email">Email</string>
     <string name="enter_your_email">Enter your email</string>
@@ -104,12 +88,10 @@
     <string name="username">Username</string>
     <string name="enter_your_username">Enter your username</string>
     <string name="verify">Verify</string>
-    <string name="send_otp">Send OTP</string>
     <string name="verify_otp_banner">Verify OTP Banner</string>
     <string name="forgot_password_banner">Forgot Password Banner</string>
     <string name="enter_your_otp">Enter your OTP</string>
     <string name="check_email_otp">Check your email for the code we\'ve sent to verify your account</string>
-    <string name="profile_image">Profile Image</string>
     <string name="john_doe">John Doe</string>
     <string name="finance_department">Finance Department</string>
     <string name="sign_out">Sign Out</string>
@@ -119,12 +101,8 @@
     <string name="account_name">Account Name</string>
     <string name="edit_icon">Edit Icon</string>
     <string name="main_account">Main Account</string>
-    <string name="enter_your_bank_account_name">Enter your bank account name</string>
-    <string name="enter_your_account_number">Enter your account number</string>
-    <string name="enter_your_bank_name">Enter your bank name</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="account_information">Account Information</string>
-    <string name="default_username">P80339</string>
     <string name="default_email">john.doe@company.co.id</string>
     <string name="change_password">Change Password</string>
     <string name="add_bank_account">Add Bank Account</string>
@@ -172,9 +150,7 @@
     <string name="no_user_found">No User Found</string>
     <string name="are_you_sure_want_to_delete">Are you sure want to Delete?</string>
     <string name="data_to_delete">Data to delete</string>
-    <string name="action">Action</string>
     <string name="add_user">Add User</string>
-    <string name="new_user">New User</string>
     <string name="select_role">Select Role</string>
     <string name="register_new_user">Register New User</string>
     <string name="register">Register</string>
@@ -182,7 +158,6 @@
     <string name="display_setting">Display Setting</string>
     <string name="request_detail">Request Detail</string>
     <string name="request_by">Request by</string>
-    <string name="nota">Nota</string>
     <string name="request_description">Request Description</string>
     <string name="review_summary">Review Summary</string>
     <string name="reviewer">Reviewer</string>
@@ -211,5 +186,8 @@
     <string name="failed_upload">Failed</string>
     <string name="request_sent">Success Sent Request!</string>
     <string name="success_message">Your request sent successfully. Please wait for admin to review it.</string>
+    <string name="welcome_to_reimbify">Welcome to Reimbify</string>
+    <string name="coin_image">Coin Image</string>
+    <string name="reimbify_logo">Reimbify Logo</string>
 
 </resources>

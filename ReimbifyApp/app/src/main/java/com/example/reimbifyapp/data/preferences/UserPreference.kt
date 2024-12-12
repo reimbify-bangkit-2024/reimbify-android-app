@@ -17,20 +17,20 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
 
     suspend fun saveSession(userSession: UserSession) {
         dataStore.edit { preferences ->
-            preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.USER_ID_KEY] = userSession.userId
-            preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.TOKEN_KEY] = userSession.token
-            preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.ROLE_KEY] = userSession.role
-            preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.IS_LOGIN_KEY] = true
+            preferences[USER_ID_KEY] = userSession.userId
+            preferences[TOKEN_KEY] = userSession.token
+            preferences[ROLE_KEY] = userSession.role
+            preferences[IS_LOGIN_KEY] = true
         }
     }
 
     fun getSession(): Flow<UserSession> {
         return dataStore.data.map { preferences ->
             UserSession(
-                preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.USER_ID_KEY] ?: "",
-                preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.TOKEN_KEY] ?: "",
-                preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.ROLE_KEY] ?: "",
-                preferences[com.example.reimbifyapp.data.preferences.UserPreference.Companion.IS_LOGIN_KEY] ?: false
+                preferences[USER_ID_KEY] ?: "",
+                preferences[TOKEN_KEY] ?: "",
+                preferences[ROLE_KEY] ?: "",
+                preferences[IS_LOGIN_KEY] == true
             )
         }
     }
@@ -43,17 +43,17 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
 
     companion object {
         @Volatile
-        private var INSTANCE: com.example.reimbifyapp.data.preferences.UserPreference? = null
+        private var INSTANCE: UserPreference? = null
 
         private val USER_ID_KEY = stringPreferencesKey("userId")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val ROLE_KEY = stringPreferencesKey("role")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
 
-        fun getInstance(dataStore: DataStore<Preferences>): com.example.reimbifyapp.data.preferences.UserPreference {
-            return com.example.reimbifyapp.data.preferences.UserPreference.Companion.INSTANCE ?: synchronized(this) {
-                val instance = com.example.reimbifyapp.data.preferences.UserPreference(dataStore)
-                com.example.reimbifyapp.data.preferences.UserPreference.Companion.INSTANCE = instance
+        fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
+            return INSTANCE ?: synchronized(this) {
+                val instance = UserPreference(dataStore)
+                INSTANCE = instance
                 instance
             }
         }

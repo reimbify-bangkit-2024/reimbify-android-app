@@ -165,7 +165,7 @@ class SettingFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         val currentTime = System.currentTimeMillis()
 
-        if (requestCode == SettingFragment.REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
             if (currentTime - lastImageSelectionTime > IMAGE_SELECTION_DELAY) {
                 data?.data?.let { uri ->
                     selectedImageUri = uri

@@ -81,8 +81,8 @@ class ProfileRepository private constructor(
         @Volatile
         private var instance: ProfileRepository? = null
         fun getInstance(
-            authApiService: com.example.reimbifyapp.data.network.api.ApiService,
-            unAuthApiService: com.example.reimbifyapp.data.network.api.ApiService
+            authApiService: ApiService,
+            unAuthApiService: ApiService
         ): ProfileRepository =
             instance ?: synchronized(this) {
                 instance ?: ProfileRepository(authApiService, unAuthApiService)

@@ -17,7 +17,7 @@ import java.util.Currency
 import java.util.Locale
 
 class HistoryAdapter(private val listHistory: ArrayList<History>) :
-    RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+    RecyclerView.Adapter<HistoryViewHolder>() {
 
     private var onItemClickCallback: OnItemClickCallback? = null
 

@@ -11,6 +11,7 @@
         android:layout_width="700dp"
         android:layout_height="700dp"
         android:layout_centerInParent="true"
+        android:contentDescription="@string/reimbify_logo"
         android:src="@drawable/reimbify_logo"
         android:scaleType="centerInside"/>
 
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_logo"
         android:layout_centerHorizontal="true"
-        android:text="Welcome to Reimbify"
+        android:text="@string/welcome_to_reimbify"
         android:textSize="18sp"
         android:textColor="@android:color/white"
         android:layout_marginTop="16dp" />
@@ -31,6 +32,7 @@
         android:id="@+id/iv_coin_1"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/coin_image"
         android:src="@drawable/koin"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -41,6 +43,7 @@
         android:id="@+id/iv_coin_2"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/coin_image"
         android:src="@drawable/koin"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -51,6 +54,7 @@
         android:id="@+id/iv_coin_3"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/coin_image"
         android:src="@drawable/koin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
@@ -61,6 +65,7 @@
         android:id="@+id/iv_coin_4"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/coin_image"
         android:src="@drawable/koin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"

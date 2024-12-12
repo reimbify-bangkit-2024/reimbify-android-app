@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.reimbifyapp.data.preferences.SettingPreferences
 import kotlinx.coroutines.launch
 
-class SettingViewModel(private val pref: com.example.reimbifyapp.data.preferences.SettingPreferences) : ViewModel() {
+class SettingViewModel(private val pref: SettingPreferences) : ViewModel() {
     fun getThemeSettings(): LiveData<Boolean> {
         return pref.getThemeSetting().asLiveData()
     }

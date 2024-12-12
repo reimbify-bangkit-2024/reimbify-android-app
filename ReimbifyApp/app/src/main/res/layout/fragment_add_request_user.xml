@@ -299,6 +299,7 @@
                 android:id="@+id/et_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:hint="@string/description"
                 android:background="@drawable/input_box"
                 android:padding="8dp"
@@ -324,6 +325,7 @@
                 android:id="@+id/et_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:hint="@string/amount"
                 android:textColor="@color/text_color_setting"
                 android:background="@drawable/input_box"
@@ -360,6 +362,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_submit_buttons"
+                style="?android:attr/buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -370,6 +373,7 @@
 
                 <Button
                     android:id="@+id/btn_cancel"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -380,6 +384,7 @@
 
                 <Button
                     android:id="@+id/btn_submit_request"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
