@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,11 +31,8 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class DashboardFragment : Fragment() {
@@ -46,7 +42,6 @@ class DashboardFragment : Fragment() {
 
     private var isFetchingUser = false
     private var isFetchingRequests = false
-    private var fetchJob: Job? = null
 
     private val userViewModel by viewModels<LoginViewModel> {
         UserViewModelFactory.getInstance(requireContext())
@@ -78,57 +73,40 @@ class DashboardFragment : Fragment() {
         fetchUserIdAndLoadUser()
         fetchRequests()
         setupRecyclerView()
-        setupObserver()
-
         val year = Calendar.getInstance().get(Calendar.YEAR)
-
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val session = userViewModel.getSession().first()
                 val userId = session.userId.toInt()
 
-                if (_binding != null && viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                    viewModel.getMonthlyAmountByUserId(year, userId).observe(viewLifecycleOwner) { listHistoryResponse ->
-                        listHistoryResponse?.let { response ->
-                            if (isAdded && view != null) {
-                                Log.d("DashboardFragment", "Fetched history data: ${response.histories}")
-                                updateLineChart(response.histories)
-                            }
-                        }
+                viewModel.getMonthlyAmountByUserId(year, userId).observe(viewLifecycleOwner) { listHistoryResponse ->
+                    if (!isAdded) return@observe
+                    listHistoryResponse?.let { response ->
+                        Log.d("DashboardFragment", "Fetched history data: ${response.histories}")
+                        updateLineChart(response.histories)
                     }
                 }
+
             } catch (e: Exception) {
                 val errorMessage = parseErrorMessage(e)
-                Log.e("ERROR", e.toString())
-
-                activity?.runOnUiThread {
-                    showToast("Failed to fetch monthly amount: $errorMessage")
-                }
+                showToast("Failed to fetch monthly amount: $errorMessage")
             }
         }
+        setupObserver()
     }
 
     private fun fetchUserIdAndLoadUser() {
         isFetchingUser = true
         updateLoadingState()
-
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val session = userViewModel.getSession().first()
                 val userId = session.userId
 
-                withContext(Dispatchers.Main) {
-                    if (isAdded && view != null) {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            profileViewModel.getUser(userId)
-                        }
-                    }
-                }
+                profileViewModel.getUser(userId)
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    val errorMessage = parseErrorMessage(e)
-                    showToast("Failed to fetch session or user details: $errorMessage")
-                }
+                val errorMessage = parseErrorMessage(e)
+                showToast("Failed to fetch session or user details: $errorMessage")
             } finally {
                 isFetchingUser = false
                 updateLoadingState()
@@ -143,49 +121,38 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setUserName(userName: String) {
-        _binding?.let { binding ->
-            if (userName.isNotEmpty()) {
-                binding.userGreeting.text = getString(R.string.greeting, userName)
-            } else {
-                binding.userGreeting.text =
-                    getString(R.string.greeting, getString(R.string.default_user_name))
-            }
+        if (userName.isNotEmpty()) {
+            binding.userGreeting.text = getString(R.string.greeting, userName)
+        } else {
+            _binding?.userGreeting?.text = getString(R.string.greeting, getString(R.string.default_user_name))
         }
     }
 
     private fun setupObserver() {
         profileViewModel.getUserResult.observe(viewLifecycleOwner) { result ->
-            if (!isAdded || view == null ||
-                viewLifecycleOwner.lifecycle.currentState != Lifecycle.State.RESUMED) {
-                return@observe
-            }
-
+            if (!isAdded) return@observe
             isFetchingUser = false
             updateLoadingState()
 
             result.onSuccess { user ->
-                user.users.firstOrNull()?.let { userDetails ->
-                    setUserName(userDetails.userName)
-                }
+                setUserName(user.users[0].userName)
             }
             result.onFailure { throwable ->
-                Log.e("DashboardFragment", "Failed to load user profile", throwable)
+                println("Failed to load user profile: ${throwable.localizedMessage}")
                 showToast("Failed to load user profile: ${throwable.localizedMessage}")
             }
         }
 
         viewModel.underReviewResponse.observe(viewLifecycleOwner) { result ->
-            if (!isAdded || view == null ||
-                viewLifecycleOwner.lifecycle.currentState != Lifecycle.State.RESUMED) {
-                return@observe
-            }
-
+            if (!isAdded) return@observe
             result.onSuccess { response ->
-                if (response.receipts.isEmpty()) {
-                    showNoRequestsMessage(true)
-                } else {
-                    showNoRequestsMessage(false)
-                    adapter.updateData(response.receipts)
+                response.let {
+                    if (it.receipts.isEmpty()) {
+                        showNoRequestsMessage(true)
+                    } else {
+                        showNoRequestsMessage(false)
+                        adapter.updateData(it.receipts)
+                    }
                 }
             }.onFailure { throwable ->
                 val errorMessage = parseErrorMessage(throwable)
@@ -231,11 +198,11 @@ class DashboardFragment : Fragment() {
         }
 
         val totalDataSet = LineDataSet(totalEntries, "Total Amount").apply {
-            color = ContextCompat.getColor(requireContext(), R.color.navy)
-            setCircleColor(ContextCompat.getColor(requireContext(), R.color.navy))
+            color = ContextCompat.getColor(requireContext(), R.color.purple_500) // Pastikan warna sesuai
+            setCircleColor(ContextCompat.getColor(requireContext(), R.color.purple_500)) // Warna titik
             setDrawValues(true)
             valueTextSize = 10f
-            valueTextColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Warna teks untuk total amount
         }
 
         dataSets.add(totalDataSet)
@@ -256,7 +223,7 @@ class DashboardFragment : Fragment() {
                 yOffset = 10f
                 axisMinimum = -0.5f
                 axisMaximum = histories.size.toFloat() - 0.5f
-                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Sesuaikan warna teks sumbu X
             }
 
             axisRight.isEnabled = false
@@ -272,7 +239,7 @@ class DashboardFragment : Fragment() {
                     }
                 }
                 setLabelCount(5, true)
-                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting)
+                textColor = ContextCompat.getColor(requireContext(), R.color.text_color_setting) // Sesuaikan warna teks sumbu Y
             }
 
             animateY(500)
@@ -281,8 +248,6 @@ class DashboardFragment : Fragment() {
 
         Log.d("DashboardFragment", "Total Amount: $totalAmountSum")
     }
-
-
 
     @SuppressLint("DefaultLocale")
     private fun formatCurrency(amount: Double): String {
@@ -335,34 +300,31 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateLoadingState() {
-        _binding?.let {
-            showLoading(isFetchingUser || isFetchingRequests)
-        }
+        showLoading(isFetchingUser || isFetchingRequests)
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.loadingOverlay.visibility = View.VISIBLE
-            binding.progressBar.isIndeterminate = true
-        } else {
-            binding.loadingOverlay.visibility = View.GONE
-            binding.progressBar.isIndeterminate = false
+        _binding?.let { binding ->
+            if (isLoading) {
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.progressBar.isIndeterminate = true
+            } else {
+                binding.loadingOverlay.visibility = View.GONE
+                binding.progressBar.isIndeterminate = false
+            }
         }
     }
 
     private fun showToast(message: String) {
-        activity?.let {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastToastTime > toastDelay) {
-                lastToastTime = currentTime
-                Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
-            }
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay && isAdded) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        fetchJob?.cancel()
         _binding = null
     }
 }

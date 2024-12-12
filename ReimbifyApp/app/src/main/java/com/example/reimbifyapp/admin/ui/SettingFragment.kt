@@ -23,6 +23,7 @@ import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.User
 import com.example.reimbifyapp.databinding.FragmentSettingAdminBinding
 import com.example.reimbifyapp.auth.ui.component.ChangePasswordDialogFragment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -50,6 +51,7 @@ class SettingFragment : Fragment() {
 
     private var lastToastTime = 0L
     private val toastDelay = 5000L
+    private var isLoadingProfile = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +68,7 @@ class SettingFragment : Fragment() {
         setupObservers()
         fetchUserProfile()
         setupActions()
+        setupThemeSwitchListener()
     }
 
     private fun openGallery() {
@@ -77,6 +80,7 @@ class SettingFragment : Fragment() {
 
     private fun setupObservers() {
         settingViewModel.getUserResult.observe(viewLifecycleOwner) { result ->
+            isLoadingProfile = false
             showLoading(false)
             result.onSuccess { user ->
                 displayUserData(user.users[0])
@@ -87,7 +91,11 @@ class SettingFragment : Fragment() {
         }
 
         settingViewModel.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive ->
-            binding.switchTheme.isChecked = isDarkModeActive
+            if (binding.switchTheme.isChecked != isDarkModeActive) {
+                binding.switchTheme.setOnCheckedChangeListener(null)
+                binding.switchTheme.isChecked = isDarkModeActive
+                setupThemeSwitchListener()
+            }
         }
 
         settingViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
@@ -105,7 +113,11 @@ class SettingFragment : Fragment() {
     }
 
     private fun fetchUserProfile() {
+        if (isLoadingProfile) return
+
+        isLoadingProfile = true
         showLoading(true)
+
         lifecycleScope.launch {
             try {
                 val userSession = userViewModel.getSession().first()
@@ -121,6 +133,8 @@ class SettingFragment : Fragment() {
             } catch (e: Exception) {
                 showLoading(false)
                 showToast("Failed to load user profile: ${e.localizedMessage}")
+            } finally {
+                isLoadingProfile = false
             }
         }
     }
@@ -162,8 +176,6 @@ class SettingFragment : Fragment() {
             }
         }
     }
-
-
 
     private fun navigateToAuthActivity() {
         val intent = Intent(requireContext(), AuthActivity::class.java).apply {
@@ -209,12 +221,23 @@ class SettingFragment : Fragment() {
             }
         }
 
-        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            settingViewModel.saveThemeSetting(isChecked)
-        }
-
         binding.profilePicture.setOnClickListener {
             openGallery()
+        }
+    }
+
+    private fun setupThemeSwitchListener() {
+        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            settingViewModel.saveThemeSetting(isChecked)
+
+            requireActivity().apply {
+                val intent = intent.apply {
+                    putExtra("open_fragment", "setting")
+                }
+                finish()
+                startActivity(intent)
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
         }
     }
 
@@ -229,7 +252,7 @@ class SettingFragment : Fragment() {
 
     private fun showToast(message: String) {
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastToastTime > toastDelay) {
+        if (currentTime - lastToastTime > toastDelay && isAdded) {
             lastToastTime = currentTime
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }

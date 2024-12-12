@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
@@ -18,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -47,6 +49,7 @@ class MainActivityUser : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val sessionCheckInterval: Long = 5 * 60 * 1000
+    private var isThemeChanging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val pref = SettingPreferences.getInstance(dataStore)
@@ -60,10 +63,12 @@ class MainActivityUser : AppCompatActivity() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
             if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+                isThemeChanging = true
                 AppCompatDelegate.setDefaultNightMode(nightMode)
             }
         }
 
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainUserBinding.inflate(layoutInflater)
@@ -72,11 +77,7 @@ class MainActivityUser : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main_user) as NavHostFragment
         navController = navHostFragment.navController
 
-        val openFragment = intent.getStringExtra("open_fragment")
-        if (openFragment == "dashboard") {
-            navController.navigate(R.id.navigation_dashboard)
-        }
-
+        handleInitialFragmentNavigation(savedInstanceState)
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_dashboard,
@@ -106,36 +107,53 @@ class MainActivityUser : AppCompatActivity() {
         startSessionValidation()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.toolbar_menu, menu)
-//        val menuItem = menu.findItem(R.id.action_notifications)
-//        val iconDrawable = menuItem.icon
-//        if (iconDrawable != null) {
-//            val color = getColorFromAttr(android.R.attr.colorSecondary)
-//            iconDrawable.setTint(color)
-//        }
-        return true
-    }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-////            R.id.action_notifications -> {
-////                Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show()
-////                true
-////            }
-////            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
-
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    private fun getColorFromAttr(attr: Int): Int {
-        val typedValue = TypedValue()
-        theme.resolveAttribute(attr, typedValue, true)
-        return typedValue.data
+    override fun onResume() {
+        super.onResume()
+
+        if (isThemeChanging) {
+            isThemeChanging = false
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+    }
+
+    private fun handleInitialFragmentNavigation(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            val openFragment = intent.getStringExtra("open_fragment")
+            Log.d("OPEN FRAGMENT", "Initial fragment: $openFragment")
+
+            when (openFragment) {
+                "dashboard" -> navigateToDashboard()
+                "setting" -> navigateToSetting()
+            }
+
+            intent.removeExtra("open_fragment")
+        }
+    }
+
+    private fun navigateToDashboard() {
+        try {
+            if (navController.currentDestination?.id != R.id.navigation_dashboard) {
+                navController.popBackStack()
+                navController.navigate(R.id.navigation_dashboard)
+            }
+        } catch (e: Exception) {
+            Log.e("Navigation", "Error navigating to dashboard", e)
+        }
+    }
+
+    private fun navigateToSetting() {
+        try {
+            if (navController.currentDestination?.id != R.id.navigation_setting) {
+                navController.popBackStack()
+                navController.navigate(R.id.navigation_setting)
+            }
+        } catch (e: Exception) {
+            Log.e("Navigation", "Error navigating to settings", e)
+        }
     }
 
     private fun startSessionValidation() {

@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.databinding.FragmentSettingUserBinding
 import com.example.reimbifyapp.data.preferences.SettingPreferences
 import com.example.reimbifyapp.user.factory.SettingViewModelFactory
 import com.example.reimbifyapp.user.viewmodel.SettingViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private val Context.dataStore by preferencesDataStore(name = "settings")
 
@@ -41,6 +44,15 @@ class SettingFragment : Fragment() {
 
             binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
                 settingViewModel.saveThemeSetting(isChecked)
+
+                requireActivity().apply {
+                    val intent = intent.apply {
+                        putExtra("open_fragment", "setting")
+                    }
+                    finish()
+                    startActivity(intent)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }
             }
         }
     }

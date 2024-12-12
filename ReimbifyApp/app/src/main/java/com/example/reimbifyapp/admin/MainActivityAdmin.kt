@@ -42,6 +42,7 @@ class MainActivityAdmin : AppCompatActivity() {
     private val Context.dataStore by preferencesDataStore(name = "settings")
 
     private val sessionCheckInterval: Long = 5 * 60 * 1000
+    private var isThemeChanging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,9 @@ class MainActivityAdmin : AppCompatActivity() {
             } else {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
+
             if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+                isThemeChanging = true
                 AppCompatDelegate.setDefaultNightMode(nightMode)
             }
         }
@@ -71,11 +74,7 @@ class MainActivityAdmin : AppCompatActivity() {
         }
         navController = navHostFragment.navController
 
-//        val openFragment = intent.getStringExtra("open_fragment")
-//        if (openFragment == "dashboard") {
-//            navController.navigate(R.id.navigation_dashboard)
-//        }
-
+        handleInitialFragmentNavigation(savedInstanceState)
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_dashboard,
@@ -105,30 +104,53 @@ class MainActivityAdmin : AppCompatActivity() {
         startSessionValidation()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.toolbar_menu, menu)
-//        val menuItem = menu.findItem(R.id.action_notifications)
-//        val iconDrawable = menuItem.icon
-//        if (iconDrawable != null) {
-//            val color = getColorFromAttr(android.R.attr.colorSecondary)
-//            iconDrawable.setTint(color)
-//        }
-        return true
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-//            R.id.action_notifications -> {
-//                Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show()
-//                true
-//            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onResume() {
+        super.onResume()
+
+        if (isThemeChanging) {
+            isThemeChanging = false
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
+    private fun handleInitialFragmentNavigation(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            val openFragment = intent.getStringExtra("open_fragment")
+            Log.d("OPEN FRAGMENT", "Initial fragment: $openFragment")
+
+            when (openFragment) {
+                "dashboard" -> navigateToDashboard()
+                "setting" -> navigateToSetting()
+            }
+
+            intent.removeExtra("open_fragment")
+        }
+    }
+
+    private fun navigateToDashboard() {
+        try {
+            if (navController.currentDestination?.id != R.id.navigation_dashboard) {
+                navController.popBackStack()
+                navController.navigate(R.id.navigation_dashboard)
+            }
+        } catch (e: Exception) {
+            Log.e("Navigation", "Error navigating to dashboard", e)
+        }
+    }
+
+    private fun navigateToSetting() {
+        try {
+            if (navController.currentDestination?.id != R.id.navigation_setting) {
+                navController.popBackStack()
+                navController.navigate(R.id.navigation_setting)
+            }
+        } catch (e: Exception) {
+            Log.e("Navigation", "Error navigating to settings", e)
+        }
     }
 
     private fun getColorFromAttr(attr: Int): Int {
