@@ -61,7 +61,6 @@
         <item>Bank 4</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="nota_image">Nota Image</string>
     <string name="name">Name</string>
     <string name="account_number">Account Number</string>

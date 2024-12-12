@@ -31,7 +31,7 @@
             android:textColor="@color/dark_gray"
             android:layout_marginBottom="16dp" />
 
-        <!-- Amount Approved Reimbursment -->
+        <!-- Amount Approved Reimbursement -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
