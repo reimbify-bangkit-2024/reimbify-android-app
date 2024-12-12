@@ -6,16 +6,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.factory.DashboardViewModelFactory
+import com.example.reimbifyapp.admin.ui.adapter.RequestAdapter
 import com.example.reimbifyapp.admin.viewmodel.DashboardViewModel
+import com.example.reimbifyapp.auth.factory.UserViewModelFactory
+import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.network.response.DepartmentRequest
 import com.example.reimbifyapp.data.network.response.GetHistoryAllUserResponse
 import com.example.reimbifyapp.data.network.response.StatusResponse
 import com.example.reimbifyapp.databinding.FragmentDashboardAdminBinding
+import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
+import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
+import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -27,12 +36,26 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import kotlin.getValue
 
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardAdminBinding? = null
     private val binding get() = _binding!!
     private lateinit var dashboardViewModel: DashboardViewModel
+    private var isFetchingUser = false
+    private var lastToastTime = 0L
+    private val toastDelay = 5000L
+
+    private val userViewModel by viewModels<LoginViewModel> {
+        UserViewModelFactory.getInstance(requireContext())
+    }
+
+    private val profileViewModel by viewModels<ProfileViewModel> {
+        ProfileViewModelFactory.getInstance(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +87,51 @@ class DashboardFragment : Fragment() {
             Log.d("DashboardFragment", "Department Data: $departmentData")
             updateBarChart(departmentData)
         }
+
+        profileViewModel.getUserResult.observe(viewLifecycleOwner) { result ->
+            if (!isAdded) return@observe
+            isFetchingUser = false
+
+            result.onSuccess { user ->
+                setUserName(user.users[0].userName)
+            }
+            result.onFailure { throwable ->
+                println("Failed to load user profile: ${throwable.localizedMessage}")
+                showToast("Failed to load user profile: ${throwable.localizedMessage}")
+            }
+        }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        fetchUserIdAndLoadUser()
+    }
+
+    private fun fetchUserIdAndLoadUser() {
+        isFetchingUser = true
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val session = userViewModel.getSession().first()
+                val userId = session.userId
+
+                profileViewModel.getUser(userId)
+            } catch (e: Exception) {
+                val errorMessage = parseErrorMessage(e)
+                showToast("Failed to fetch session or user details: $errorMessage")
+            } finally {
+                isFetchingUser = false
+            }
+        }
+    }
+
+    private fun setUserName(userName: String) {
+        if (userName.isNotEmpty()) {
+            binding.userGreeting.text = getString(R.string.greeting, userName)
+        } else {
+            _binding?.userGreeting?.text = getString(R.string.greeting, getString(R.string.default_user_name))
+        }
     }
 
     private fun updateBarChart(departmentData: List<DepartmentRequest>) {
@@ -278,6 +345,14 @@ class DashboardFragment : Fragment() {
                 12 -> "Dec"
                 else -> ""
             }
+        }
+    }
+
+    private fun showToast(message: String) {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastToastTime > toastDelay && isAdded) {
+            lastToastTime = currentTime
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
