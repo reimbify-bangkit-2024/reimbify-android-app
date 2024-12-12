@@ -322,7 +322,7 @@ class AddRequestFragment : Fragment() {
                     }
                 }
             } catch (e: Exception) {
-                Toast.makeText(context, "Error retrieving session: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("SESSION", "Error retrieving session: ${e.message}")
             }
         }
         viewModel.bankAccountResponse.observe(viewLifecycleOwner) { result ->
