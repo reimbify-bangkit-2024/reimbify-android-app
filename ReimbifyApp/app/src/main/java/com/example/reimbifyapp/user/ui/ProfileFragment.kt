@@ -157,13 +157,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         }
 
         viewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
-            // Reset flag upload dan toast setelah proses selesai
             isUploading = false
             isShowingUploadToast = false
 
             response?.let {
                 if (it.success) {
-                    showToast("Profile picture uploaded successfully!")
                     fetchUserProfile()
                 } else {
                     showToast("Failed to upload profile picture: ${it.message}")
@@ -173,13 +171,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     }
 
     private fun uploadProfilePicture() {
-        // Cek apakah sedang dalam proses upload atau sudah menampilkan toast
         if (isUploading || isShowingUploadToast) {
             return
         }
 
         selectedImageUri?.let { uri ->
-            // Set flag upload dan toast
             isUploading = true
             isShowingUploadToast = true
 

@@ -1,7 +1,10 @@
 package com.example.reimbifyapp.admin.ui
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +12,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.factory.SettingViewModelFactory
 import com.example.reimbifyapp.admin.viewmodel.SettingViewModel
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
@@ -22,9 +28,18 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class SettingFragment : Fragment() {
+
+    companion object {
+        const val REQUEST_GALLERY = 200
+    }
+
     private var _binding: FragmentSettingAdminBinding? = null
     private val binding get() = _binding!!
-
+    private var isUploading = false
+    private var isShowingUploadToast = false
+    private var lastImageSelectionTime = 0L
+    private val IMAGE_SELECTION_DELAY = 1000L
+    private var selectedImageUri: Uri? = null
     private val settingViewModel by viewModels<SettingViewModel> {
         SettingViewModelFactory.getInstance(requireContext())
     }
@@ -53,6 +68,13 @@ class SettingFragment : Fragment() {
         setupActions()
     }
 
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
+        startActivityForResult(intent, REQUEST_GALLERY)
+    }
+
     private fun setupObservers() {
         settingViewModel.getUserResult.observe(viewLifecycleOwner) { result ->
             showLoading(false)
@@ -66,6 +88,19 @@ class SettingFragment : Fragment() {
 
         settingViewModel.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive ->
             binding.switchTheme.isChecked = isDarkModeActive
+        }
+
+        settingViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
+            isUploading = false
+            isShowingUploadToast = false
+
+            response?.let {
+                if (it.success) {
+                    fetchUserProfile()
+                } else {
+                    showToast("Failed to upload profile picture: ${it.message}")
+                }
+            } ?: showToast("Upload failed: Unknown error")
         }
     }
 
@@ -90,6 +125,46 @@ class SettingFragment : Fragment() {
         }
     }
 
+    private fun uploadProfilePicture() {
+        if (isUploading || isShowingUploadToast) {
+            return
+        }
+
+        selectedImageUri?.let { uri ->
+            isUploading = true
+            isShowingUploadToast = true
+
+            lifecycleScope.launch {
+                try {
+                    val userSession = userViewModel.getSession().first()
+                    settingViewModel.UploadImage(uri, userSession.userId)
+                } catch (e: Exception) {
+                    showToast("Failed to upload profile picture: ${e.localizedMessage}")
+                    isUploading = false
+                    isShowingUploadToast = false
+                }
+            }
+        } ?: showToast("Please select an image first")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val currentTime = System.currentTimeMillis()
+
+        if (requestCode == SettingFragment.REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
+            if (currentTime - lastImageSelectionTime > IMAGE_SELECTION_DELAY) {
+                data?.data?.let { uri ->
+                    selectedImageUri = uri
+                    binding.profilePicture.setImageURI(uri)
+                    uploadProfilePicture()
+                    lastImageSelectionTime = currentTime
+                }
+            }
+        }
+    }
+
+
+
     private fun navigateToAuthActivity() {
         val intent = Intent(requireContext(), AuthActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -103,6 +178,21 @@ class SettingFragment : Fragment() {
         binding.tvProfileDepartment.text = user.department.departmentName
         binding.tvEmail.text = user.email
         binding.tvRole.text = user.role
+        val profileImageUrl = user.profileImageUrl
+        binding.profilePicture.setImageResource(R.drawable.baseline_account_circle_24)
+        Log.d("ProfileFragment", "Profile image URL: $profileImageUrl")
+        profileImageUrl?.let { url ->
+            Glide.with(requireContext())
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .circleCrop()
+                .placeholder(R.drawable.baseline_account_circle_24)
+                .error(R.drawable.baseline_account_circle_24)
+                .into(binding.profilePicture)
+        } ?: run {
+            Log.e("ProfileFragment", "Profile image URL is null")
+        }
     }
 
     private fun setupActions() {
@@ -121,6 +211,10 @@ class SettingFragment : Fragment() {
 
         binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
             settingViewModel.saveThemeSetting(isChecked)
+        }
+
+        binding.profilePicture.setOnClickListener {
+            openGallery()
         }
     }
 
