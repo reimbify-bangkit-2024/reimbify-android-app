@@ -37,13 +37,21 @@
 
         <activity
             android:name=".auth.ui.AuthActivity"
-            android:exported="false" />
+            android:exported="false" >
+            <nav-graph android:value="@navigation/auth_nav_graph" />
+        </activity>
+
         <activity
             android:name=".user.MainActivityUser"
-            android:exported="false"></activity>
+            android:exported="false" >
+            <nav-graph android:value="@navigation/main_user_navigation" />
+        </activity>
+
         <activity
             android:name=".admin.MainActivityAdmin"
-            android:exported="false"></activity>
+            android:exported="false" >
+            <nav-graph android:value="@navigation/main_admin_navigation" />
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

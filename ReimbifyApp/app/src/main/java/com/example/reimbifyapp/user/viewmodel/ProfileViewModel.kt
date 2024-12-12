@@ -157,7 +157,7 @@ class ProfileViewModel(private val repository: ProfileRepository, private val im
         }
     }
 
-    fun UploadImage(imageUri: Uri, userId: String){
+    fun uploadImage(imageUri: Uri, userId: String){
         viewModelScope.launch {
             try {
                 val apiService = ApiConfig.createAuthenticatedApiService(userPreference)

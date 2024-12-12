@@ -6,11 +6,11 @@ import android.icu.util.Currency
 import android.icu.util.TimeZone
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
@@ -26,7 +26,6 @@ import com.example.reimbifyapp.auth.viewmodel.RequestApprovalViewModel
 import com.example.reimbifyapp.auth.viewmodel.RequestDetailViewModel
 import com.example.reimbifyapp.data.entities.Reimbursement
 import com.example.reimbifyapp.databinding.FragmentApprovalBinding
-import com.example.reimbifyapp.databinding.FragmentRequestDetailBinding
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

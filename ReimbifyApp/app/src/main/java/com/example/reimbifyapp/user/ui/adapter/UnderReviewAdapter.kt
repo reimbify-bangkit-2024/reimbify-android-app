@@ -14,10 +14,6 @@ class UnderReviewAdapter(private val listHistory: ArrayList<History>) :
 
     private var onItemClickCallback: OnItemClickCallback? = null
 
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
     interface OnItemClickCallback {
         fun onItemClicked(data: History)
     }

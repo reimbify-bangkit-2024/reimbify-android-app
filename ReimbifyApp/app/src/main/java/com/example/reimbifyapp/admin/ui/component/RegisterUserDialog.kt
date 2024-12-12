@@ -2,14 +2,11 @@ package com.example.reimbifyapp.admin.ui.component
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -17,15 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.admin.factory.UserListViewModelFactory
 import com.example.reimbifyapp.admin.viewmodel.UserListViewModel
-import com.example.reimbifyapp.databinding.DialogChangePasswordBinding
-import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
-import com.example.reimbifyapp.auth.factory.UserViewModelFactory
-import com.example.reimbifyapp.auth.ui.component.CustomConfirmPasswordEditText
 import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
-import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
-import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.databinding.DialogRegisterUserBinding
-import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
+import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import kotlinx.coroutines.launch
 
 class RegisterUserDialog  : DialogFragment() {

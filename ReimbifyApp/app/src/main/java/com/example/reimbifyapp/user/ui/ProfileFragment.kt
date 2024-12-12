@@ -16,15 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.databinding.FragmentProfileUserBinding
-import com.example.reimbifyapp.data.entities.User
-import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.ui.AuthActivity
 import com.example.reimbifyapp.auth.ui.component.ChangePasswordDialogFragment
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.Account
-import com.example.reimbifyapp.user.ui.AddRequestFragment.Companion
+import com.example.reimbifyapp.data.entities.User
+import com.example.reimbifyapp.databinding.FragmentProfileUserBinding
+import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.user.ui.adapter.BankAccountAdapter
 import com.example.reimbifyapp.user.ui.component.AddBankAccountDialogFragment
 import com.example.reimbifyapp.user.ui.component.UpdateBankAccountDialogFragment
@@ -41,9 +40,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     private var isUploading = false
     private var isShowingUploadToast = false
     private var lastImageSelectionTime = 0L
-    private val IMAGE_SELECTION_DELAY = 1000L
+    private val imageSelectionDelay = 1000L
     private var selectedImageUri: Uri? = null
-    private var userId: Int? = null
     private lateinit var bankAccountAdapter: BankAccountAdapter
 
     companion object{
@@ -182,7 +180,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
             lifecycleScope.launch {
                 try {
                     val userSession = userViewModel.getSession().first()
-                    viewModel.UploadImage(uri, userSession.userId)
+                    viewModel.uploadImage(uri, userSession.userId)
                 } catch (e: Exception) {
                     showToast("Failed to upload profile picture: ${e.localizedMessage}")
                     isUploading = false
@@ -197,7 +195,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         val currentTime = System.currentTimeMillis()
 
         if (requestCode == REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
-            if (currentTime - lastImageSelectionTime > IMAGE_SELECTION_DELAY) {
+            if (currentTime - lastImageSelectionTime > imageSelectionDelay) {
                 data?.data?.let { uri ->
                     selectedImageUri = uri
                     binding.profilePicture.setImageURI(uri)

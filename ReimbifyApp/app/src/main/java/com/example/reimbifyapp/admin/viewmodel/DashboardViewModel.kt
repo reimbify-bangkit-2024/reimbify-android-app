@@ -39,7 +39,7 @@ class DashboardViewModel(private val reimbursementRepository: ReimbursementRepos
             emit(response)
         } catch (e: Exception) {
             Log.e("DashboardViewModel", "Error fetching total request status: ${e.message}")
-            emit(StatusResponse(under_review = 0, approved = 0, rejected = 0)) // Emit nilai default jika error
+            emit(StatusResponse(underReview = 0, approved = 0, rejected = 0)) // Emit nilai default jika error
         }
     }
 

@@ -3,7 +3,6 @@ package com.example.reimbifyapp.data.repositories
 import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.response.GetDepartmentByIdResponse
 import com.example.reimbifyapp.data.network.response.GetDepartmentResponse
-import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 
 class DepartmentRepository private constructor(
     private val authApiService: ApiService,

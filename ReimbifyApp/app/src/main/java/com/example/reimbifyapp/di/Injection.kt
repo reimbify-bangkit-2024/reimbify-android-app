@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.preferences.dataStore
 import com.example.reimbifyapp.data.repositories.DepartmentRepository
-import com.example.reimbifyapp.data.repositories.ImageRepository
 import com.example.reimbifyapp.data.repositories.ProfileRepository
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
 import com.example.reimbifyapp.data.repositories.RequestRepository

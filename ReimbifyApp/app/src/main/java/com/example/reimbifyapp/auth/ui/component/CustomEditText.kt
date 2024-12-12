@@ -21,8 +21,4 @@ class CustomEditText @JvmOverloads constructor(
             override fun afterTextChanged(s: Editable?) {}
         })
     }
-
-    private fun getTextInputLayout(): TextInputLayout? {
-        return this.parent?.parent as? TextInputLayout
-    }
 }

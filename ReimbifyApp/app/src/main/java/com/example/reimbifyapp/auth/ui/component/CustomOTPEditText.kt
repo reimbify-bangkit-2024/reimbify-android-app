@@ -81,16 +81,4 @@ class CustomOTPEditText @JvmOverloads constructor(
     fun getOtp(): String {
         return otpBoxes.joinToString("") { it.text.toString() }
     }
-
-    fun validateOtp(): Boolean {
-        for (box in otpBoxes) {
-            if (box.text.isNullOrEmpty()) {
-                box.setBackgroundColor(Color.RED)
-                return false
-            } else {
-                box.setBackgroundResource(R.drawable.otp_box_background)
-            }
-        }
-        return true
-    }
 }

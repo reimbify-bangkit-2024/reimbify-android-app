@@ -2,14 +2,10 @@ package com.example.reimbifyapp.admin
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.preferencesDataStore
@@ -151,13 +147,6 @@ class MainActivityAdmin : AppCompatActivity() {
             Log.e("Navigation", "Error navigating to settings", e)
         }
     }
-
-    private fun getColorFromAttr(attr: Int): Int {
-        val typedValue = TypedValue()
-        theme.resolveAttribute(attr, typedValue, true)
-        return typedValue.data
-    }
-
 
     private fun startSessionValidation() {
         lifecycleScope.launch {

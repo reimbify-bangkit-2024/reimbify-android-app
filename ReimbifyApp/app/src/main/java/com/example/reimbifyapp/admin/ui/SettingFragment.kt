@@ -19,11 +19,10 @@ import com.example.reimbifyapp.admin.factory.SettingViewModelFactory
 import com.example.reimbifyapp.admin.viewmodel.SettingViewModel
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.ui.AuthActivity
+import com.example.reimbifyapp.auth.ui.component.ChangePasswordDialogFragment
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.User
 import com.example.reimbifyapp.databinding.FragmentSettingAdminBinding
-import com.example.reimbifyapp.auth.ui.component.ChangePasswordDialogFragment
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -39,7 +38,7 @@ class SettingFragment : Fragment() {
     private var isUploading = false
     private var isShowingUploadToast = false
     private var lastImageSelectionTime = 0L
-    private val IMAGE_SELECTION_DELAY = 1000L
+    private val imageSelectionDelay = 1000L
     private var selectedImageUri: Uri? = null
     private val settingViewModel by viewModels<SettingViewModel> {
         SettingViewModelFactory.getInstance(requireContext())
@@ -151,7 +150,7 @@ class SettingFragment : Fragment() {
             lifecycleScope.launch {
                 try {
                     val userSession = userViewModel.getSession().first()
-                    settingViewModel.UploadImage(uri, userSession.userId)
+                    settingViewModel.uploadImage(uri, userSession.userId)
                 } catch (e: Exception) {
                     showToast("Failed to upload profile picture: ${e.localizedMessage}")
                     isUploading = false
@@ -166,7 +165,7 @@ class SettingFragment : Fragment() {
         val currentTime = System.currentTimeMillis()
 
         if (requestCode == REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
-            if (currentTime - lastImageSelectionTime > IMAGE_SELECTION_DELAY) {
+            if (currentTime - lastImageSelectionTime > imageSelectionDelay) {
                 data?.data?.let { uri ->
                     selectedImageUri = uri
                     binding.profilePicture.setImageURI(uri)

@@ -25,7 +25,6 @@ import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.user.viewmodel.DashboardViewModel
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
-import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -193,7 +192,7 @@ class DashboardFragment : Fragment() {
     private fun updateLineChart(histories: List<GetHistoryAllUserResponse>) {
         val dataSets = mutableListOf<ILineDataSet>()
         val totalEntries = histories.mapIndexed { index, history ->
-            val totalAmount = history.status.approved + history.status.under_review + history.status.rejected
+            val totalAmount = history.status.approved + history.status.underReview + history.status.rejected
             Entry(index.toFloat(), totalAmount.toFloat())
         }
 
@@ -207,7 +206,7 @@ class DashboardFragment : Fragment() {
 
         dataSets.add(totalDataSet)
 
-        val totalAmountSum = histories.sumOf { it.status.approved + it.status.under_review + it.status.rejected }
+        val totalAmountSum = histories.sumOf { it.status.approved + it.status.underReview + it.status.rejected }
         val lineData = LineData(dataSets)
 
         binding.lineChart.apply {
@@ -228,8 +227,8 @@ class DashboardFragment : Fragment() {
 
             axisRight.isEnabled = false
             axisLeft.apply {
-                val min = histories.minOf { it.status.approved + it.status.under_review + it.status.rejected }
-                val max = histories.maxOf { it.status.approved + it.status.under_review + it.status.rejected }
+                val min = histories.minOf { it.status.approved + it.status.underReview + it.status.rejected }
+                val max = histories.maxOf { it.status.approved + it.status.underReview + it.status.rejected }
                 axisMinimum = (min.toFloat() * 0.9f)
                 axisMaximum = (max.toFloat() * 1.1f)
                 setDrawLabels(true)

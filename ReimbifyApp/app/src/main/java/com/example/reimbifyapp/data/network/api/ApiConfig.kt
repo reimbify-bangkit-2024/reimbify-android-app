@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 object ApiConfig {
 
     private const val BASE_URL = BuildConfig.BASE_URL
-    private val BASE_URL_MODEL = BuildConfig.BASE_URL_MODEL
+    private const val BASE_URL_MODEL = BuildConfig.BASE_URL_MODEL
 
     private fun createRetrofit(client: OkHttpClient, baseUrl: String = BASE_URL): Retrofit {
         return Retrofit.Builder()

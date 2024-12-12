@@ -10,9 +10,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
-import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
-import com.example.reimbifyapp.databinding.DialogApprovalConfirmationBinding
 import com.example.reimbifyapp.R
+import com.example.reimbifyapp.databinding.DialogApprovalConfirmationBinding
 import kotlinx.coroutines.launch
 
 class ApprovalConfirmationDialog(

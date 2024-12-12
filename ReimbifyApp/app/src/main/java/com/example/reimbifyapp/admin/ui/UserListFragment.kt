@@ -1,15 +1,14 @@
 package com.example.reimbifyapp.admin.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reimbifyapp.R
@@ -18,7 +17,6 @@ import com.example.reimbifyapp.admin.ui.adapter.UserListAdapter
 import com.example.reimbifyapp.admin.ui.component.DeleteConfirmationDialog
 import com.example.reimbifyapp.admin.ui.component.RegisterUserDialog
 import com.example.reimbifyapp.admin.viewmodel.UserListViewModel
-import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.data.entities.Department
 import com.example.reimbifyapp.data.entities.User
 import com.example.reimbifyapp.databinding.FragmentUserListAdminBinding

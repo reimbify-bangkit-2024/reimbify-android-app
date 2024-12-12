@@ -1,6 +1,5 @@
 package com.example.reimbifyapp.data.repositories
 
-import android.icu.text.StringSearch
 import com.example.reimbifyapp.data.entities.UserSession
 import com.example.reimbifyapp.data.network.api.ApiConfig
 import com.example.reimbifyapp.data.network.api.ApiService

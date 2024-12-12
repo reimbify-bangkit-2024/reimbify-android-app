@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reimbifyapp.data.network.response.GetReimbursementResponse
 import com.example.reimbifyapp.data.repositories.ReimbursementRepository
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class RequestDetailViewModel(private val repository: ReimbursementRepository) : ViewModel() {

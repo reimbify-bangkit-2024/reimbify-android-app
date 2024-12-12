@@ -2,8 +2,6 @@ package com.example.reimbifyapp.user.ui.component
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +12,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
 import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.databinding.DialogAddBankAccountBinding
+import com.example.reimbifyapp.user.factory.ProfileViewModelFactory
 import com.example.reimbifyapp.user.viewmodel.ProfileViewModel
 import com.example.reimbifyapp.utils.ErrorUtils.parseErrorMessage
 import kotlinx.coroutines.flow.first

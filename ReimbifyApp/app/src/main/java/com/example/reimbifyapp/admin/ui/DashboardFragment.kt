@@ -10,25 +10,23 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.admin.viewmodel.DashboardViewModel
 import com.example.reimbifyapp.admin.factory.DashboardViewModelFactory
+import com.example.reimbifyapp.admin.viewmodel.DashboardViewModel
 import com.example.reimbifyapp.data.network.response.DepartmentRequest
-import com.example.reimbifyapp.databinding.FragmentDashboardAdminBinding
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.example.reimbifyapp.data.network.response.GetHistoryAllUserResponse
-import com.example.reimbifyapp.data.network.response.GetRequestGroupByDepartementResponse
 import com.example.reimbifyapp.data.network.response.StatusResponse
-import com.github.mikephil.charting.components.Legend
+import com.example.reimbifyapp.databinding.FragmentDashboardAdminBinding
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.Calendar
 
 class DashboardFragment : Fragment() {
@@ -140,10 +138,10 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updatePieChart(statusResponse: StatusResponse) {
-        val total = statusResponse.approved + statusResponse.under_review + statusResponse.rejected
+        val total = statusResponse.approved + statusResponse.underReview + statusResponse.rejected
 
         val approvedPercentage = (statusResponse.approved / total.toFloat()) * 100
-        val underReviewPercentage = (statusResponse.under_review / total.toFloat()) * 100
+        val underReviewPercentage = (statusResponse.underReview / total.toFloat()) * 100
         val rejectedPercentage = (statusResponse.rejected / total.toFloat()) * 100
 
         val pieEntries = mutableListOf<PieEntry>()

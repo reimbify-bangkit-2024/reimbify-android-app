@@ -3,7 +3,6 @@ package com.example.reimbifyapp.data.repositories
 import com.example.reimbifyapp.data.network.api.ApiService
 import com.example.reimbifyapp.data.network.request.ChangePasswordRequest
 import com.example.reimbifyapp.data.network.request.CreateBankAccountRequest
-import com.example.reimbifyapp.data.network.request.GetBankAccountByUserIdRequest
 import com.example.reimbifyapp.data.network.request.UpdateBankAccountRequest
 import com.example.reimbifyapp.data.network.response.ChangePasswordResponse
 import com.example.reimbifyapp.data.network.response.CreateBankAccountResponse

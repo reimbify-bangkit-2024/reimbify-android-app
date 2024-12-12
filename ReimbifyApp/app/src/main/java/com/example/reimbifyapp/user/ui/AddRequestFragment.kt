@@ -26,14 +26,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reimbifyapp.R
-import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
 import com.example.reimbifyapp.auth.factory.UserViewModelFactory
-import com.example.reimbifyapp.auth.ui.component.SuccessDialogFragment
-import com.example.reimbifyapp.user.viewmodel.AddRequestViewModel
 import com.example.reimbifyapp.auth.viewmodel.LoginViewModel
 import com.example.reimbifyapp.data.entities.Account
 import com.example.reimbifyapp.data.entities.Department
 import com.example.reimbifyapp.data.network.request.RequestData
+import com.example.reimbifyapp.databinding.FragmentAddRequestUserBinding
+import com.example.reimbifyapp.user.viewmodel.AddRequestViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
