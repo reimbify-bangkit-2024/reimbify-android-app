@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.okhttp3.integration)
     implementation(libs.androidx.annotation.experimental)
     implementation(libs.philjay.mpandroidchart)
+    implementation(libs.androidx.cardview)
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.compiler)
 }

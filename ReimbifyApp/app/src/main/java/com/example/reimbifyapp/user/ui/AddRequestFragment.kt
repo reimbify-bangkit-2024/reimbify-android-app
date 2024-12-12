@@ -93,8 +93,11 @@ class AddRequestFragment : Fragment() {
                 Log.d(TAG, "Prediction Response: $prediction")
                 val isCropValid = !prediction.crop.cropped
                 val isRotateValid = !prediction.rotate.rotated
+                val isBlurValid = !prediction.blur.blurred
 
-                if (isCropValid && isRotateValid) {
+                Log.d(TAG, "isCropValid: $isCropValid, isRotateValid: $isRotateValid, isBlurValid: $isBlurValid")
+
+                if (isCropValid && isRotateValid && isBlurValid) {
                     viewModel.statusIconColor.value = R.color.green_500
                     binding.ivBlurStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
                     binding.ivRotationStatusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_500))
@@ -105,7 +108,7 @@ class AddRequestFragment : Fragment() {
                 } else {
                     val errorMessage = buildErrorMessage(isCropValid, isRotateValid)
                     Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                    updateStatusIcons(isCropValid, isRotateValid)
+                    updateStatusIcons(isCropValid, isRotateValid, isBlurValid)
                     goodImage = false
                 }
             }
@@ -158,7 +161,7 @@ class AddRequestFragment : Fragment() {
         return "Please adjust the image: ${errorParts.joinToString(", ")}"
     }
 
-    private fun updateStatusIcons(isCropValid: Boolean, isRotateValid: Boolean) {
+    private fun updateStatusIcons(isCropValid: Boolean, isRotateValid: Boolean, isBlurValid: Boolean) {
         binding.ivCropStatusIcon.setColorFilter(
             ContextCompat.getColor(
                 requireContext(),
@@ -170,6 +173,13 @@ class AddRequestFragment : Fragment() {
             ContextCompat.getColor(
                 requireContext(),
                 if (isRotateValid) R.color.green_500 else R.color.red_500
+            )
+        )
+
+        binding.ivBlurStatusIcon.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                if (isBlurValid) R.color.green_500 else R.color.red_500
             )
         )
     }
@@ -386,6 +396,7 @@ class AddRequestFragment : Fragment() {
                                 showLoading(true)
                                 description = binding.etDescription.text.toString()
                                 amount = binding.etAmount.text.toString().toIntOrNull()
+                                Log.d(TAG,"ini token ${user.token}")
 
                                 when {
                                     description.isNullOrEmpty() -> {

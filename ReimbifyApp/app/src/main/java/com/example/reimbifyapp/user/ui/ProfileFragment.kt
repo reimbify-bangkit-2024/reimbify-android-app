@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.reimbifyapp.R
 import com.example.reimbifyapp.databinding.FragmentProfileUserBinding
 import com.example.reimbifyapp.data.entities.User
@@ -37,6 +38,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
 
     private var _binding: FragmentProfileUserBinding? = null
     private val binding get() = _binding!!
+    private var isUploading = false
+
+    private var lastImageSelectionTime = 0L
+    private val IMAGE_SELECTION_DELAY = 1000L
 
     private var selectedImageUri: Uri? = null
     private var userId: Int? = null
@@ -153,6 +158,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         }
 
         viewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
+            isUploading = false // Pastikan flag upload direset
             response?.let {
                 if (it.success) {
                     showToast("Profile picture uploaded successfully!")
@@ -165,13 +171,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
     }
 
     private fun uploadProfilePicture() {
+        if (isUploading) {
+            // Jika sedang dalam proses upload, keluar dari fungsi
+            return
+        }
+
         selectedImageUri?.let { uri ->
+            isUploading = true // Set flag upload
             lifecycleScope.launch {
                 try {
                     val userSession = userViewModel.getSession().first()
                     viewModel.UploadImage(uri, userSession.userId)
                 } catch (e: Exception) {
                     showToast("Failed to upload profile picture: ${e.localizedMessage}")
+                } finally {
+                    isUploading = false // Reset flag upload setelah proses selesai
                 }
             }
         } ?: showToast("Please select an image first")
@@ -179,11 +193,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val currentTime = System.currentTimeMillis()
+
         if (requestCode == REQUEST_GALLERY && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                selectedImageUri = uri
-                binding.profilePicture.setImageURI(uri)
-                uploadProfilePicture()
+            // Cegah upload berulang dalam waktu singkat
+            if (currentTime - lastImageSelectionTime > IMAGE_SELECTION_DELAY) {
+                data?.data?.let { uri ->
+                    selectedImageUri = uri
+                    binding.profilePicture.setImageURI(uri)
+                    uploadProfilePicture()
+                    lastImageSelectionTime = currentTime
+                }
             }
         }
     }
@@ -240,14 +260,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile_user) {
         binding.tvEmail.text = user.email
         binding.tvRole.text = user.role
         val profileImageUrl = user.profileImageUrl
+        binding.profilePicture.setImageResource(R.drawable.baseline_account_circle_24)
         Log.d("ProfileFragment", "Profile image URL: $profileImageUrl")
         profileImageUrl?.let { url ->
             Glide.with(requireContext())
                 .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .circleCrop()
                 .placeholder(R.drawable.baseline_account_circle_24)
                 .error(R.drawable.baseline_account_circle_24)
                 .into(binding.profilePicture)
-                .onLoadFailed(null)
         } ?: run {
             Log.e("ProfileFragment", "Profile image URL is null")
         }

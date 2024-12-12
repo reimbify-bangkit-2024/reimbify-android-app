@@ -35,6 +35,14 @@ class ImageRepository(private val context: Context) {
                     Log.e(TAG, "Failed to open input stream for image URI: $imageUri")
                     throw Exception("Input stream is null")
                 }
+
+                // Check MIME type to allow only jpg or png
+                val mimeType = context.contentResolver.getType(imageUri)
+                if (mimeType == null || (mimeType != "image/jpeg" && mimeType != "image/png")) {
+                    Log.e(TAG, "Invalid image format: $mimeType. Only JPG and PNG are allowed.")
+                    throw Exception("Invalid image format. Only JPG and PNG are allowed.")
+                }
+
                 val tempFile = createTempFileFromInputStream(inputStream)
                 Log.d(TAG, "Temporary file created at: ${tempFile.absolutePath}")
                 val requestBody = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
