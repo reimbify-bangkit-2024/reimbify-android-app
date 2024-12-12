@@ -149,7 +149,7 @@ class ApprovalFragment : Fragment() {
         } catch (e: Exception) {
             val errorMessage = parseErrorMessage(e)
             Log.d("PARSE DATE", errorMessage)
-            showToast("Failed to parse Date $errorMessage")
+            showToast("Use default date format")
             date
         }
     }

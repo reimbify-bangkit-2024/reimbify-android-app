@@ -107,22 +107,22 @@ class MainActivityAdmin : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val menuItem = menu.findItem(R.id.action_notifications)
-        val iconDrawable = menuItem.icon
-        if (iconDrawable != null) {
-            val color = getColorFromAttr(android.R.attr.colorSecondary)
-            iconDrawable.setTint(color)
-        }
+//        menuInflater.inflate(R.menu.toolbar_menu, menu)
+//        val menuItem = menu.findItem(R.id.action_notifications)
+//        val iconDrawable = menuItem.icon
+//        if (iconDrawable != null) {
+//            val color = getColorFromAttr(android.R.attr.colorSecondary)
+//            iconDrawable.setTint(color)
+//        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_notifications -> {
-                Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show()
-                true
-            }
+//            R.id.action_notifications -> {
+//                Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show()
+//                true
+//            }
             else -> super.onOptionsItemSelected(item)
         }
     }
