@@ -58,7 +58,7 @@ Reimbify is an Android application that simplifies the reimbursement process thr
 ### Steps
 1. Clone the repository:
    ```bash
-   [https://github.com/reimbify-bangkit-2024/reimbify-android-app.git](https://github.com/reimbify-bangkit-2024/reimbify-android-app.git)
+   https://github.com/reimbify-bangkit-2024/reimbify-android-app.git
    ```
 
 2. Open the project in **Android Studio**.
@@ -74,50 +74,55 @@ If you prefer not to build the project, you can download the APK file directly:
 ---
 
 ## App Screenshots
+
 ### Authentication
+
 #### Login Page
-![Login Page](docs/login.png)
+<img src="docs/login.jpg" width="300" alt="Login Page">
 
 #### Forgot Password
-![Forgot Password](docs/forgot-password.png)
+<img src="docs/forgot-password.jpg" width="300" alt="Forgot Password">
 
 #### Verify OTP
-![Verify OTP](docs/verify-otp.png)
+<img src="docs/verify-otp.jpg" width="300" alt="Verify OTP">
 
 #### Reset Password
-![Reset Password](docs/reset-password.png)
+<img src="docs/reset-password.jpg" width="300" alt="Reset Password">
 
 ### Admin-side
+
 #### Dashboard
-![Admin Dashboard](docs/admin-dashboard.png)
+<img src="docs/admin-dashboard.jpg" width="300" alt="Admin Dashboard">
 
 #### Task List (Request Under-Review)
-![Task List](docs/task-list.png)
+<img src="docs/task-list.jpg" width="300" alt="Task List">
 
 #### Reviewed Request History
-![Reviewed Request History](docs/reviewed.png)
+<img src="docs/reviewed.jpg" width="300" alt="Reviewed Request History">
 
 #### User Management
-![User Management](docs/user-management.png)
+<img src="docs/user-management.jpg" width="300" alt="User Management">
 
 #### Profile and Setting
-![Admin Profile and Setting](docs/admin-setting.png)
+<img src="docs/admin-setting.jpg" width="300" alt="Admin Profile and Setting">
 
 ### User-side
+
 #### Dashboard
-![User Dashboard](docs/user-dashboard.png)
+<img src="docs/user-dashboard.jpg" width="300" alt="User Dashboard">
 
 #### Request List
-![Request List](docs/request-list.png)
+<img src="docs/request-list.jpg" width="300" alt="Request List">
 
 #### New Request
-![New Request](docs/new-request.png)
+<img src="docs/new-request.jpg" width="300" alt="New Request">
 
 #### Request Detail
-![Request Detail](docs/request-detail.png)
+<img src="docs/request-detail.jpg" width="300" alt="Request Detail">
 
 #### User Profile
-![User Profile](docs/user-profile.png)
+<img src="docs/user-profile.jpg" width="300" alt="User Profile">
+
 
 ---
 
