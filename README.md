@@ -10,6 +10,7 @@ Reimbify is an Android application that simplifies the reimbursement process thr
 -  [Setup and Installation](#setup-and-installation)
 -  [App Screenshots](#app-screenshots)
 -  [Project Structure](#project-structure)
+-  [Contributor](#contributor)
 
 ---
 
@@ -197,6 +198,10 @@ ReimbifyApp/
     └── sessions/
 
 ```
+
+## Contributor
+- Husnia Munzayana
+- Shelma Salsabila
 
 ---
 
