@@ -1,4 +1,4 @@
-# Reimbify - Android Application
+# Reimbify - Android Mobile Application
 
 Reimbify is an Android application that simplifies the reimbursement process through an intuitive mobile interface, machine learning for receipt validation, and a REST API-based backend service. It streamlines the submission, approval, and tracking of reimbursement requests for both users and administrators.
 
